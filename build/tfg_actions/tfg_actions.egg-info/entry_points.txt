@@ -1,0 +1,3 @@
+[console_scripts]
+count_until_client = tfg_actions.count_until_client:main
+count_until_server = tfg_actions.count_until_server:main

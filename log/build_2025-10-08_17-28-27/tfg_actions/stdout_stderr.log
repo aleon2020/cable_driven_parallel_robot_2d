@@ -1,0 +1,23 @@
+running develop
+running egg_info
+creating tfg_actions.egg-info
+writing tfg_actions.egg-info/PKG-INFO
+writing dependency_links to tfg_actions.egg-info/dependency_links.txt
+writing entry points to tfg_actions.egg-info/entry_points.txt
+writing requirements to tfg_actions.egg-info/requires.txt
+writing top-level names to tfg_actions.egg-info/top_level.txt
+writing manifest file 'tfg_actions.egg-info/SOURCES.txt'
+reading manifest file 'tfg_actions.egg-info/SOURCES.txt'
+writing manifest file 'tfg_actions.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/aalbeerto-02/tfg_girs_ws/install/tfg_actions/lib/python3.12/site-packages/tfg-actions.egg-link (link to .)
+Installing count_until_client script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_actions/lib/tfg_actions
+Installing count_until_server script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_actions/lib/tfg_actions
+
+Installed /home/aalbeerto-02/tfg_girs_ws/build/tfg_actions
+running symlink_data
+creating /home/aalbeerto-02/tfg_girs_ws/install/tfg_actions/share/ament_index
+creating /home/aalbeerto-02/tfg_girs_ws/install/tfg_actions/share/ament_index/resource_index
+creating /home/aalbeerto-02/tfg_girs_ws/install/tfg_actions/share/ament_index/resource_index/packages
+symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/tfg_actions/resource/tfg_actions -> /home/aalbeerto-02/tfg_girs_ws/install/tfg_actions/share/ament_index/resource_index/packages
+symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/tfg_actions/package.xml -> /home/aalbeerto-02/tfg_girs_ws/install/tfg_actions/share/tfg_actions

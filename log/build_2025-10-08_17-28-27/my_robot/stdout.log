@@ -1,0 +1,30 @@
+running develop
+running egg_info
+creating my_robot.egg-info
+writing my_robot.egg-info/PKG-INFO
+writing dependency_links to my_robot.egg-info/dependency_links.txt
+writing entry points to my_robot.egg-info/entry_points.txt
+writing requirements to my_robot.egg-info/requires.txt
+writing top-level names to my_robot.egg-info/top_level.txt
+writing manifest file 'my_robot.egg-info/SOURCES.txt'
+reading manifest file 'my_robot.egg-info/SOURCES.txt'
+writing manifest file 'my_robot.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/lib/python3.12/site-packages/my-robot.egg-link (link to .)
+Installing my_robot_controller script to /home/aalbeerto-02/tfg_girs_ws/install/my_robot/lib/my_robot
+
+Installed /home/aalbeerto-02/tfg_girs_ws/build/my_robot
+running symlink_data
+creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/ament_index
+creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/ament_index/resource_index
+creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/ament_index/resource_index/packages
+symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/resource/my_robot -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/ament_index/resource_index/packages
+symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/package.xml -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot
+creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/launch
+symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/launch/view.launch.py -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/launch
+creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/description
+symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/description/my_robot.xacro -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/description
+creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/description/urdf
+symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/description/urdf/robot_base.urdf -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/description/urdf
+creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/config
+symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/config/my_config.rviz -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/config

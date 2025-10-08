@@ -1,0 +1,1 @@
+ament_cmake_symlink_install_files("/home/aalbeerto-02/tfg_girs_ws/src/tfg_interfaces" FILES "/home/aalbeerto-02/tfg_girs_ws/build/tfg_interfaces/rosidl_cmake/rosidl_cmake-extras.cmake" "DESTINATION" "share/tfg_interfaces/cmake")

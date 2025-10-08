@@ -1,0 +1,32 @@
+[0.508s] Invoking command in '/home/aalbeerto-02/tfg_girs_ws/build/tfg_package': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aalbeerto-02/tfg_girs_ws/build/tfg_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/aalbeerto-02/tfg_girs_ws/build/tfg_package/build --no-deps symlink_data
+[0.661s] running develop
+[0.752s] running egg_info
+[0.752s] creating tfg_package.egg-info
+[0.761s] writing tfg_package.egg-info/PKG-INFO
+[0.761s] writing dependency_links to tfg_package.egg-info/dependency_links.txt
+[0.761s] writing entry points to tfg_package.egg-info/entry_points.txt
+[0.761s] writing requirements to tfg_package.egg-info/requires.txt
+[0.761s] writing top-level names to tfg_package.egg-info/top_level.txt
+[0.761s] writing manifest file 'tfg_package.egg-info/SOURCES.txt'
+[0.779s] reading manifest file 'tfg_package.egg-info/SOURCES.txt'
+[0.779s] writing manifest file 'tfg_package.egg-info/SOURCES.txt'
+[0.788s] running build_ext
+[0.788s] Creating /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/python3.12/site-packages/tfg-package.egg-link (link to .)
+[0.789s] Installing version0_node script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/tfg_package
+[0.789s] Installing version0_publisher script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/tfg_package
+[0.789s] Installing version0_subscriber script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/tfg_package
+[0.789s] Installing version1_node script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/tfg_package
+[0.789s] Installing version1_subscriber script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/tfg_package
+[0.789s] Installing version2_node script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/tfg_package
+[0.789s] Installing version2_subscriber script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/tfg_package
+[0.789s] Installing version3_node script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/tfg_package
+[0.789s] Installing version3_subscriber script to /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/tfg_package
+[0.789s] 
+[0.789s] Installed /home/aalbeerto-02/tfg_girs_ws/build/tfg_package
+[0.790s] running symlink_data
+[0.790s] creating /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/share/ament_index
+[0.790s] creating /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/share/ament_index/resource_index
+[0.790s] creating /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/share/ament_index/resource_index/packages
+[0.790s] symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/tfg_package/resource/tfg_package -> /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/share/ament_index/resource_index/packages
+[0.790s] symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/tfg_package/package.xml -> /home/aalbeerto-02/tfg_girs_ws/install/tfg_package/share/tfg_package
+[0.805s] Invoked command in '/home/aalbeerto-02/tfg_girs_ws/build/tfg_package' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aalbeerto-02/tfg_girs_ws/build/tfg_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aalbeerto-02/tfg_girs_ws/install/tfg_package/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/aalbeerto-02/tfg_girs_ws/build/tfg_package/build --no-deps symlink_data

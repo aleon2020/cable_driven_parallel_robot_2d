@@ -1,0 +1,9 @@
+source;share/tfg_actions/hook/pythonpath.ps1
+source;share/tfg_actions/hook/pythonpath.dsv
+source;share/tfg_actions/hook/pythonpath.sh
+source;share/tfg_actions/hook/ament_prefix_path.ps1
+source;share/tfg_actions/hook/ament_prefix_path.dsv
+source;share/tfg_actions/hook/ament_prefix_path.sh
+source;../../build/tfg_actions/share/tfg_actions/hook/pythonpath_develop.ps1
+source;../../build/tfg_actions/share/tfg_actions/hook/pythonpath_develop.dsv
+source;../../build/tfg_actions/share/tfg_actions/hook/pythonpath_develop.sh

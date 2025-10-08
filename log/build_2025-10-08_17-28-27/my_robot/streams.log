@@ -1,0 +1,32 @@
+[0.501s] Invoking command in '/home/aalbeerto-02/tfg_girs_ws/build/my_robot': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aalbeerto-02/tfg_girs_ws/build/my_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aalbeerto-02/tfg_girs_ws/install/my_robot/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/aalbeerto-02/tfg_girs_ws/build/my_robot/build --no-deps symlink_data
+[0.655s] running develop
+[0.745s] running egg_info
+[0.745s] creating my_robot.egg-info
+[0.754s] writing my_robot.egg-info/PKG-INFO
+[0.755s] writing dependency_links to my_robot.egg-info/dependency_links.txt
+[0.755s] writing entry points to my_robot.egg-info/entry_points.txt
+[0.755s] writing requirements to my_robot.egg-info/requires.txt
+[0.755s] writing top-level names to my_robot.egg-info/top_level.txt
+[0.755s] writing manifest file 'my_robot.egg-info/SOURCES.txt'
+[0.772s] reading manifest file 'my_robot.egg-info/SOURCES.txt'
+[0.772s] writing manifest file 'my_robot.egg-info/SOURCES.txt'
+[0.782s] running build_ext
+[0.782s] Creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/lib/python3.12/site-packages/my-robot.egg-link (link to .)
+[0.782s] Installing my_robot_controller script to /home/aalbeerto-02/tfg_girs_ws/install/my_robot/lib/my_robot
+[0.782s] 
+[0.782s] Installed /home/aalbeerto-02/tfg_girs_ws/build/my_robot
+[0.782s] running symlink_data
+[0.782s] creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/ament_index
+[0.782s] creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/ament_index/resource_index
+[0.783s] creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/ament_index/resource_index/packages
+[0.783s] symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/resource/my_robot -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/ament_index/resource_index/packages
+[0.783s] symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/package.xml -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot
+[0.783s] creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/launch
+[0.783s] symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/launch/view.launch.py -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/launch
+[0.783s] creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/description
+[0.783s] symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/description/my_robot.xacro -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/description
+[0.783s] creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/description/urdf
+[0.783s] symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/description/urdf/robot_base.urdf -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/description/urdf
+[0.783s] creating /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/config
+[0.783s] symbolically linking /home/aalbeerto-02/tfg_girs_ws/build/my_robot/config/my_config.rviz -> /home/aalbeerto-02/tfg_girs_ws/install/my_robot/share/my_robot/config
+[0.797s] Invoked command in '/home/aalbeerto-02/tfg_girs_ws/build/my_robot' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aalbeerto-02/tfg_girs_ws/build/my_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aalbeerto-02/tfg_girs_ws/install/my_robot/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/aalbeerto-02/tfg_girs_ws/build/my_robot/build --no-deps symlink_data

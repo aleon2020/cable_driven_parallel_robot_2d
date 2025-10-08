@@ -1,0 +1,1 @@
+ament_cmake_symlink_install_targets("TARGET_FILES" "/home/aalbeerto-02/tfg_girs_ws/build/tfg_interfaces/rosidl_generator_py/tfg_interfaces/tfg_interfaces_s__rosidl_typesupport_c.so" "TARGETS" "tfg_interfaces_s__rosidl_typesupport_c" "DESTINATION" "lib/python3.12/site-packages/tfg_interfaces")

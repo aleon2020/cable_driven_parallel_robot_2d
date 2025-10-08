@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: tfg-package
+Version: 0.0.1
+Summary: Implementación de un robot por cables para el control de un efector final en diversas tareas
+Maintainer: aalbeerto-02
+Maintainer-email: a.leon.2020@alumnos.urjc.es
+License: Apache-2.0

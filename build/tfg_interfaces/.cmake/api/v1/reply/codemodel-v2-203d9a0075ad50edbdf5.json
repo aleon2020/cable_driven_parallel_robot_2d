@@ -1,0 +1,242 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-e8c029d5f9646bfb8eff.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18
+					]
+				},
+				{
+					"build" : "tfg_interfaces__py",
+					"jsonFile" : "directory-tfg_interfaces__py-6c58039cede619073ca7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/aalbeerto-02/tfg_girs_ws/build/tfg_interfaces/tfg_interfaces__py",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "tfg_interfaces",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_tfg_interfaces_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_tfg_interfaces_egg-50fbf7ba7dd4a50ddd66.json",
+					"name" : "ament_cmake_python_build_tfg_interfaces_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_symlink_tfg_interfaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_symlink_tfg_interfaces-13078361a879ede0d261.json",
+					"name" : "ament_cmake_python_symlink_tfg_interfaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces-f40878e12fe5d1978adc.json",
+					"name" : "tfg_interfaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces__cpp-6eb3b14bc60098813023.json",
+					"name" : "tfg_interfaces__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "tfg_interfaces__py::@d184b6c71faa3b5b96cb",
+					"jsonFile" : "target-tfg_interfaces__py-f648cc27e5711b8b5021.json",
+					"name" : "tfg_interfaces__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces__rosidl_generator_c-748f78b9412a4245db24.json",
+					"name" : "tfg_interfaces__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces__rosidl_generator_py-b5a375364fa68b65d07e.json",
+					"name" : "tfg_interfaces__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces__rosidl_generator_type_description::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces__rosidl_generator_type_description-8c32032802f39ef73840.json",
+					"name" : "tfg_interfaces__rosidl_generator_type_description",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces__rosidl_typesupport_c-e9577853934e6f876d61.json",
+					"name" : "tfg_interfaces__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces__rosidl_typesupport_cpp-3a2fa2dc294fe1066bbf.json",
+					"name" : "tfg_interfaces__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces__rosidl_typesupport_fastrtps_c-d4c8c4ce5ae617e42c90.json",
+					"name" : "tfg_interfaces__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces__rosidl_typesupport_fastrtps_cpp-5f1af67147ccdec90cf0.json",
+					"name" : "tfg_interfaces__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces__rosidl_typesupport_introspection_c-6bdd14912e5bb6bcb2b1.json",
+					"name" : "tfg_interfaces__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces__rosidl_typesupport_introspection_cpp-1319ba1249c329fe9c9b.json",
+					"name" : "tfg_interfaces__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces_s__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces_s__rosidl_typesupport_c-a8eb5854a90d9a5ab0dc.json",
+					"name" : "tfg_interfaces_s__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces_s__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces_s__rosidl_typesupport_fastrtps_c-9f076cd159505a41adba.json",
+					"name" : "tfg_interfaces_s__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces_s__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces_s__rosidl_typesupport_introspection_c-7b5630a557f7a7ad64a5.json",
+					"name" : "tfg_interfaces_s__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tfg_interfaces_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tfg_interfaces_uninstall-cd428b160ca1f8204cf8.json",
+					"name" : "tfg_interfaces_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-a7a99a6585130e5f66cc.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/aalbeerto-02/tfg_girs_ws/build/tfg_interfaces",
+		"source" : "/home/aalbeerto-02/tfg_girs_ws/src/tfg_interfaces"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
