@@ -93,7 +93,7 @@ cd tfg_girs_ws/
 **TERMINAL 1**
 
 ```sh
-ros2 launch view.launch.py
+ros2 launch my_robot view.launch.py
 ```
 
 **TERMINAL 2**
