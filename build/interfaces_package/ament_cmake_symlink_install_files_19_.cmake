@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_files("/home/aalbeerto-02/tfg_girs_ws/src/interfaces_package" FILES "/home/aalbeerto-02/tfg_girs_ws/build/interfaces_package/ament_cmake_index/share/ament_index/resource_index/packages/interfaces_package" "DESTINATION" "share/ament_index/resource_index/packages")

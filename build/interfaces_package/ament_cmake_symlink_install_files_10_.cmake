@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_files("/home/aalbeerto-02/tfg_girs_ws/src/interfaces_package" FILES "/opt/ros/rolling/share/ament_cmake_core/cmake/environment_hooks/environment/ament_prefix_path.sh" "DESTINATION" "share/interfaces_package/environment")

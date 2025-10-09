@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_targets("TARGET_FILES" "/home/aalbeerto-02/tfg_girs_ws/build/interfaces_package/rosidl_generator_py/interfaces_package/interfaces_package_s__rosidl_typesupport_fastrtps_c.so" "TARGETS" "interfaces_package_s__rosidl_typesupport_fastrtps_c" "DESTINATION" "lib/python3.12/site-packages/interfaces_package")

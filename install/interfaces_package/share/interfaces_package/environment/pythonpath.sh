@@ -1,1 +1,0 @@
-/home/aalbeerto-02/tfg_girs_ws/build/interfaces_package/ament_cmake_environment_hooks/pythonpath.sh
