@@ -1,0 +1,1 @@
+/home/aalbeerto-02/tfg_girs_ws/build/interfaces_package/ament_cmake_core/interfaces_packageConfig-version.cmake

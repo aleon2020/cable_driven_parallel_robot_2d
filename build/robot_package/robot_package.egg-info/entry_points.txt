@@ -1,0 +1,2 @@
+[console_scripts]
+robot_controller = robot_package.robot_controller:main
