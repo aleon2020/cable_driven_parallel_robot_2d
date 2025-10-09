@@ -62,7 +62,7 @@ Una vez guardados los cambios, se cierran tanto el fichero como la terminal. Est
 
 ## 2. Comandos de ejecución de cada paquete
 
-### 2.1 Paquete **"actions_package"**
+### 2.1 Paquete "actions_package"
 
 ```sh
 # TERMINAL 1
@@ -74,14 +74,14 @@ ros2 run actions_package count_until_server
 ros2 run actions_package count_until_client
 ```
 
-### 2.2 Paquete **"interfaces_package"**
+### 2.2 Paquete "interfaces_package"
 
 ```sh
 # TERMINAL 1
 ros2 interface show interfaces_package/action/CountUntil
 ```
 
-### 2.3 Paquete **"nodes_package"**
+### 2.3 Paquete "nodes_package"
 
 ```sh
 # TERMINAL 1
@@ -114,7 +114,7 @@ ros2 topic echo /pulley_parameters
 
 **IMPORTANTE**: Este comando se debe ejecutar cuando se están probando las versiones version2 o version3 de los nodos.
 
-### 2.4 Paquete **"robot_package"**
+### 2.4 Paquete "robot_package"
 
 ```sh
 # TERMINAL 1
