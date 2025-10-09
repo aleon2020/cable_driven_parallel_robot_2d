@@ -1,0 +1,1 @@
+/home/aalbeerto-02/tfg_girs_ws/build/robot_package/launch/robot_state_publisher.launch.py

@@ -102,7 +102,7 @@ ros2 launch robot_package robot_state_publisher.launch.py
 ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.2}}"
 ```
 
-### 3.2 Paquete "tfg_actions"
+### 3.2 Paquete "actions_package"
 
 ```sh
 cd tfg_girs_ws/
@@ -111,26 +111,26 @@ cd tfg_girs_ws/
 **TERMINAL 1**
 
 ```sh
-ros2 run tfg_actions count_until_server
+ros2 run actions_package count_until_server
 ```
 
 **TERMINAL 2**
 
 ```sh
-ros2 run tfg_actions count_until_client
+ros2 run actions_package count_until_client
 ```
 
-### 3.3 Paquete "tfg_interfaces"
+### 3.3 Paquete "interfaces_package"
 
 ```sh
 cd tfg_girs_ws/
 ```
 
 ```sh
-ros2 interface show tfg_interfaces/action/CountUntil
+ros2 interface show interfaces_package/action/CountUntil
 ```
 
-### 3.4 Paquete "tfg_package"
+### 3.4 Paquete "nodes_package"
 
 ```sh
 cd tfg_girs_ws/
@@ -139,13 +139,13 @@ cd tfg_girs_ws/
 **TERMINAL 1**
 
 ```sh
-ros2 run tfg_package versionX_node
+ros2 run nodes_package versionX_node
 ```
 
 **TERMINAL 2**
 
 ```sh
-ros2 run tfg_package versionX_subscriber
+ros2 run nodes_package versionX_subscriber
 ```
 
 **TERMINAL 3**

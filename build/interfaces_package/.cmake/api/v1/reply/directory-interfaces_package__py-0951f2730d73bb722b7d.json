@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "interfaces_package__py",
+		"source" : "/home/aalbeerto-02/tfg_girs_ws/build/interfaces_package/interfaces_package__py"
+	}
+}
