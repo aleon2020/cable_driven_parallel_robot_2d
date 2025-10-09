@@ -96,7 +96,7 @@ cd tfg_girs_ws/
 ros2 launch robot_package robot_state_publisher.launch.py
 ```
 
-**TERMINAL 3**
+**TERMINAL 2**
 
 ```sh
 ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.2}}"
