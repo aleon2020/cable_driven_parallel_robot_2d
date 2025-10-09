@@ -1,6 +1,0 @@
-setup.py
-tfg_interfaces/__init__.py
-tfg_interfaces.egg-info/PKG-INFO
-tfg_interfaces.egg-info/SOURCES.txt
-tfg_interfaces.egg-info/dependency_links.txt
-tfg_interfaces.egg-info/top_level.txt

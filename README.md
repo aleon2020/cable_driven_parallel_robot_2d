@@ -84,7 +84,7 @@ Una vez guardados los cambios, se cierran tanto el fichero como la terminal. Est
 
 ## 3. Comandos de ejecución de cada paquete
 
-### 3.1 Paquete "my_robot"
+### 3.1 Paquete "robot_package"
 
 ```sh
 cd tfg_girs_ws/
@@ -93,13 +93,7 @@ cd tfg_girs_ws/
 **TERMINAL 1**
 
 ```sh
-ros2 launch my_robot view.launch.py
-```
-
-**TERMINAL 2**
-
-```sh
-ros2 run joint_state_publisher_gui joint_state_publisher_gui
+ros2 launch robot_package robot_state_publisher.launch.py
 ```
 
 **TERMINAL 3**
