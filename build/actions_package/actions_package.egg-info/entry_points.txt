@@ -1,3 +1,0 @@
-[console_scripts]
-count_until_client = actions_package.count_until_client:main
-count_until_server = actions_package.count_until_server:main

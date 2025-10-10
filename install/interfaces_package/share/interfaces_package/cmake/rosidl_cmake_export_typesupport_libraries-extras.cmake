@@ -1,1 +1,0 @@
-/home/aalbeerto-02/tfg_girs_ws/build/interfaces_package/rosidl_cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake

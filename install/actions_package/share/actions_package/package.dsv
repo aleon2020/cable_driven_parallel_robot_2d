@@ -1,9 +1,0 @@
-source;share/actions_package/hook/pythonpath.ps1
-source;share/actions_package/hook/pythonpath.dsv
-source;share/actions_package/hook/pythonpath.sh
-source;share/actions_package/hook/ament_prefix_path.ps1
-source;share/actions_package/hook/ament_prefix_path.dsv
-source;share/actions_package/hook/ament_prefix_path.sh
-source;../../build/actions_package/share/actions_package/hook/pythonpath_develop.ps1
-source;../../build/actions_package/share/actions_package/hook/pythonpath_develop.dsv
-source;../../build/actions_package/share/actions_package/hook/pythonpath_develop.sh

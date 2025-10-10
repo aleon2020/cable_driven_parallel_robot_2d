@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_files("/home/aalbeerto-02/tfg_girs_ws/src/interfaces_package" FILES "/home/aalbeerto-02/tfg_girs_ws/build/interfaces_package/rosidl_adapter/interfaces_package/action/CountUntil.idl" "DESTINATION" "share/interfaces_package/action")

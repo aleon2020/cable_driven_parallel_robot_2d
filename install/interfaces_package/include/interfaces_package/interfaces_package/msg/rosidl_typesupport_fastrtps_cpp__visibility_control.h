@@ -1,1 +1,0 @@
-/home/aalbeerto-02/tfg_girs_ws/build/interfaces_package/rosidl_typesupport_fastrtps_cpp/interfaces_package/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h

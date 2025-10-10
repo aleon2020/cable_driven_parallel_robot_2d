@@ -1,1 +1,0 @@
-/home/aalbeerto-02/tfg_girs_ws/build/interfaces_package/rosidl_generator_c/interfaces_package/msg/rosidl_generator_c__visibility_control.h

@@ -1,1 +1,0 @@
-/home/aalbeerto-02/tfg_girs_ws/src/actions_package/setup.py
