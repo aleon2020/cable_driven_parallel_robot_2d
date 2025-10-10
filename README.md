@@ -8,7 +8,7 @@
 
 ## 1. Compilación y ejecución del workspace
 
-En este caso, el repositorio es el workspace completo, por lo que no sería necesario crear un workspace desde cero.
+En este caso, el repositorio es el equivalente al **directorio src** de un workspace, por lo que sería necesario crear un workspace nuevo desde cero.
 
 A continuación se detallan los pasos a seguir para compilar y ejecutar correctamente todos los paquetes que componen este repositorio:
 
@@ -17,7 +17,15 @@ A continuación se detallan los pasos a seguir para compilar y ejecutar correcta
 Para clonar este repositorio es recomendable abrir la terminal desde el **directorio HOME** (carpeta personal):
 
 ```sh
-git clone https://<token>@github.com/aleon2020/TFG_GIRS_2025_WS.git
+mkdir tfg_girs_ws
+```
+
+```sh
+cd tfg_girs_ws/
+```
+
+```sh
+git clone https://<token>@github.com/aleon2020/TFG_GIRS_2025_SRC.git
 ```
 
 **IMPORTANTE**: Añade tu token tal y como se muestra. Esto se hace con el objetivo de no tener que introducir el token en la terminal cada vez que se quiera actualizar el repositorio utilizando el comando 'git pull'.
@@ -30,10 +38,10 @@ git pull
 
 ### 1.2 PASO 2: Cambio de nombre del repositorio
 
-Una vez clonado el repositorio en tu **directorio HOME** (carpeta personal), éste aparecerá con el nombre **"TFG_GIRS_2025_WS"**, por lo que se renombrará con otro nombre para evitar el uso de mayúsculas y números. Para ello, se debe ejecutar el siguiente comando en la terminal:
+Una vez clonado el repositorio en tu **directorio HOME** (carpeta personal), éste aparecerá con el nombre **"TFG_GIRS_2025_SRC"**, por lo que se renombrará con otro nombre para evitar el uso de mayúsculas y números. Para ello, se debe ejecutar el siguiente comando en la terminal:
 
 ```sh
-mv TFG_GIRS_2025_WS tfg_girs_ws
+mv TFG_GIRS_2025_SRC src
 ```
 
 ### 1.3 PASO 3: Compilación del workspace
