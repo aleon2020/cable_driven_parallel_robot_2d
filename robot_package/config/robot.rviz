@@ -71,7 +71,17 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        caster_wheel:
+        bottom_edge:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_column:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_support:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -81,7 +91,37 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        right_column:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_support:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         right_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        support_left_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        support_right_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        top_edge:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        whiteboard:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -103,13 +143,27 @@ Visualization Manager:
         All Enabled: true
         base_link:
           Value: true
-        caster_wheel:
+        bottom_edge:
+          Value: true
+        left_column:
+          Value: true
+        left_support:
           Value: true
         left_wheel:
           Value: true
-        odom:
+        right_column:
+          Value: true
+        right_support:
           Value: true
         right_wheel:
+          Value: true
+        support_left_wheel:
+          Value: true
+        support_right_wheel:
+          Value: true
+        top_edge:
+          Value: true
+        whiteboard:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -118,14 +172,28 @@ Visualization Manager:
       Show Names: false
       Tree:
         base_link:
-          caster_wheel:
+          bottom_edge:
+            {}
+          left_column:
+            {}
+          left_support:
             {}
           left_wheel:
             {}
+          right_column:
+            {}
+          right_support:
+            {}
           right_wheel:
             {}
-        odom:
-          {}
+          support_left_wheel:
+            {}
+          support_right_wheel:
+            {}
+          top_edge:
+            {}
+          whiteboard:
+            {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -174,25 +242,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 5.517323970794678
+      Distance: 34.42256546020508
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 1.3210675716400146
+        Y: 7.006526947021484
+        Z: 3.6478958129882812
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5303983688354492
+      Pitch: 0.6004000902175903
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.44039851427078247
+      Yaw: 5.218569755554199
     Saved: ~
 Window Geometry:
   Displays:

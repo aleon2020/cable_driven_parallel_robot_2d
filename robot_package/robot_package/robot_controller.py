@@ -63,8 +63,8 @@ class RobotController(Node):
         self.odom['th'] += delta_th
 
     def update_joint_positions(self, vx, vy, vr, time_now):
-        L = 0.3
-        r = 0.05
+        L = 10
+        r = 0.5
         l_omega = (vx - (L/2)*vr)/r
         r_omega = (vx + (L/2)*vr)/r
         dt = (time_now.nanoseconds - self.time_last.nanoseconds) * 10**-9
