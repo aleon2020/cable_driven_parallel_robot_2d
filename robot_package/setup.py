@@ -26,6 +26,7 @@ setup(
     entry_points={
         'console_scripts': [
             'robot_controller = robot_package.robot_controller:main',
+            'version2_controller = robot_package.version2_controller:main'
         ],
     },
 )
