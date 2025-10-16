@@ -1,54 +1,54 @@
-# ORDEN DE EJECUCIÓN DEL FICHERO VERSION2_CONTROLLER.PY
+## ORDEN DE EJECUCIÓN DEL FICHERO VERSION2_CONTROLLER.PY
 
-## TERMINAL 1
+### TERMINAL 1
 
 ```sh
 colcon build --symlink-install
 ```
 
-## TERMINAL 2
+### TERMINAL 2
 
 ```sh
 ros2 run robot_package version2_controller
 ```
 
-## TERMINAL 3
+### TERMINAL 3
 
 ```sh
 ros2 topic echo /effector_coordinates
 ```
 
-## TERMINAL 4
+### TERMINAL 4
 
 ```sh
 ros2 topic echo /cable_parameters
 ```
 
-## TERMINAL 5
+### TERMINAL 5
 
 ```sh
 ros2 topic echo /pulley_parameters
 ```
 
-## TERMINAL 6
+### TERMINAL 6
 
 ```sh
 ros2 topic echo /effector_log
 ```
 
-## TERMINAL 7
+### TERMINAL 7
 
 ```sh
 ros2 topic echo /cable_log
 ```
 
-## TERMINAL 8
+### TERMINAL 8
 
 ```sh
 ros2 topic echo /pulley_log
 ```
 
-## TERMINAL 9
+### TERMINAL 9
 
 ```sh
 ros2 topic pub --once /version2 interfaces_package/msg/EffectorCoordinates "{current: {x: 0.30, y: 0.30}, target: {x: 0.70, y: 0.70}}"

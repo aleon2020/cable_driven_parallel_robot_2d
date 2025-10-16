@@ -23,6 +23,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/CableParameters.msg"
   "msg/PulleyParameters.msg"
   "msg/EffectorPath.msg"
+  "msg/EffectorPosition.msg"
   DEPENDENCIES geometry_msgs
 )
 
