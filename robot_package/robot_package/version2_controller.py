@@ -10,10 +10,10 @@ from tf2_ros import TransformBroadcaster, TransformStamped
 from interfaces_package.msg import EffectorCoordinates, CableParameters, PulleyParameters
 import sys
 
-class CableRobotController(Node):
+class Version2Controller(Node):
 
     def __init__(self):
-        super().__init__('cable_robot_controller')
+        super().__init__('version2_controller')
         self.platform_width = 1.0
         self.platform_height = 1.0  
         self.effector_width = 0.1
@@ -54,7 +54,7 @@ class CableRobotController(Node):
         self.pulley_log_pub = self.create_publisher(String, '/pulley_log', qos_profile)
         self.coords_sub = self.create_subscription(
             EffectorCoordinates,
-            '/target_coordinates',
+            '/version2',
             self.target_coords_callback,
             qos_profile
         )
@@ -67,7 +67,7 @@ class CableRobotController(Node):
 
     def target_coords_callback(self, msg):
         if self.objective_achieved:
-            self.get_logger().info("OBJETIVO CUMPLIDO")
+            self.get_logger().info("OBJETIVO ALCANZADO")
             return
         self.initial_x = msg.current.x
         self.initial_y = msg.current.y
@@ -147,8 +147,7 @@ class CableRobotController(Node):
         final_left_length, final_right_length, final_left_angle, final_right_angle = self.calculate_cable_parameters(self.current_x, self.current_y)
         initial_left_length, initial_right_length, initial_left_angle, initial_right_angle = self.calculate_cable_parameters(self.initial_x, self.initial_y)
         self.publish_final_status()
-        print("═" * 50)
-        print("DATOS OBTENIDOS")
+        print("═" * 100)
         print("POSICIONES DEL EFECTOR FINAL (X, Y)")
         print(f"• POSICIÓN INICIAL:  ({self.initial_x:.3f}, {self.initial_y:.3f}) m")
         print(f"• POSICIÓN FINAL:    ({self.current_x:.3f}, {self.current_y:.3f}) m")
@@ -168,9 +167,7 @@ class CableRobotController(Node):
         print(f"• CABLE ELONGADO / RECOGIDO POR P2: {self.target_right_cable_change:+.3f} m")
         print(f"• ÁNGULO DE GIRO DE P1: {self.target_left_pulley_angle:+.3f} rad ({math.degrees(self.target_left_pulley_angle):+.2f} °)")
         print(f"• ÁNGULO DE GIRO DE P2: {self.target_right_pulley_angle:+.3f} rad ({math.degrees(self.target_right_pulley_angle):+.2f} °)")
-        print("═" * 50)
-        print("CERRANDO CONTROLADOR ...")
-        print("═" * 50 + "\n")
+        print("═" * 100)
 
     def publish_final_status(self):
         final_left_length, final_right_length, final_left_angle, final_right_angle = self.calculate_cable_parameters(self.current_x, self.current_y)
@@ -187,7 +184,6 @@ class CableRobotController(Node):
         self.pulley_log_pub.publish(final_log)
 
     def shutdown_node(self):
-        print("CERRANDO CONTROLADOR ...")
         self.destroy_node()
         rclpy.shutdown()
 
@@ -251,7 +247,7 @@ class CableRobotController(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    controller = CableRobotController()
+    controller = Version2Controller()
     try:
         rclpy.spin(controller)
     except KeyboardInterrupt:
