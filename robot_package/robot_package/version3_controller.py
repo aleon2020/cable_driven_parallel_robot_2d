@@ -1,3 +1,6 @@
+# Implementación de un robot por cables para el control
+# de un efector final en diversas tareas.
+
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile

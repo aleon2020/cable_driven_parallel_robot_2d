@@ -5,10 +5,8 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
 import math
-import time
 from geometry_msgs.msg import Point
 from sensor_msgs.msg import JointState
-from std_msgs.msg import String
 from interfaces_package.msg import EffectorPosition, CableParameters, PulleyParameters
 
 # COMPILACIÓN, ENLAZADO Y EJECUCIÓN
@@ -57,7 +55,7 @@ class Version1Controller(Node):
         self.get_logger().info("CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...")
 
     # Función calculate_cable_parameters()
-    # Calcula longitudes y ángulos de los cables en función de la posición del efector
+    # Calcula longitudes y ángulos de los cables en función de la posición del efector.
     def calculate_cable_parameters(self, x, y):
 
         # COORDENADAS DE LAS POLEAS
@@ -81,7 +79,7 @@ class Version1Controller(Node):
         return left_cable_length, right_cable_length, left_cable_angle, right_cable_angle
 
     # Función calculate_pulley_changes()
-    # Calcula la longitud de cable recogida por las poleas en función de la posición del efector
+    # Calcula la longitud de cable recogida por las poleas en función de la posición del efector.
     def calculate_pulley_changes(self, x, y):
         l1, l2, _, _ = self.calculate_cable_parameters(x, y)
 
@@ -96,7 +94,7 @@ class Version1Controller(Node):
         return delta_l1, delta_l2, pulley1_angle, pulley2_angle
 
     # Función position_callback()
-    # Procesa la posición recibida del efector y publica el resto de parámetros
+    # Procesa la posición recibida del efector y publica el resto de parámetros.
     def position_callback(self, msg):
 
         # IGNORACIÓN DEL PROCESAMIENTO DE MÚLTIPLES MENSAJES
@@ -162,13 +160,13 @@ class Version1Controller(Node):
         self.create_timer(3.0, self.shutdown_node)
 
     # Función shutdown_node()
-    # Cierra el nodo y detiene su ejecución
+    # Cierra el nodo y detiene su ejecución.
     def shutdown_node(self):
         self.destroy_node()
         rclpy.shutdown()
 
 # Función principal main()
-# Punto de entrada del programa
+# Punto de entrada del programa.
 def main(args=None):
     rclpy.init(args=args)
     controller = Version1Controller()
