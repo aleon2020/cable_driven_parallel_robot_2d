@@ -51,8 +51,8 @@ class Version3Controller(Node):
         super().__init__('version3_controller')
 
         # PARÁMETROS GEOMÉTRICOS DEL SISTEMA
-        self.platform_width = 1.0
-        self.platform_height = 1.0
+        self.plane_width = 1.0
+        self.plane_height = 1.0
         self.effector_width = 0.1
         self.effector_height = 0.1
         self.pulley_radius = 0.05
@@ -69,8 +69,8 @@ class Version3Controller(Node):
         self.shutdown_scheduled = False
 
         # ESTADO Y POSICIONES INICIALES Y FINALES DE LAS POLEAS
-        self.left_pulley_pos = 0.0
-        self.right_pulley_pos = 0.0
+        self.left_pulley_position = 0.0
+        self.right_pulley_position = 0.0
         self.initial_x = self.current_x
         self.initial_y = self.current_y
         self.target_x = self.current_x
@@ -85,22 +85,22 @@ class Version3Controller(Node):
 
         # CONFIGURACIÓN DE LA COMUNICACIÓN QOS
         qos_profile = QoSProfile(depth=10)
-        self.effector_coords_pub = self.create_publisher(EffectorCoordinatesOut, '/effector_coordinates', qos_profile)
-        self.cable_params_pub = self.create_publisher(CableParameters, '/cable_parameters', qos_profile)
-        self.pulley_params_pub = self.create_publisher(PulleyParameters, '/pulley_parameters', qos_profile)
-        self.joint_pub = self.create_publisher(JointState, 'joint_states', qos_profile)
+        self.effector_coordinates_publisher = self.create_publisher(EffectorCoordinatesOut, '/effector_coordinates', qos_profile)
+        self.cable_parameters_publisher = self.create_publisher(CableParameters, '/cable_parameters', qos_profile)
+        self.pulley_parameters_publisher = self.create_publisher(PulleyParameters, '/pulley_parameters', qos_profile)
+        self.joint_state_publisher = self.create_publisher(JointState, 'joint_states', qos_profile)
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
-        self.effector_log_pub = self.create_publisher(String, '/effector_log', qos_profile)
-        self.cable_log_pub = self.create_publisher(String, '/cable_log', qos_profile)
-        self.pulley_log_pub = self.create_publisher(String, '/pulley_log', qos_profile)
+        self.effector_log_publisher = self.create_publisher(String, '/effector_log', qos_profile)
+        self.cable_log_publisher = self.create_publisher(String, '/cable_log', qos_profile)
+        self.pulley_log_publisher = self.create_publisher(String, '/pulley_log', qos_profile)
 
         # SUBSCRIPCIÓN AL TOPIC /VERSION3
         if EffectorPathMsg is not None:
-            self.coords_sub = self.create_subscription(EffectorPathMsg, '/version3', self.path_callback, qos_profile)
+            self.coordinates_subscriber = self.create_subscription(EffectorPathMsg, '/version3', self.path_callback, qos_profile)
         elif EffectorCoordinatesMsg is not None:
-            self.coords_sub = self.create_subscription(EffectorCoordinatesMsg, '/version3', self.path_callback, qos_profile)
+            self.coordinates_subscriber = self.create_subscription(EffectorCoordinatesMsg, '/version3', self.path_callback, qos_profile)
         else:
-            self.coords_sub = self.create_subscription(EffectorCoordinatesOut, '/version3', self.path_callback, qos_profile)
+            self.coordinates_subscriber = self.create_subscription(EffectorCoordinatesOut, '/version3', self.path_callback, qos_profile)
         self.get_logger().info("CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...")
 
     # Función calculate_cable_parameters()
@@ -109,9 +109,9 @@ class Version3Controller(Node):
 
         # COORDENADAS DE LAS POLEAS
         left_pulley_x = 0.0
-        left_pulley_y = self.platform_height
-        right_pulley_x = self.platform_width
-        right_pulley_y = self.platform_height
+        left_pulley_y = self.plane_height
+        right_pulley_x = self.plane_width
+        right_pulley_y = self.plane_height
 
         # PUNTOS DE CONEXIÓN DEL EFECTOR
         left_connection_x = x - self.effector_width / 2
@@ -181,13 +181,13 @@ class Version3Controller(Node):
         else:
             points_number = int(points_number)
         if points_number < 3:
-            self.get_logger().error(f"SE RECIBIERON {points_number} PUNTOS: MÍNIMO 3 requerido. Ignorando comando.")
+            self.get_logger().error(f"SE REQUIEREN COMO MÍNIMO {points_number} PUNTOS")
             return
         if points_number > 10:
-            self.get_logger().error(f"SE RECIBIERON {points_number} PUNTOS: Máximo 10 permitido. Truncando a 10.")
+            self.get_logger().error(f"SE REQUIEREN COMO MÁXIMO {points_number} PUNTOS")
             points_number = 10
         if len(points_list) < points_number:
-            self.get_logger().error(f"SE ESPERABAN {points_number} PUNTOS PERO SOLO SE RECIBIERON {len(points_list)}. Ignorando comando.")
+            self.get_logger().error(f"SE ESPERABAN {points_number} PUNTOS PERO SOLO SE RECIBIERON {len(points_list)}")
             return
         self.points = [(float(px), float(py)) for (px, py) in points_list[:points_number]]
         self.points_number = points_number
@@ -199,8 +199,8 @@ class Version3Controller(Node):
         self.animation_progress = 0.0
         self.objective_achieved = False
         self.shutdown_scheduled = False
-        self.left_pulley_pos = 0.0
-        self.right_pulley_pos = 0.0
+        self.left_pulley_position = 0.0
+        self.right_pulley_position = 0.0
         self.segment_target_params = []
         for i in range(self.points_number - 1):
             sx, sy = self.points[i]
@@ -215,7 +215,7 @@ class Version3Controller(Node):
                 'pulley_angles': (p1_angle, p2_angle)
             })
         self.get_logger().info(f"NUEVA TRAYECTORIA RECIBIDA DE {self.points_number} PUNTOS")
-        self.get_logger().info("INICIANDO SEGMENTO 1 -> 2")
+        self.get_logger().info("DESPLAZAMIENTO DESDE EL PUNTO 1 HASTA EL PUNTO 2")
 
     # Función control_loop()
     # Actualiza la posición del efector y el estado de las poleas en cada momento.
@@ -236,59 +236,59 @@ class Version3Controller(Node):
                 self.current_x = self.target_x
                 self.current_y = self.target_y
                 delta_l1, delta_l2, pulley1_angle, pulley2_angle = self.calculate_pulley_movement(self.initial_x, self.initial_y, self.current_x, self.current_y)
-                self.left_pulley_pos += pulley1_angle
-                self.right_pulley_pos += pulley2_angle
+                self.left_pulley_position += pulley1_angle
+                self.right_pulley_position += pulley2_angle
                 self.publish_joint_states()
                 if self.segment_index < (self.points_number - 2):
                     self.segment_index += 1
                     self.initial_x, self.initial_y = self.points[self.segment_index]
                     self.target_x, self.target_y = self.points[self.segment_index + 1]
                     self.animation_progress = 0.0
-                    self.get_logger().info(f"INICIANDO SEGMENTO {self.segment_index+1} -> {self.segment_index+2}")
+                    self.get_logger().info(f"DESPLAZAMIENTO DESDE EL PUNTO {self.segment_index+1} HASTA EL PUNTO {self.segment_index+2}")
                 else:
                     if self.check_objective_achieved():
                         self.objective_achieved = True
                         self.moving = False
                         self.show_final_summary()
                     else:
-                        self.get_logger().info("TRAYECTORIA COMPLETADA (pero la comprobación de tolerancia falló)")
+                        self.get_logger().info("TRAYECTORIA COMPLETADA")
                         self.moving = False
                 return
             
             # INTERPOLACIÓN LINEAL DE LA POSICIÓN
-            interp_x = self.initial_x + (self.target_x - self.initial_x) * self.animation_progress
-            interp_y = self.initial_y + (self.target_y - self.initial_y) * self.animation_progress
+            interpolated_x = self.initial_x + (self.target_x - self.initial_x) * self.animation_progress
+            interpolated_y = self.initial_y + (self.target_y - self.initial_y) * self.animation_progress
             
             # CÁLCULO DEL DESPLAZAMIENTO DE CADA POLEA
-            delta_l1, delta_l2, pulley1_angle, pulley2_angle = self.calculate_pulley_movement(self.current_x, self.current_y, interp_x, interp_y)
+            delta_l1, delta_l2, pulley1_angle, pulley2_angle = self.calculate_pulley_movement(self.current_x, self.current_y, interpolated_x, interpolated_y)
             
             # ÁNGULOS ACUMULADOS Y ACTUALIZACIÓN DE ESTADO
-            self.left_pulley_pos += pulley1_angle
-            self.right_pulley_pos += pulley2_angle
+            self.left_pulley_position += pulley1_angle
+            self.right_pulley_position += pulley2_angle
             self.publish_joint_states()
-            self.current_x = interp_x
-            self.current_y = interp_y
+            self.current_x = interpolated_x
+            self.current_y = interpolated_y
 
     # Función publish_effector_parameters()
     # Publica periódicamente las posiciones actual y objetivo del efector.
     def publish_effector_parameters(self):
         if self.objective_achieved:
             return
-        effector_msg = EffectorCoordinatesOut()
-        effector_msg.current.x = self.current_x
-        effector_msg.current.y = self.current_y
-        effector_msg.target.x = self.target_x
-        effector_msg.target.y = self.target_y
-        self.effector_coords_pub.publish(effector_msg)
-        log_msg = String()
+        effector_message = EffectorCoordinatesOut()
+        effector_message.current.x = self.current_x
+        effector_message.current.y = self.current_y
+        effector_message.target.x = self.target_x
+        effector_message.target.y = self.target_y
+        self.effector_coordinates_publisher.publish(effector_message)
+        effector_log_message = String()
         if self.moving:
             progress_percent = self.animation_progress * 100
-            log_msg.data = (f"EFECTOR: PROGRESO SGM[{self.segment_index+1}/{max(1,self.points_number-1)}] "
-                            f"{progress_percent:.1f}% - ACTUAL = ({self.current_x:.3f}, {self.current_y:.3f}), "
-                            f"OBJETIVO_SEG = ({self.target_x:.3f}, {self.target_y:.3f})")
+            effector_log_message.data = (f"EFECTOR: PROGRESO DEL SEGMENTO [{self.segment_index+1}/{max(1,self.points_number-1)}] "
+                                         f"{progress_percent:.1f}% - POSICIÓN ACTUAL = ({self.current_x:.3f}, {self.current_y:.3f}), "
+                                         f"POSICIÓN OBJETIVO = ({self.target_x:.3f}, {self.target_y:.3f})")
         else:
-            log_msg.data = f"EFECTOR: EN REPOSO - POSICIÓN = ({self.current_x:.3f}, {self.current_y:.3f})"
-        self.effector_log_pub.publish(log_msg)
+            effector_log_message.data = f"EFECTOR: EN REPOSO - POSICIÓN = ({self.current_x:.3f}, {self.current_y:.3f})"
+        self.effector_log_publisher.publish(effector_log_message)
 
     # Función publish_cable_parameters()
     # Publica periódicamente las longitudes y ángulos de los cables.
@@ -301,10 +301,10 @@ class Version3Controller(Node):
         cable_msg.right_length = current_right_length
         cable_msg.left_angle = current_left_angle
         cable_msg.right_angle = current_right_angle
-        self.cable_params_pub.publish(cable_msg)
-        log_msg = String()
-        log_msg.data = f"CABLES: (L1, L2) = ({current_left_length:.3f} m, {current_right_length:.3f} m), (Q1, Q2) =({current_left_angle:.2f} °, {current_right_angle:.2f} °)"
-        self.cable_log_pub.publish(log_msg)
+        self.cable_parameters_publisher.publish(cable_msg)
+        cable_log_message = String()
+        cable_log_message.data = f"CABLES: (L1, L2) = ({current_left_length:.3f} m, {current_right_length:.3f} m), (Q1, Q2) =({current_left_angle:.2f} °, {current_right_angle:.2f} °)"
+        self.cable_log_publisher.publish(cable_log_message)
 
     # Función publish_pulley_parameters()
     # Publica periódicamente las longitudes elongadas / recogidas de cable y ángulos de giro de cada polea.
@@ -325,35 +325,33 @@ class Version3Controller(Node):
         pulley_msg.right_cable_change = current_right_cable_change
         pulley_msg.left_pulley_angle = current_left_pulley_angle
         pulley_msg.right_pulley_angle = current_right_pulley_angle
-        self.pulley_params_pub.publish(pulley_msg)
-        log_msg = String()
-        log_msg.data = (f"POLEAS: SEG[{self.segment_index+1}/{max(1,self.points_number-1)}] "
-                        f"DIF = ({current_left_cable_change:+.3f} m, {current_right_cable_change:+.3f} m), "
-                        f"ÁNG = ({current_left_pulley_angle:+.3f} rad, {current_right_pulley_angle:+.3f} rad)")
-        self.pulley_log_pub.publish(log_msg)
+        self.pulley_parameters_publisher.publish(pulley_msg)
+        pulley_log_message = String()
+        pulley_log_message.data = (f"POLEAS: SEGMENTO [{self.segment_index+1}/{max(1,self.points_number-1)}] "
+                                   f"DIFERENCIA = ({current_left_cable_change:+.3f} m, {current_right_cable_change:+.3f} m), "
+                                   f"ÁNGULOS = ({current_left_pulley_angle:+.3f} rad, {current_right_pulley_angle:+.3f} rad)")
+        self.pulley_log_publisher.publish(pulley_log_message)
 
     # Función publish_joint_states()
     # Publica el joint_state de cada polea para su visualización en RVIZ.
     def publish_joint_states(self):
-        joint_state = JointState()
-        joint_state.header.stamp = self.get_clock().now().to_msg()
-        joint_state.name = ['left_wheel_joint', 'right_wheel_joint']
-        joint_state.position = [self.left_pulley_pos, self.right_pulley_pos]
-        self.joint_pub.publish(joint_state)
+        joint_state_message = JointState()
+        joint_state_message.header.stamp = self.get_clock().now().to_msg()
+        joint_state_message.name = ['left_wheel_joint', 'right_wheel_joint']
+        joint_state_message.position = [self.left_pulley_position, self.right_pulley_position]
+        self.joint_state_publisher.publish(joint_state_message)
 
     def show_final_summary(self):
         print("═" * 100)
-        print("RESUMEN FINAL DE LA TRAYECTORIA")
-        print(f"NUMERO DE PUNTOS: {self.points_number}")
-        print("PUNTOS (orden):")
+        print(f"NÚMERO DE PUNTOS: {self.points_number}")
+        print("\nPUNTOS POR LOS QUE HA PASADO EL EFECTOR")
         for i, (x, y) in enumerate(self.points):
-            print(f"  {i+1:02d}: ({x:.3f}, {y:.3f}) m")
-        print("")
+            print(f"• {i+1:02d}: ({x:.3f}, {y:.3f}) m")
         for i, (x, y) in enumerate(self.points):
             L1, L2, q1, q2 = self.calculate_cable_parameters(x, y)
             print(f"\nDATOS POSICIÓN NÚMERO {i+1}")
-            print(f"  L1 = {L1:.3f} m, L2 = {L2:.3f} m")
-            print(f"  Q1 = {q1:.2f} °, Q2 = {q2:.2f} °")
+            print(f"• L1 = {L1:.3f} m, L2 = {L2:.3f} m")
+            print(f"• Q1 = {q1:.2f} °, Q2 = {q2:.2f} °")
         for i in range(self.points_number - 1):
             sx, sy = self.points[i]
             ex, ey = self.points[i+1]
@@ -363,10 +361,10 @@ class Version3Controller(Node):
             L2_mov = L2_f - L2_i
             P1_mov_rad = L1_mov / self.pulley_radius
             P2_mov_rad = L2_mov / self.pulley_radius
-            print(f"\nMOVIMIENTO ENTRE POS {i+1} y {i+2}:")
-            print(f"  ΔL1 = {L1_mov:+.3f} m, ΔL2 = {L2_mov:+.3f} m")
-            print(f"  P1 rad = {P1_mov_rad:+.3f} rad ({math.degrees(P1_mov_rad):+.2f} °)")
-            print(f"  P2 rad = {P2_mov_rad:+.3f} rad ({math.degrees(P2_mov_rad):+.2f} °)")
+            print(f"\nMOVIMIENTO DE CADA POLEA ENTRE LAS POSICIONES {i+1} Y {i+2}")
+            print(f"• ΔL1 = {L1_mov:+.3f} m, ΔL2 = {L2_mov:+.3f} m")
+            print(f"• P1 = {P1_mov_rad:+.3f} rad ({math.degrees(P1_mov_rad):+.2f} °)")
+            print(f"• P2 = {P2_mov_rad:+.3f} rad ({math.degrees(P2_mov_rad):+.2f} °)")
         print("═" * 100)
         self.publish_final_status()
 
@@ -374,17 +372,17 @@ class Version3Controller(Node):
     # Publica los parámetros finales obtenidos en los topics de log.
     def publish_final_status(self):
         final_left_length, final_right_length, final_left_angle, final_right_angle = self.calculate_cable_parameters(self.current_x, self.current_y)
-        effector_msg = EffectorCoordinatesOut()
-        effector_msg.current.x = self.current_x
-        effector_msg.current.y = self.current_y
-        effector_msg.target.x = self.target_x
-        effector_msg.target.y = self.target_y
-        self.effector_coords_pub.publish(effector_msg)
-        final_log = String()
-        final_log.data = f"TRAYECTORIA COMPLETADA: ultimo segmento {self.segment_index+1} de {max(1,self.points_number-1)}"
-        self.effector_log_pub.publish(final_log)
-        self.cable_log_pub.publish(final_log)
-        self.pulley_log_pub.publish(final_log)
+        effector_message = EffectorCoordinatesOut()
+        effector_message.current.x = self.current_x
+        effector_message.current.y = self.current_y
+        effector_message.target.x = self.target_x
+        effector_message.target.y = self.target_y
+        self.effector_coordinates_publisher.publish(effector_message)
+        final_status_message = String()
+        final_status_message.data = f"TRAYECTORIA COMPLETADA: {self.segment_index+1} SEGMENTOS RECORRIDOS DE {max(1, self.points_number-1)}"
+        self.effector_log_publisher.publish(final_status_message)
+        self.cable_log_publisher.publish(final_status_message)
+        self.pulley_log_publisher.publish(final_status_message)
 
     # Función shutdown_node()
     # Cierra el nodo y detiene su ejecución.
