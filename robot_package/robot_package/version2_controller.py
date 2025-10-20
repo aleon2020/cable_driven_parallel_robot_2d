@@ -77,7 +77,7 @@ class Version2Controller(Node):
         self.pulley_log_publisher = self.create_publisher(String, '/pulley_log', qos_profile)
 
         # SUBSCRIPCIÓN AL TOPIC /VERSION2
-        self.coords_sub = self.create_subscription(
+        self.coordinates_subscriber = self.create_subscription(
             EffectorCoordinates,
             '/version2',
             self.target_coordinates_callback,

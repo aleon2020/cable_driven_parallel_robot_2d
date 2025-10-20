@@ -46,7 +46,7 @@ class Version1Controller(Node):
         self.pulley_parameters_publisher = self.create_publisher(PulleyParameters, '/pulley_parameters', qos_profile)
         self.joint_state_publisher = self.create_publisher(JointState, 'joint_states', qos_profile)
 
-        # SUBSCRIPCIÓN AL TOPIC DE REFERENCIA
+        # SUBSCRIPCIÓN AL TOPIC /VERSION1
         self.coordinates_subscriber = self.create_subscription(EffectorPosition, '/version1', self.position_callback, qos_profile)
         
         # CÁLCULO DE LOS PARÁMETROS INICIALES DE REFERENCIA
