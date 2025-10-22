@@ -1,4 +1,0 @@
-float32 left_length
-float32 right_length
-float32 left_angle
-float32 right_angle
