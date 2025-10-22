@@ -9,7 +9,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time')
-    pkg_path = os.path.join(get_package_share_directory('robot_package'))
+    pkg_path = os.path.join(get_package_share_directory('cdpr_2d'))
     xacro_file = os.path.join(pkg_path,'description/robot.xacro')
     robot_description_config = xacro.process_file(xacro_file)
 
@@ -35,7 +35,7 @@ def generate_launch_description():
     )
 
     robot_controller_node = Node(
-        package='robot_package',
+        package='cdpr_2d',
         executable='robot_controller',
         name='robot_controller',
     )

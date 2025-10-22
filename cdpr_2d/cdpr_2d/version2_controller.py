@@ -13,7 +13,7 @@ from tf2_ros import TransformBroadcaster
 
 # COMPILACIÓN, ENLAZADO Y EJECUCIÓN
 # TERMINAL 1: colcon build --symlink-install
-# TERMINAL 2: ros2 run robot_package version2_controller
+# TERMINAL 2: ros2 run cdpr_2d version2_controller
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="cdpr_2d" >
+  <xacro:include filename="$(find cdpr_2d)/description/urdf/robot.urdf"/>
+</robot>

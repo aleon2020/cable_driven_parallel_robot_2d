@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import find_packages, setup
 
-package_name = 'robot_package'
+package_name = 'cdpr_2d'
 
 setup(
     name=package_name,
@@ -25,10 +25,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'robot_controller = robot_package.robot_controller:main',
-            'version1_controller = robot_package.version1_controller:main',
-            'version2_controller = robot_package.version2_controller:main',
-            'version3_controller = robot_package.version3_controller:main'
+            'robot_controller = cdpr_2d.robot_controller:main',
+            'version1_controller = cdpr_2d.version1_controller:main',
+            'version2_controller = cdpr_2d.version2_controller:main',
+            'version3_controller = cdpr_2d.version3_controller:main'
         ],
     },
 )

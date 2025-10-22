@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>robot_package</name>
+  <name>cdpr_2d</name>
   <version>0.0.1</version>
   <description>Implementación de un robot por cables para el control de un efector final en diversas tareas</description>
   <maintainer email="a.leon.2020@alumnos.urjc.es">aalbeerto-02</maintainer>

@@ -8,13 +8,13 @@
 
 ## 1. Compilación y ejecución del workspace
 
-En este caso, el repositorio es el equivalente al **directorio src** de un workspace, por lo que sería necesario crear un workspace nuevo desde cero.
+En este caso, el repositorio es el equivalente al **directorio src/** de un workspace, por lo que sería necesario crear un workspace nuevo desde cero.
 
 A continuación se detallan los pasos a seguir para compilar y ejecutar correctamente todos los paquetes que componen este repositorio:
 
 ### 1.1 PASO 1: Clonación del workspace
 
-Para clonar este repositorio es recomendable abrir la terminal desde el **directorio HOME** (carpeta personal):
+Para clonar este repositorio es recomendable abrir la terminal desde el **directorio HOME/** (carpeta personal):
 
 ```sh
 mkdir tfg_girs_ws
@@ -38,7 +38,7 @@ git pull
 
 ### 1.2 PASO 2: Cambio de nombre del repositorio
 
-Una vez clonado el repositorio en tu **directorio HOME** (carpeta personal), éste aparecerá con el nombre **"TFG_GIRS_2025_SRC"**, por lo que se renombrará con otro nombre para evitar el uso de mayúsculas y números. Para ello, se debe ejecutar el siguiente comando en la terminal:
+Una vez clonado el repositorio en tu **directorio HOME/** (carpeta personal), éste aparecerá con el nombre **"TFG_GIRS_2025_SRC"**, por lo que se renombrará con otro nombre para evitar el uso de mayúsculas y números. Para ello, se debe ejecutar el siguiente comando en la terminal:
 
 ```sh
 mv TFG_GIRS_2025_SRC src
@@ -56,7 +56,7 @@ cd tfg_girs_ws/
 colcon build --symlink-install
 ```
 
-Una vez terminada la compilación del workspace con colcon, añade la siguiente línea en el fichero .bashrc desde el **directorio HOME** (carpeta personal):
+Una vez terminada la compilación del workspace con colcon, añade la siguiente línea en el fichero .bashrc desde el **directorio HOME/** (carpeta personal):
 
 ```sh
 nano .bashrc
@@ -68,37 +68,18 @@ source ~/tfg_girs_ws/install/setup.bash
 
 Una vez guardados los cambios, se cierran tanto el fichero como la terminal. Esto se hace con el objetivo de que los cambios realizados en el fichero .bashrc funcionen correctamente.
 
-## 2. Comandos de ejecución de cada paquete
+## 2. Comandos de ejecución de los controladores
 
-### 2.1 Paquete "actions_package"
+### 2.1 Versión 1: version1_controller.py
 
 ```sh
 # TERMINAL 1
-ros2 run actions_package count_until_server
+colcon build --symlink-install
 ```
 
 ```sh
 # TERMINAL 2
-ros2 run actions_package count_until_client
-```
-
-### 2.2 Paquete "interfaces_package"
-
-```sh
-# TERMINAL 1
-ros2 interface show interfaces_package/action/CountUntil
-```
-
-### 2.3 Paquete "nodes_package"
-
-```sh
-# TERMINAL 1
-ros2 run nodes_package versionX_node
-```
-
-```sh
-# TERMINAL 2
-ros2 run nodes_package versionX_subscriber
+ros2 run cdpr_2d version1_controller
 ```
 
 ```sh
@@ -106,30 +87,90 @@ ros2 run nodes_package versionX_subscriber
 ros2 topic echo /effector_coordinates
 ```
 
-**IMPORTANTE**: Este comando se debe ejecutar cuando se está probando cualquiera de las 3 versiones de los nodos (version1, version2 o version3).
-
 ```sh
 # TERMINAL 4
 ros2 topic echo /cable_parameters
 ```
-
-**IMPORTANTE**: Este comando se debe ejecutar cuando se está probando cualquiera de las 3 versiones de los nodos (version1, version2 o version3).
 
 ```sh
 # TERMINAL 5
 ros2 topic echo /pulley_parameters
 ```
 
-**IMPORTANTE**: Este comando se debe ejecutar cuando se están probando las versiones version2 o version3 de los nodos.
+```sh
+# TERMINAL 6
+ros2 topic pub --once /version1 geometry_msgs/msg/PoseStamped "{pose: {position: {x: 0.30, y: 0.30, z: 0.0}}}"
+```
 
-### 2.4 Paquete "robot_package"
+### 2.2 Versión 2: version2_controller.py
 
 ```sh
 # TERMINAL 1
-ros2 launch robot_package robot_state_publisher.launch.py
+colcon build --symlink-install
 ```
 
 ```sh
 # TERMINAL 2
-ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.2}}"
+ros2 run cdpr_2d version2_controller
+```
+
+```sh
+# TERMINAL 3
+ros2 topic echo /effector_coordinates
+```
+
+```sh
+# TERMINAL 4
+ros2 topic echo /cable_parameters
+```
+
+```sh
+# TERMINAL 5
+ros2 topic echo /pulley_parameters
+```
+
+```sh
+# TERMINAL 6
+ros2 topic pub --once /version2 nav_msgs/msg/Path "{poses: [{pose: {position: {x: 0.30, y: 0.30, z: 0.0}}}, {pose: {position: {x: 0.70, y: 0.70, z: 0.0}}}]}"
+```
+
+### 2.3 Versión 3: version3_controller.py
+
+```sh
+# TERMINAL 1
+colcon build --symlink-install
+```
+
+```sh
+# TERMINAL 2
+ros2 run cdpr_2d version3_controller
+```
+
+```sh
+# TERMINAL 3
+ros2 topic echo /effector_coordinates
+```
+
+```sh
+# TERMINAL 4
+ros2 topic echo /cable_parameters
+```
+
+```sh
+# TERMINAL 5
+ros2 topic echo /pulley_parameters
+```
+
+```sh
+# TERMINAL 6
+ros2 topic pub --once /version3 geometry_msgs/msg/PoseArray "
+poses:
+- {position: {x: 0.30, y: 0.50, z: 0.0}}
+- {position: {x: 0.40, y: 0.70, z: 0.0}}
+- {position: {x: 0.60, y: 0.70, z: 0.0}}
+- {position: {x: 0.70, y: 0.50, z: 0.0}}
+- {position: {x: 0.60, y: 0.30, z: 0.0}}
+- {position: {x: 0.40, y: 0.30, z: 0.0}}
+- {position: {x: 0.30, y: 0.50, z: 0.0}}
+"
 ```
