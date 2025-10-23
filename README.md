@@ -13,7 +13,7 @@ The main objective of this project is the design, construction, and commissionin
 In addition, aspects such as kinematic modeling of the system, software development in multiple languages, integration with ROS2, and physical validation will be addressed.
 
 <p align="center">
-  <img src="">
+  <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/cable_driven_parallel_robot.png?raw=true">
 </p>
 
 ## 1. Compilación y ejecución del workspace
