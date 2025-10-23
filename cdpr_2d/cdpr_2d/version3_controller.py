@@ -1,55 +1,39 @@
-# Implementación de un robot por cables para el control
-# de un efector final en diversas tareas.
-
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
 import math
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float32MultiArray
-from geometry_msgs.msg import PoseArray, PoseStamped
+from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Path
 from tf2_ros import TransformBroadcaster
 
-# COMPILACIÓN, ENLAZADO Y EJECUCIÓN
+# COMPILING, LINKING, AND EXECUTING
 # TERMINAL 1: colcon build --symlink-install
 # TERMINAL 2: ros2 run cdpr_2d version3_controller
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6: 
-# ros2 topic pub --once /version3 geometry_msgs/msg/PoseArray "
-# poses:
-# - {position: {x: 0.30, y: 0.50, z: 0.0}}
-# - {position: {x: 0.40, y: 0.70, z: 0.0}}
-# - {position: {x: 0.60, y: 0.70, z: 0.0}}
-# - {position: {x: 0.70, y: 0.50, z: 0.0}}
-# - {position: {x: 0.60, y: 0.30, z: 0.0}}
-# - {position: {x: 0.40, y: 0.30, z: 0.0}}
-# - {position: {x: 0.30, y: 0.50, z: 0.0}}
-# "
+# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
 
 class Version3Controller(Node):
 
     def __init__(self):
         super().__init__('version3_controller')
-
-        # PARÁMETROS GEOMÉTRICOS DEL SISTEMA
         self.plane_width = 1.0
         self.plane_height = 1.0
         self.effector_width = 0.1
         self.effector_height = 0.1
         self.pulley_radius = 0.05
-
-        # VARIABLES DE POSICIÓN Y ESTADO
         self.current_x = 0.5
         self.current_y = 0.5
-
-        # ✅ CAMBIO NUEVO: inicialización temprana de target_x / target_y
-        # (para evitar error 'object has no attribute target_x')
         self.target_x = self.current_x
         self.target_y = self.current_y
-
         self.points = []
         self.points_number = 0
         self.segment_index = 0
@@ -57,55 +41,35 @@ class Version3Controller(Node):
         self.animation_progress = 0.0
         self.objective_achieved = False
         self.shutdown_scheduled = False
-
-        # ESTADO DE POLEAS
         self.left_pulley_position = 0.0
         self.right_pulley_position = 0.0
         self.initial_x = self.current_x
         self.initial_y = self.current_y
         self.segment_target_params = []
-
-        # TIMERS DE CONTROL
-        self.control_timer = self.create_timer(0.1, self.control_loop)
-        self.effector_timer = self.create_timer(0.25, self.publish_effector_parameters)
-        self.cable_timer = self.create_timer(0.25, self.publish_cable_parameters)
-        self.pulley_timer = self.create_timer(0.25, self.publish_pulley_parameters)
-
         qos_profile = QoSProfile(depth=10)
-
-        # ✅ CAMBIO: uso de mensajes estándar
         self.effector_coordinates_publisher = self.create_publisher(Path, '/effector_coordinates', qos_profile)
         self.cable_parameters_publisher = self.create_publisher(Float32MultiArray, '/cable_parameters', qos_profile)
         self.pulley_parameters_publisher = self.create_publisher(Float32MultiArray, '/pulley_parameters', qos_profile)
         self.joint_state_publisher = self.create_publisher(JointState, 'joint_states', qos_profile)
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
-
-        # ✅ CAMBIO: suscripción al topic /version3 con tipo PoseArray
-        self.coordinates_subscriber = self.create_subscription(
-            PoseArray, '/version3', self.path_callback, qos_profile
-        )
-
-        self.get_logger().info("CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS DE TRAYECTORIA...")
-
-    # ========================= FUNCIONES DE CÁLCULO ==============================
+        self.coordinates_subscriber = self.create_subscription(PoseStamped, '/version3', self.pose_callback, qos_profile)
+        self.control_timer = self.create_timer(0.1, self.control_loop)
+        self.effector_timer = self.create_timer(0.25, self.publish_effector_parameters)
+        self.cable_timer = self.create_timer(0.25, self.publish_cable_parameters)
+        self.pulley_timer = self.create_timer(0.25, self.publish_pulley_parameters)
+        self.get_logger().info("CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...")
 
     def calculate_cable_parameters(self, x, y):
-        left_pulley_x = 0.0
-        left_pulley_y = self.plane_height
-        right_pulley_x = self.plane_width
-        right_pulley_y = self.plane_height
-
+        left_pulley_x, left_pulley_y = 0.0, self.plane_height
+        right_pulley_x, right_pulley_y = self.plane_width, self.plane_height
         left_connection_x = x - self.effector_width / 2
         left_connection_y = y + self.effector_height / 2
         right_connection_x = x + self.effector_width / 2
         right_connection_y = y + self.effector_height / 2
-
         left_cable_length = math.sqrt((left_connection_x - left_pulley_x)**2 + (left_connection_y - left_pulley_y)**2)
         right_cable_length = math.sqrt((right_connection_x - right_pulley_x)**2 + (right_connection_y - right_pulley_y)**2)
-
         left_cable_angle = math.degrees(math.atan2(left_connection_x - left_pulley_x, left_pulley_y - left_connection_y))
         right_cable_angle = math.degrees(math.atan2(right_pulley_x - right_connection_x, right_pulley_y - right_connection_y))
-
         return left_cable_length, right_cable_length, left_cable_angle, right_cable_angle
 
     def calculate_pulley_movement(self, start_x, start_y, end_x, end_y):
@@ -120,14 +84,22 @@ class Version3Controller(Node):
     def check_objective_achieved(self):
         return abs(self.current_x - self.target_x) < 0.005 and abs(self.current_y - self.target_y) < 0.005
 
-    # ========================= CALLBACK DE TRAYECTORIA ==============================
-
-    def path_callback(self, msg):
-        if not msg.poses or len(msg.poses) < 2:
-            self.get_logger().error("SE REQUIEREN AL MENOS DOS PUNTOS EN LA TRAYECTORIA.")
+    def pose_callback(self, msg: PoseStamped):
+        x = float(msg.pose.position.x)
+        y = float(msg.pose.position.y)
+        if x == -1.0 and y == -1.0:
+            if len(self.points) > 2:
+                self.start_trajectory()
+                self.get_logger().info(f"TRAYECTORIA OBTENIDA DE {len(self.points)} PUNTOS. INICIANDO MOVIMIENTO ...")
+            else:
+                self.get_logger().error("SE REQUIEREN AL MENOS TRES PUNTOS")
+                self.create_timer(3.0, self.shutdown_node)
+                return
             return
+        self.points.append((x, y))
+        self.get_logger().info(f"PUNTO {len(self.points)} RECIBIDO: ({x:.3f}, {y:.3f})")
 
-        self.points = [(float(p.position.x), float(p.position.y)) for p in msg.poses]
+    def start_trajectory(self):
         self.points_number = len(self.points)
         self.segment_index = 0
         self.initial_x, self.initial_y = self.points[0]
@@ -140,7 +112,6 @@ class Version3Controller(Node):
         self.left_pulley_position = 0.0
         self.right_pulley_position = 0.0
         self.segment_target_params = []
-
         for i in range(self.points_number - 1):
             sx, sy = self.points[i]
             ex, ey = self.points[i + 1]
@@ -154,31 +125,22 @@ class Version3Controller(Node):
                 'pulley_angles': (p1_angle, p2_angle)
             })
 
-        self.get_logger().info(f"NUEVA TRAYECTORIA RECIBIDA CON {self.points_number} PUNTOS.")
-        self.get_logger().info("DESPLAZAMIENTO DESDE EL PUNTO 1 HASTA EL PUNTO 2.")
-
-    # ========================= BUCLE DE CONTROL ==============================
-
     def control_loop(self):
         if self.objective_achieved and not self.shutdown_scheduled:
             self.shutdown_scheduled = True
             self.get_logger().info("CERRANDO CONTROLADOR ...")
             self.create_timer(3.0, self.shutdown_node)
             return
-
         if self.moving and not self.objective_achieved:
             self.animation_progress += 0.02
-
             if self.animation_progress >= 1.0:
                 self.animation_progress = 1.0
                 self.current_x = self.target_x
                 self.current_y = self.target_y
-                delta_l1, delta_l2, pulley1_angle, pulley2_angle = \
-                    self.calculate_pulley_movement(self.initial_x, self.initial_y, self.current_x, self.current_y)
+                delta_l1, delta_l2, pulley1_angle, pulley2_angle = self.calculate_pulley_movement(self.initial_x, self.initial_y, self.current_x, self.current_y)
                 self.left_pulley_position += pulley1_angle
                 self.right_pulley_position += pulley2_angle
                 self.publish_joint_states()
-
                 if self.segment_index < (self.points_number - 2):
                     self.segment_index += 1
                     self.initial_x, self.initial_y = self.points[self.segment_index]
@@ -186,27 +148,18 @@ class Version3Controller(Node):
                     self.animation_progress = 0.0
                     self.get_logger().info(f"DESPLAZAMIENTO DESDE EL PUNTO {self.segment_index+1} HASTA EL PUNTO {self.segment_index+2}")
                 else:
-                    if self.check_objective_achieved():
-                        self.objective_achieved = True
-                        self.moving = False
-                        self.show_final_summary()
-                    else:
-                        self.get_logger().info("TRAYECTORIA COMPLETADA")
-                        self.moving = False
+                    self.objective_achieved = True
+                    self.moving = False
+                    self.show_final_summary()
                 return
-
             interpolated_x = self.initial_x + (self.target_x - self.initial_x) * self.animation_progress
             interpolated_y = self.initial_y + (self.target_y - self.initial_y) * self.animation_progress
-            delta_l1, delta_l2, pulley1_angle, pulley2_angle = \
-                self.calculate_pulley_movement(self.current_x, self.current_y, interpolated_x, interpolated_y)
-
+            delta_l1, delta_l2, pulley1_angle, pulley2_angle = self.calculate_pulley_movement(self.current_x, self.current_y, interpolated_x, interpolated_y)
             self.left_pulley_position += pulley1_angle
             self.right_pulley_position += pulley2_angle
             self.publish_joint_states()
             self.current_x = interpolated_x
             self.current_y = interpolated_y
-
-    # ========================= PUBLICADORES ==============================
 
     def publish_effector_parameters(self):
         path_msg = Path()
@@ -218,7 +171,6 @@ class Version3Controller(Node):
         pose_target.pose.position.y = self.target_y
         path_msg.poses = [pose_current, pose_target]
         self.effector_coordinates_publisher.publish(path_msg)
-
         if self.moving:
             progress_percent = self.animation_progress * 100
             self.get_logger().info(
@@ -230,14 +182,13 @@ class Version3Controller(Node):
             self.get_logger().info(f"EFECTOR: EN REPOSO - POSICIÓN = ({self.current_x:.3f}, {self.current_y:.3f})")
 
     def publish_cable_parameters(self):
-        current_left_length, current_right_length, current_left_angle, current_right_angle = \
-            self.calculate_cable_parameters(self.current_x, self.current_y)
+        L1, L2, Q1, Q2 = self.calculate_cable_parameters(self.current_x, self.current_y)
         msg = Float32MultiArray()
-        msg.data = [current_left_length, current_right_length, current_left_angle, current_right_angle]
+        msg.data = [L1, L2, Q1, Q2]
         self.cable_parameters_publisher.publish(msg)
         self.get_logger().info(
-            f"CABLES: (L1, L2)=({current_left_length:.3f} m, {current_right_length:.3f} m), "
-            f"(Q1, Q2)=({current_left_angle:.2f}°, {current_right_angle:.2f}°)"
+            f"CABLES: (L1, L2)=({L1:.3f} m, {L2:.3f} m), "
+            f"(Q1, Q2)=({Q1:.2f}°, {Q2:.2f}°)"
         )
 
     def publish_pulley_parameters(self):
@@ -260,8 +211,6 @@ class Version3Controller(Node):
         joint_state_message.name = ['left_wheel_joint', 'right_wheel_joint']
         joint_state_message.position = [self.left_pulley_position, self.right_pulley_position]
         self.joint_state_publisher.publish(joint_state_message)
-
-    # ========================= RESUMEN FINAL Y CIERRE ==============================
 
     def show_final_summary(self):
         print("═" * 100)
@@ -293,7 +242,6 @@ class Version3Controller(Node):
         self.destroy_node()
         rclpy.shutdown()
 
-
 def main(args=None):
     rclpy.init(args=args)
     controller = Version3Controller()
@@ -301,17 +249,10 @@ def main(args=None):
         rclpy.spin(controller)
     except KeyboardInterrupt:
         print("\nCERRANDO CONTROLADOR ...")
-    except Exception as e:
-        print(f"Error: {e}")
     finally:
-        try:
-            if rclpy.ok():
-                controller.destroy_node()
-                rclpy.shutdown()
-        except:
-            pass
-
+        if rclpy.ok():
+            controller.destroy_node()
+            rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
-
