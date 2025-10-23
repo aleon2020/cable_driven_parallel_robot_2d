@@ -26,6 +26,7 @@ setup(
     entry_points={
         'console_scripts': [
             'cdpr_controller = cdpr_2d.cdpr_controller:main',
+            'robot_controller = cdpr_2d.robot_controller:main',
             'version1_controller = cdpr_2d.version1_controller:main',
             'version2_controller = cdpr_2d.version2_controller:main',
             'version3_controller = cdpr_2d.version3_controller:main'
