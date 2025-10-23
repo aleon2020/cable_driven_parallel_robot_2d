@@ -99,7 +99,7 @@ class Version1Controller(Node):
         print(f"• ÁNGULOS DE GIRO (RADIANES): P1: {pulley1_angle:+.3f} rad, P2: {pulley2_angle:+.3f} rad")
         print("=" * 100)
         self.get_logger().info("CERRANDO CONTROLADOR ...")
-        self.create_timer(3.0, self.shutdown_node)
+        self.create_timer(0.05, self.shutdown_node)
 
     def shutdown_node(self):
         self.destroy_node()

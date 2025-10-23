@@ -365,18 +365,20 @@ class CDPRController(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = CDPRController()
+    controller = CDPRController()
     try:
-        rclpy.spin(node)
+        rclpy.spin(controller)
     except KeyboardInterrupt:
-        node.get_logger().info("CONTROLADOR FINALIZADO POR USUARIO.")
+        print("\nCERRANDO CONTROLADOR ...")
+    except Exception as e:
+        print(f"Error: {e}")
     finally:
-        if rclpy.ok():
-            try:
-                node.destroy_node()
-            except:
-                pass
-            rclpy.shutdown()
+        try:
+            if rclpy.ok():
+                controller.destroy_node()
+                rclpy.shutdown()
+        except:
+            pass
 
 if __name__ == '__main__':
     main()

@@ -44,10 +44,10 @@ class Version2Controller(Node):
         self.target_right_pulley_angle = 0.0
         self.received_first_pose = False
         self.first_pose = None
-        self.control_timer = self.create_timer(0.1, self.control_loop)
-        self.effector_timer = self.create_timer(0.25, self.publish_effector_parameters)
-        self.cable_timer = self.create_timer(0.25, self.publish_cable_parameters)
-        self.pulley_timer = self.create_timer(0.25, self.publish_pulley_parameters)
+        self.control_timer = self.create_timer(0.5, self.control_loop)
+        self.effector_timer = self.create_timer(0.5, self.publish_effector_parameters)
+        self.cable_timer = self.create_timer(0.5, self.publish_cable_parameters)
+        self.pulley_timer = self.create_timer(0.5, self.publish_pulley_parameters)
         qos_profile = QoSProfile(depth=10)
         self.effector_coordinates_publisher = self.create_publisher(Path, '/effector_coordinates', qos_profile)
         self.cable_parameters_publisher = self.create_publisher(Float32MultiArray, '/cable_parameters', qos_profile)
@@ -113,7 +113,7 @@ class Version2Controller(Node):
         if self.objective_achieved and not self.shutdown_scheduled:
             self.shutdown_scheduled = True
             self.get_logger().info("CERRANDO CONTROLADOR ...")
-            self.create_timer(3.0, self.shutdown_node)
+            self.create_timer(0.05, self.shutdown_node)
             return
         if self.moving and not self.objective_achieved:
             self.animation_progress += 0.02
@@ -215,15 +215,20 @@ class Version2Controller(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = Version2Controller()
+    controller = Version2Controller()
     try:
-        rclpy.spin(node)
+        rclpy.spin(controller)
     except KeyboardInterrupt:
-        node.get_logger().info("CONTROLADOR FINALIZADO POR USUARIO.")
+        print("\nCERRANDO CONTROLADOR ...")
+    except Exception as e:
+        print(f"Error: {e}")
     finally:
-        if rclpy.ok():
-            node.destroy_node()
-            rclpy.shutdown()
+        try:
+            if rclpy.ok():
+                controller.destroy_node()
+                rclpy.shutdown()
+        except:
+            pass
 
 if __name__ == '__main__':
     main()

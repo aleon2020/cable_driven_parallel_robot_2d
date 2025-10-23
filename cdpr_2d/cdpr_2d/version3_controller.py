@@ -53,10 +53,10 @@ class Version3Controller(Node):
         self.joint_state_publisher = self.create_publisher(JointState, 'joint_states', qos_profile)
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
         self.coordinates_subscriber = self.create_subscription(PoseStamped, '/version3', self.pose_callback, qos_profile)
-        self.control_timer = self.create_timer(0.1, self.control_loop)
-        self.effector_timer = self.create_timer(0.25, self.publish_effector_parameters)
-        self.cable_timer = self.create_timer(0.25, self.publish_cable_parameters)
-        self.pulley_timer = self.create_timer(0.25, self.publish_pulley_parameters)
+        self.control_timer = self.create_timer(0.5, self.control_loop)
+        self.effector_timer = self.create_timer(0.5, self.publish_effector_parameters)
+        self.cable_timer = self.create_timer(0.5, self.publish_cable_parameters)
+        self.pulley_timer = self.create_timer(0.5, self.publish_pulley_parameters)
         self.get_logger().info("CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...")
 
     def calculate_cable_parameters(self, x, y):
@@ -93,7 +93,7 @@ class Version3Controller(Node):
                 self.get_logger().info(f"TRAYECTORIA OBTENIDA DE {len(self.points)} PUNTOS. INICIANDO MOVIMIENTO ...")
             else:
                 self.get_logger().error("SE REQUIEREN AL MENOS TRES PUNTOS")
-                self.create_timer(3.0, self.shutdown_node)
+                self.create_timer(0.05, self.shutdown_node)
                 return
             return
         self.points.append((x, y))
@@ -129,7 +129,7 @@ class Version3Controller(Node):
         if self.objective_achieved and not self.shutdown_scheduled:
             self.shutdown_scheduled = True
             self.get_logger().info("CERRANDO CONTROLADOR ...")
-            self.create_timer(3.0, self.shutdown_node)
+            self.create_timer(0.05, self.shutdown_node)
             return
         if self.moving and not self.objective_achieved:
             self.animation_progress += 0.02
@@ -249,10 +249,15 @@ def main(args=None):
         rclpy.spin(controller)
     except KeyboardInterrupt:
         print("\nCERRANDO CONTROLADOR ...")
+    except Exception as e:
+        print(f"Error: {e}")
     finally:
-        if rclpy.ok():
-            controller.destroy_node()
-            rclpy.shutdown()
+        try:
+            if rclpy.ok():
+                controller.destroy_node()
+                rclpy.shutdown()
+        except:
+            pass
 
 if __name__ == '__main__':
     main()
