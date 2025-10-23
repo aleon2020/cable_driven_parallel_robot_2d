@@ -1,10 +1,20 @@
-# Trabajo de Fin de Grado 2025-2026
+# Cable Driven Parallel Robot 2D
 
-¡Bienvenido! En este repositorio se encuentran todos los materiales correspondientes al Trabajo de Fin de Grado realizado en el Grado en Ingeniería de Robótica Software.
+![distro](https://img.shields.io/badge/Ubuntu%2024-Jammy%20Jellyfish-orange)
+![distro](https://img.shields.io/badge/ROS2-Rolling-blue)
+[![jazzy](https://github.com/juanscelyg/ray_tracing_plugin/actions/workflows/main.yaml/badge.svg)](https://github.com/aleon2020/cable_driven_parallel_robot_2d/actions/workflows/main.yaml)
 
-**TEMA**: Implementación de un robot por cables para el control de un efector final en diversas tareas
+Welcome! My name is [Alberto León Luengo](https://github.com/aleon2020), a Software Robotics Engineering student at Rey Juan Carlos University.
 
-**TUTOR**: [Juan Sebastián Cely Gutiérrez](https://github.com/juanscelyg)
+This GitHub repository contains all the materials I used to complete my Final Degree Project (FDP) within the [Intelligent Robotics Lab](https://github.com/IntelligentRoboticsLabs), all under the supervision of my professor / tutor, [Juan Sebastián Cely Gutiérrez](https://github.com/juanscelyg).
+
+The main objective of this project is the design, construction, and commissioning of a functional prototype of a **Cable-Driven Parallel Robot (CDPR)** capable of controlling a suspended end-effector to perform trajectory planning tasks.
+
+In addition, aspects such as kinematic modeling of the system, software development in multiple languages, integration with ROS2, and physical validation will be addressed.
+
+<p align="center">
+  <img src="">
+</p>
 
 ## 1. Compilación y ejecución del workspace
 
@@ -174,3 +184,7 @@ poses:
 - {position: {x: 0.30, y: 0.50, z: 0.0}}
 "
 ```
+
+### References
+
+[https://ieeexplore.ieee.org/document/8920840](https://ieeexplore.ieee.org/document/8920840)
