@@ -16,174 +16,181 @@ In addition, aspects such as kinematic modeling of the system, software developm
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/cable_driven_parallel_robot.png?raw=true">
 </p>
 
-## 1. Compilación y ejecución del workspace
+---
 
-En este caso, el repositorio es el equivalente al **directorio src/** de un workspace, por lo que sería necesario crear un workspace nuevo desde cero.
+## Features
 
-A continuación se detallan los pasos a seguir para compilar y ejecutar correctamente todos los paquetes que componen este repositorio:
+- Management of a Cable Driven Parallel Robot using ROS2 and RViZ.
+- Compatible with **ROS2 Rolling**.
+- Implemented in **Python** with support for configuration via **ROS2 launch files**.
+- Modular architecture:
+  - **cdpr_2d/**: CDPR source code.
+  - **config/**: RViZ configuration.
+  - **description/**: CDPR model in URDF for RViZ.
+  - **launch/**: Launch files.
+  - **resource/**: Resource file.
+  - **test/**: Test files.
+  - **package.xml**: Package metadata.
+  - **setup.cfg/**: Build configuration.
+  - **setup.py/**: Build configuration.
+- Built using **colcon**.
 
-### 1.1 PASO 1: Clonación del workspace
+---
 
-Para clonar este repositorio es recomendable abrir la terminal desde el **directorio HOME/** (carpeta personal):
+## Project Structure
 
 ```sh
-mkdir tfg_girs_ws
+src
+├── cdpr_2d
+│   ├── cdpr_controller.py
+│   ├── __init__.py
+│   ├── robot_controller.py
+│   ├── version1_controller.py
+│   ├── version2_controller.py
+│   └── version3_controller.py
+├── config
+│   └── robot.rviz
+├── description
+│   ├── robot.xacro
+│   └── urdf
+│       └── robot.urdf
+├── launch
+│   └── robot_state_publisher.launch.py
+├── package.xml
+├── resource
+│   └── cdpr_2d
+├── setup.cfg
+├── setup.py
+└── test
+│   ├── test_copyright.py
+│   ├── test_flake8.py
+│   └── test_pep257.py
+docs
+media
+README.md
+```
+
+---
+
+## Installation
+
+### Prerequisites
+
+- **RViZ**.
+- **ROS 2 Rolling**.
+- **Python ≥ 3.12.3**.
+- **colcon** for building.
+
+### Steps
+
+In this case, the repository is the equivalent of the **src/** directory of a workspace, so it would be necessary to create a new workspace from scratch.
+
+```sh
+# Cloning the workspace
+
+mkdir <my_workspace>
+
+cd <my_workspace>/
+
+git clone https://<my_token>@github.com/aleon2020/cable_driven_parallel_robot_2d.git
 ```
 
 ```sh
-cd tfg_girs_ws/
+# Repository name change
+
+mv cable_driven_parallel_robot_2d src
 ```
 
 ```sh
-git clone https://<token>@github.com/aleon2020/TFG_GIRS_2025_SRC.git
+# Compiling the workspace
+
+cd <my_workspace>/
+
+colcon build --symlink-install
+
+source ~/<my_workspace>/install/setup.bash
 ```
 
-**IMPORTANTE**: Añade tu token tal y como se muestra. Esto se hace con el objetivo de no tener que introducir el token en la terminal cada vez que se quiera actualizar el repositorio utilizando el comando 'git pull'.
+**IMPORTANT**: Add your token exactly as shown. This is to avoid having to enter the token in the terminal every time you want to update the repository using the 'git pull' command.
 
-Si ya has clonado este repositorio, ejecuta el siguiente comando antes de que empieces a trabajar con él, ya que pueden haberse añadido nuevos cambios o modificaciones. Esto se hace con el objetivo de asegurarse de que se tiene clonada la versión más reciente del repositorio:
+If you've already cloned this repository, run the following command before starting to work with it, as new changes or modifications may have been added. This is to ensure you have cloned the most recent version of the repository:
 
 ```sh
 git pull
 ```
 
-### 1.2 PASO 2: Cambio de nombre del repositorio
+---
 
-Una vez clonado el repositorio en tu **directorio HOME/** (carpeta personal), éste aparecerá con el nombre **"TFG_GIRS_2025_SRC"**, por lo que se renombrará con otro nombre para evitar el uso de mayúsculas y números. Para ello, se debe ejecutar el siguiente comando en la terminal:
+## Usage
 
-```sh
-mv TFG_GIRS_2025_SRC src
-```
-
-### 1.3 PASO 3: Compilación del workspace
-
-Con el repositorio ya renombrado de una forma más acorde a la de un workspace, se debe compilar el workspace ejecutando los siguientes comandos en una nueva terminal:
+1. Run one of the following commands depending on the driver version you want to run:
 
 ```sh
-cd tfg_girs_ws/
-```
-
-```sh
-colcon build --symlink-install
-```
-
-Una vez terminada la compilación del workspace con colcon, añade la siguiente línea en el fichero .bashrc desde el **directorio HOME/** (carpeta personal):
-
-```sh
-nano .bashrc
-```
-
-```sh
-source ~/tfg_girs_ws/install/setup.bash
-```
-
-Una vez guardados los cambios, se cierran tanto el fichero como la terminal. Esto se hace con el objetivo de que los cambios realizados en el fichero .bashrc funcionen correctamente.
-
-## 2. Comandos de ejecución de los controladores
-
-### 2.1 Versión 1: version1_controller.py
-
-```sh
-# TERMINAL 1
-colcon build --symlink-install
-```
-
-```sh
-# TERMINAL 2
+# VERSION 1 (1 POINT)
 ros2 run cdpr_2d version1_controller
-```
 
-```sh
-# TERMINAL 3
-ros2 topic echo /effector_coordinates
-```
-
-```sh
-# TERMINAL 4
-ros2 topic echo /cable_parameters
-```
-
-```sh
-# TERMINAL 5
-ros2 topic echo /pulley_parameters
-```
-
-```sh
-# TERMINAL 6
-ros2 topic pub --once /version1 geometry_msgs/msg/PoseStamped "{pose: {position: {x: 0.30, y: 0.30, z: 0.0}}}"
-```
-
-### 2.2 Versión 2: version2_controller.py
-
-```sh
-# TERMINAL 1
-colcon build --symlink-install
-```
-
-```sh
-# TERMINAL 2
+# VERSION 2 (2 POINTS)
 ros2 run cdpr_2d version2_controller
-```
 
-```sh
-# TERMINAL 3
-ros2 topic echo /effector_coordinates
-```
-
-```sh
-# TERMINAL 4
-ros2 topic echo /cable_parameters
-```
-
-```sh
-# TERMINAL 5
-ros2 topic echo /pulley_parameters
-```
-
-```sh
-# TERMINAL 6
-ros2 topic pub --once /version2 nav_msgs/msg/Path "{poses: [{pose: {position: {x: 0.30, y: 0.30, z: 0.0}}}, {pose: {position: {x: 0.70, y: 0.70, z: 0.0}}}]}"
-```
-
-### 2.3 Versión 3: version3_controller.py
-
-```sh
-# TERMINAL 1
-colcon build --symlink-install
-```
-
-```sh
-# TERMINAL 2
+# VERSION 3 (3 OR MORE POINTS)
 ros2 run cdpr_2d version3_controller
+
+# FULL VERSION
+ros2 run cdpr_2d cdpr_controller
 ```
 
+2. Launch each of the topics to see data related to the end effector:
+
 ```sh
-# TERMINAL 3
+# Position (x,y) of the end effector
 ros2 topic echo /effector_coordinates
-```
 
-```sh
-# TERMINAL 4
+# Cable lengths and angles with the vertical
 ros2 topic echo /cable_parameters
-```
 
-```sh
-# TERMINAL 5
+# Elongated/retracted cable length and angle of rotation of each pulley
 ros2 topic echo /pulley_parameters
 ```
 
+3. Publish messages in the corresponding topic to send the coordinates to which you want to move the end effector:
+
 ```sh
-# TERMINAL 6
-ros2 topic pub --once /version3 geometry_msgs/msg/PoseArray "
-poses:
-- {position: {x: 0.30, y: 0.50, z: 0.0}}
-- {position: {x: 0.40, y: 0.70, z: 0.0}}
-- {position: {x: 0.60, y: 0.70, z: 0.0}}
-- {position: {x: 0.70, y: 0.50, z: 0.0}}
-- {position: {x: 0.60, y: 0.30, z: 0.0}}
-- {position: {x: 0.40, y: 0.30, z: 0.0}}
-- {position: {x: 0.30, y: 0.50, z: 0.0}}
-"
+# VERSION 1
+ros2 topic pub --once /version1 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
+
+# VERSION 2
+ros2 topic pub --once /version2 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
+ros2 topic pub --once /version2 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.7, y: 0.7, z: 0.0}}}"
+
+# VERSION 3
+ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
+ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}"
+ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}"
+ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}"
+ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
+ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+
+# FULL VERSION (VERSION 1)
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+
+# FULL VERSION (VERSION 2)
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.7, y: 0.7, z: 0.0}}}"
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+
+# FULL VERSION (VERSION 3)
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}"
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}"
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}"
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
+ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
 ```
+
+**NOTE**: In version 3 and in all cases of the full version, the point (-1.0,-1.0) is published as a marker to let the controller know that no more points will be sent and therefore, it can start executing each case, always depending on the number of points (or messages of the geometry_msgs/msg/PoseStamped type that have been sent to it).
+
+---
 
 ### References
 
