@@ -152,7 +152,7 @@ ros2 topic echo /cable_parameters
 ros2 topic echo /pulley_parameters
 ```
 
-3. Publish messages in the corresponding topic to send the coordinates to which you want to move the end effector:
+3. Publish one of the following sets of commands messages in the corresponding topic to send the coordinates to which you want to move the end effector:
 
 ```sh
 # VERSION 1
