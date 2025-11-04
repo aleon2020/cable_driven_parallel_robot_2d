@@ -1,38 +1,87 @@
+# FILE .github/workflows/main.yaml
+# Continuous integration (CI) execution and testing for the ROS2 cdpr_2d package.
+
+# Workflow name (Actions tab).
 name: main
 
 on:
+
+  # Creating a Pull Request to the main branch.
   pull_request:
     branches:
       - main
+
+  # Direct push to the main branch.
   push:
     branches:
       - main
+  
+  # Scheduled execution:
+  # - 1: Minute (0 - 59).
+  # - 2: Hour (0 - 23).
+  # - 3: Day of the Month (1 - 31), where * means "any day".
+  # - 4: Month (1 - 12), where * means "any month".
+  # - 5: Day of the Week (0 - 6), where 0 is Sunday and 6 is Saturday.
   schedule:
-      - cron: '0 0 * * 6'     
+      - cron: '0 0 * * 6'
+
 jobs:
+
   build-and-test:
+
+    # Define the operating system on which the workflow runs.
     runs-on: ${{ matrix.os }}
+
+    # Use Ubuntu 24.04 to run ROS2 Rolling (continues even if jobs fail).
     strategy:
       matrix:
         os: [ubuntu-24.04]
       fail-fast: false
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup ROS 2
+
+      # Checkout of the repository source code.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Environment configuration in ROS2 Rolling.
+      - name: Setup ROS 2 environment
         uses: ros-tooling/setup-ros@0.7.13
         with:
           required-ros-distributions: rolling
-      - name: build and test
+
+      # Construction, testing and analysis of the cdpr_2d package.
+      - name: Build and test cdpr_2d package
         uses: ros-tooling/action-ros-ci@0.4.3
         with:
+
+          # Name of the ROS2 package that contains the source code.
           package-name: cdpr_2d
+
+          # ROS2 distribution to be used.
           target-ros2-distro: rolling
+
+          # Request the Github token only if the repository is private.
+          import-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Optional colcon configuration to control tests.
           colcon-defaults: |
             {
               "test": {
                 "parallel-workers" : 1
               }
             }
+
+          # Compilation mixins with coverage and GCC.
           colcon-mixin-name: coverage-gcc
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
-          
+
+      # Upload performance of test results and coverage.
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            log/latest_test
+            log/latest_build
