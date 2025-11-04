@@ -2,7 +2,7 @@
 
 ![distro](https://img.shields.io/badge/Ubuntu%2024-Jammy%20Jellyfish-orange)
 ![distro](https://img.shields.io/badge/ROS2-Rolling-blue)
-[![jazzy](https://github.com/juanscelyg/ray_tracing_plugin/actions/workflows/main.yaml/badge.svg)](https://github.com/aleon2020/cable_driven_parallel_robot_2d/actions/workflows/main.yaml)
+[![jazzy](https://github.com/aleon2020/cable_driven_parallel_robot_2d/actions/workflows/main.yaml/badge.svg)](https://github.com/aleon2020/cable_driven_parallel_robot_2d/actions/workflows/main.yaml)
 
 Welcome! My name is [Alberto León Luengo](https://github.com/aleon2020), a Software Robotics Engineering student at Rey Juan Carlos University.
 
