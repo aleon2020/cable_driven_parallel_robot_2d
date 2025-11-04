@@ -4,13 +4,9 @@
 ![distro](https://img.shields.io/badge/ROS2-Rolling-blue)
 [![jazzy](https://github.com/aleon2020/cable_driven_parallel_robot_2d/actions/workflows/main.yaml/badge.svg)](https://github.com/aleon2020/cable_driven_parallel_robot_2d/actions/workflows/main.yaml)
 
-Welcome! My name is [Alberto León Luengo](https://github.com/aleon2020), a Software Robotics Engineering student at Rey Juan Carlos University.
+This repository is part of a Final Degree Project (FDP / TFG) focused on the design, construction, and commissioning of a **Cable-Driven Parallel Robot (CDPR)** capable of controlling a suspended end-effector to perform trajectory planning and motion control tasks.
 
-This GitHub repository contains all the materials I used to complete my Final Degree Project (FDP) within the [Intelligent Robotics Lab](https://github.com/IntelligentRoboticsLabs), all under the supervision of my professor / tutor, [Juan Sebastián Cely Gutiérrez](https://github.com/juanscelyg).
-
-The main objective of this project is the design, construction, and commissioning of a functional prototype of a **Cable-Driven Parallel Robot (CDPR)** capable of controlling a suspended end-effector to perform trajectory planning tasks.
-
-In addition, aspects such as kinematic modeling of the system, software development in multiple languages, integration with ROS2, and physical validation will be addressed.
+The project integrates topics such as **kinematic modeling**, **control algorithms**, **software development in Python**, and **integration with ROS2 Rolling**, providing a modular and scalable framework for experimentation with cable-driven robotic platforms.
 
 <p align="center">
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/cable_driven_parallel_robot.png?raw=true">
@@ -195,3 +191,12 @@ ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: '
 ### References
 
 [https://ieeexplore.ieee.org/document/8920840](https://ieeexplore.ieee.org/document/8920840)
+
+---
+
+### Author
+
+**Alberto León Luengo**  
+Software Robotics Engineering at **Rey Juan Carlos University**.  
+Github: [aleon2020](https:/github.com/aleon2020)  
+Developed under the supervision of [Professor Juan Sebastián Cely Gutiérrez](https://github.com/juanscely), within the [Intelligent Robotics Lab](https://github.com/IntelligentRoboticsLabs).
