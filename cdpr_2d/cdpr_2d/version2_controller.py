@@ -14,8 +14,7 @@ from tf2_ros import TransformBroadcaster
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6: ros2 topic pub --once /version2 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /version2 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.7, y: 0.7, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /version2 nav_msgs/msg/Path "{header: {frame_id: 'world'}, poses: [{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.7, y: 0.7, z: 0.0}}}]}"
 
 class Version2Controller(Node):
 
@@ -54,17 +53,15 @@ class Version2Controller(Node):
         self.pulley_parameters_publisher = self.create_publisher(Float32MultiArray, '/pulley_parameters', qos_profile)
         self.joint_state_publisher = self.create_publisher(JointState, 'joint_states', qos_profile)
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
-        self.coordinates_subscriber = self.create_subscription(PoseStamped, '/version2', self.target_coordinates_callback, qos_profile)
+        self.coordinates_subscriber = self.create_subscription(Path, '/version2', self.target_coordinates_callback, qos_profile)
         self.get_logger().info("CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...")
 
-    def target_coordinates_callback(self, msg: PoseStamped):
-        if not self.received_first_pose:
-            self.first_pose = msg.pose
-            self.received_first_pose = True
-            self.get_logger().info(f"POSICIÓN INICIAL RECIBIDA: ({msg.pose.position.x:.3f}, {msg.pose.position.y:.3f})")
+    def target_coordinates_callback(self, msg: Path):
+        if len(msg.poses) < 2:
+            self.get_logger().error("ERROR. FORMATO DE MENSAJE INCORRECTO.")
             return
-        start = self.first_pose.position
-        end = msg.pose.position
+        start = msg.poses[0].pose.position
+        end = msg.poses[1].pose.position
         self.initial_x = start.x
         self.initial_y = start.y
         self.current_x = start.x

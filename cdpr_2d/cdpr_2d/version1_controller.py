@@ -60,7 +60,7 @@ class Version1Controller(Node):
         pulley2_angle = delta_l2 / self.pulley_radius
         return delta_l1, delta_l2, pulley1_angle, pulley2_angle
 
-    def position_callback(self, msg: PoseStamped):
+    def position_callback(self, msg: Path):
         if self.received:
             return
         try:
