@@ -14,12 +14,7 @@ from tf2_ros import TransformBroadcaster
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /version3 nav_msgs/msg/Path "{header: {frame_id: 'world'}, poses: [{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}]}"
 
 class Version3Controller(Node):
 
@@ -52,12 +47,26 @@ class Version3Controller(Node):
         self.pulley_parameters_publisher = self.create_publisher(Float32MultiArray, '/pulley_parameters', qos_profile)
         self.joint_state_publisher = self.create_publisher(JointState, 'joint_states', qos_profile)
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
-        self.coordinates_subscriber = self.create_subscription(PoseStamped, '/version3', self.pose_callback, qos_profile)
+        self.coordinates_subscriber = self.create_subscription(Path, '/version3', self.path_callback, qos_profile)
         self.control_timer = self.create_timer(0.5, self.control_loop)
         self.effector_timer = self.create_timer(0.5, self.publish_effector_parameters)
         self.cable_timer = self.create_timer(0.5, self.publish_cable_parameters)
         self.pulley_timer = self.create_timer(0.5, self.publish_pulley_parameters)
         self.get_logger().info("CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...")
+
+    def path_callback(self, msg: Path):
+        self.points = []
+        for pose in msg.poses:
+            x = float(pose.pose.position.x)
+            y = float(pose.pose.position.y)
+            self.points.append((x, y))
+        self.points_number = len(self.points)
+        if self.points_number < 2:
+            self.get_logger().error("SE REQUIEREN AL MENOS DOS PUNTOS PARA DEFINIR UNA TRAYECTORIA")
+            self.create_timer(0.05, self.shutdown_node)
+            return
+        self.get_logger().info(f"TRAYECTORIA RECIBIDA CON {self.points_number} PUNTOS. INICIANDO MOVIMIENTO ...")
+        self.start_trajectory()
 
     def calculate_cable_parameters(self, x, y):
         left_pulley_x, left_pulley_y = 0.0, self.plane_height
@@ -83,21 +92,6 @@ class Version3Controller(Node):
 
     def check_objective_achieved(self):
         return abs(self.current_x - self.target_x) < 0.005 and abs(self.current_y - self.target_y) < 0.005
-
-    def pose_callback(self, msg: PoseStamped):
-        x = float(msg.pose.position.x)
-        y = float(msg.pose.position.y)
-        if x == -1.0 and y == -1.0:
-            if len(self.points) > 2:
-                self.start_trajectory()
-                self.get_logger().info(f"TRAYECTORIA OBTENIDA DE {len(self.points)} PUNTOS. INICIANDO MOVIMIENTO ...")
-            else:
-                self.get_logger().error("SE REQUIEREN AL MENOS TRES PUNTOS")
-                self.create_timer(0.05, self.shutdown_node)
-                return
-            return
-        self.points.append((x, y))
-        self.get_logger().info(f"PUNTO {len(self.points)} RECIBIDO: ({x:.3f}, {y:.3f})")
 
     def start_trajectory(self):
         self.points_number = len(self.points)
