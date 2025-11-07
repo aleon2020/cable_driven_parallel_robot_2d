@@ -152,36 +152,78 @@ ros2 topic echo /pulley_parameters
 
 ```sh
 # VERSION 1
-ros2 topic pub --once /version1 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
+ros2 topic pub --once /version1 nav_msgs/msg/Path \
+"{header: {frame_id: 'world'}, \
+  poses: [ \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.3, y: 0.3, z: 0.0}}} \
+  ] \
+}"
 
 # VERSION 2
-ros2 topic pub --once /version2 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
-ros2 topic pub --once /version2 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.7, y: 0.7, z: 0.0}}}"
+ros2 topic pub --once /version2 nav_msgs/msg/Path \
+"{header: {frame_id: 'world'}, \
+  poses: [ \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}, \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.7, y: 0.7, z: 0.0}}} \
+  ] \
+}"
 
 # VERSION 3
-ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
-ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}"
-ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}"
-ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}"
-ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
-ros2 topic pub --once /version3 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+ros2 topic pub --once /version3 nav_msgs/msg/Path \
+"{header: {frame_id: 'world'}, \
+  poses: [ \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}, \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}, \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}, \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}, \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.2, y: 0.2, z: 0.0}}} \
+  ] \
+}"
 
 # FULL VERSION (VERSION 1)
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+ros2 topic pub --once /cdpr nav_msgs/msg/Path \
+"{header: {frame_id: 'world'}, \
+  poses: [ \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.3, y: 0.3, z: 0.0}}} \
+  ] \
+}"
 
 # FULL VERSION (VERSION 2)
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.7, y: 0.7, z: 0.0}}}"
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+ros2 topic pub --once /cdpr nav_msgs/msg/Path \
+"{header: {frame_id: 'world'}, \
+  poses: [ \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}, \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.7, y: 0.7, z: 0.0}}} \
+  ] \
+}"
 
 # FULL VERSION (VERSION 3)
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}"
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}"
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}"
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
-ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+ros2 topic pub --once /cdpr nav_msgs/msg/Path \
+"{header: {frame_id: 'world'}, \
+  poses: [ \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}, \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}, \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}, \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}, \
+    {header: {frame_id: 'world'}, \
+     pose: {position: {x: 0.2, y: 0.2, z: 0.0}}} \
+  ] \
+}"
 ```
 
 **NOTE**: In version 3 and in all cases of the full version, the point (-1.0,-1.0) is published as a marker to let the controller know that no more points will be sent and therefore, it can start executing each case, always depending on the number of points (or messages of the geometry_msgs/msg/PoseStamped type that have been sent to it).

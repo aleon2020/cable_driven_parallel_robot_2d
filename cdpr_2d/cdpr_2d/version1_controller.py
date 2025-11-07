@@ -13,7 +13,14 @@ from std_msgs.msg import Float32MultiArray
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6: ros2 topic pub --once /version1 nav_msgs/msg/Path "{header: {frame_id: 'world'}, poses: [{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}]}"
+# TERMINAL 6:
+# ros2 topic pub --once /version1 nav_msgs/msg/Path \
+# "{header: {frame_id: 'world'}, \
+#   poses: [ \
+#     {header: {frame_id: 'world'}, \
+#      pose: {position: {x: 0.3, y: 0.3, z: 0.0}}} \
+#   ] \
+# }"
 
 class Version1Controller(Node):
 

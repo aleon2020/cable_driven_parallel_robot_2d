@@ -14,7 +14,22 @@ from tf2_ros import TransformBroadcaster
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6: ros2 topic pub --once /version3 nav_msgs/msg/Path "{header: {frame_id: 'world'}, poses: [{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}]}"
+# TERMINAL 6:
+# ros2 topic pub --once /version3 nav_msgs/msg/Path \
+# "{header: {frame_id: 'world'}, \
+#   poses: [ \
+#     {header: {frame_id: 'world'}, \
+#      pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}, \
+#     {header: {frame_id: 'world'}, \
+#      pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}, \
+#     {header: {frame_id: 'world'}, \
+#      pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}, \
+#     {header: {frame_id: 'world'}, \
+#      pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}, \
+#     {header: {frame_id: 'world'}, \
+#      pose: {position: {x: 0.2, y: 0.2, z: 0.0}}} \
+#   ] \
+# }"
 
 class Version3Controller(Node):
 
