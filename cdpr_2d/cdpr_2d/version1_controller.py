@@ -3,6 +3,7 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile
 import math
 from geometry_msgs.msg import Point, PoseStamped
+from nav_msgs.msg import Path
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float32MultiArray
 
@@ -12,7 +13,7 @@ from std_msgs.msg import Float32MultiArray
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6: ros2 topic pub --once /version1 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /version1 nav_msgs/msg/Path "{header: {frame_id: 'world'}, poses: [{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}]}"
 
 class Version1Controller(Node):
 
@@ -32,7 +33,7 @@ class Version1Controller(Node):
         self.cable_parameters_publisher = self.create_publisher(Float32MultiArray, '/cable_parameters', qos_profile)
         self.pulley_parameters_publisher = self.create_publisher(Float32MultiArray, '/pulley_parameters', qos_profile)
         self.joint_state_publisher = self.create_publisher(JointState, 'joint_states', qos_profile)
-        self.coordinates_subscriber = self.create_subscription(PoseStamped, '/version1', self.position_callback, qos_profile)
+        self.coordinates_subscriber = self.create_subscription(Path, '/version1', self.position_callback, qos_profile)
         (self.reference_left_cable_length, self.reference_right_cable_length,
          self.reference_left_cable_angle, self.reference_right_cable_angle) = self.calculate_cable_parameters(self.reference_x, self.reference_y)
         self.received = False
@@ -63,9 +64,10 @@ class Version1Controller(Node):
         if self.received:
             return
         try:
-            pos = msg.pose.position
-        except AttributeError:
-            self.get_logger().error("ERROR. FORMATO CORRECTO DEL MENSAJE: {pose: {position: {x:..., y:..., z:...}}}")
+            pose_st = msg.poses[0]
+            pos = pose_st.pose.position
+        except Exception:
+            self.get_logger().error("ERROR. FORMATO DE MENSAJE INCORRECTO.")
             return
         self.received = True
         self.current_x, self.current_y = float(pos.x), float(pos.y)
