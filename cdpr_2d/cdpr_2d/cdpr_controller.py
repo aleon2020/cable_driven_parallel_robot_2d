@@ -16,8 +16,7 @@ from tf2_ros import TransformBroadcaster
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /cdpr nav_msgs/msg/Path "{header: {frame_id: 'world'}, poses: [{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}]}"
 
 # 2 POINTS (INITIAL AND FINAL POSITION)
 # TERMINAL 1: colcon build --symlink-install
@@ -25,9 +24,7 @@ from tf2_ros import TransformBroadcaster
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.7, y: 0.7, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /cdpr nav_msgs/msg/Path "{header: {frame_id: 'world'}, poses: [{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.7, y: 0.7, z: 0.0}}}]}"
 
 # 3 OR MORE POINTS (TRAJECTORY)
 # TERMINAL 1: colcon build --symlink-install
@@ -35,12 +32,7 @@ from tf2_ros import TransformBroadcaster
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}"
-# TERMINAL 6: ros2 topic pub --once /cdpr geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: -1.0, y: -1.0, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /cdpr nav_msgs/msg/Path "{header: {frame_id: 'world'}, poses: [{header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}, {header: {frame_id: 'world'}, pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}]}"
 
 class CDPRController(Node):
 
@@ -75,7 +67,7 @@ class CDPRController(Node):
         self.pulley_parameters_publisher = self.create_publisher(Float32MultiArray, '/pulley_parameters', qos_profile)
         self.joint_state_publisher = self.create_publisher(JointState, 'joint_states', qos_profile)
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
-        self.coordinates_subscriber = self.create_subscription(PoseStamped, '/cdpr', self.pose_callback, qos_profile)
+        self.coordinates_subscriber = self.create_subscription(Path, '/cdpr', self.path_callback, qos_profile)
         self.control_timer = self.create_timer(0.5, self.control_loop)
         self.effector_timer = self.create_timer(0.5, self.publish_effector_parameters)
         self.cable_timer = self.create_timer(0.5, self.publish_cable_parameters)
@@ -104,36 +96,30 @@ class CDPRController(Node):
         pulley2_angle = delta_l2 / self.pulley_radius
         return delta_l1, delta_l2, pulley1_angle, pulley2_angle
 
-    def pose_callback(self, msg: PoseStamped):
-        try:
-            x = float(msg.pose.position.x)
-            y = float(msg.pose.position.y)
-        except Exception:
-            self.get_logger().error("ERROR. FORMATO CORRECTO DEL MENSAJE: {pose: {position: {x:..., y:..., z:...}}}")
+    def path_callback(self, msg: Path):
+        self.points = []
+        for pose_stamped in msg.poses:
+            x = float(pose_stamped.pose.position.x)
+            y = float(pose_stamped.pose.position.y)
+            self.points.append((x, y))
+        self.points_number = len(self.points)
+        if self.points_number == 0:
+            self.get_logger().error("ERROR. FORMATO DE MENSAJE INCORRECTO.")
             return
-        if x == -1.0 and y == -1.0:
-            if len(self.points) == 0:
-                self.get_logger().error("SE REQUIERE AL MENOS UN PUNTO")
-                return
-            self.points_number = len(self.points)
-            if self.points_number == 1:
-                self.mode = 'single'
-                self.get_logger().info("UN PUNTO RECIBIDO (VERSION1_CONTROLLER). EJECUTANDO ...")
-                self.handle_single_point()
-            elif self.points_number == 2:
-                self.mode = 'two_point'
-                self.get_logger().info("DOS PUNTOS RECIBIDOS (VERSION2_CONTROLLER). EJECUTANDO ...")
-                self.start_two_point_trajectory()
-            elif self.points_number >= 3:
-                self.mode = 'multi'
-                self.get_logger().info(f"{self.points_number} PUNTOS RECIBIDOS (VERSION3_CONTROLLER). EJECUTANDO ...")
-                self.start_multi_point_trajectory()
-            else:
-                self.get_logger().error("ERROR. NÚMERO DE PUNTOS NO VÁLIDO")
-            self.marker_received = True
-            return
-        self.points.append((x, y))
-        self.get_logger().info(f"PUNTO {len(self.points)} RECIBIDO: ({x:.3f}, {y:.3f})")
+        if self.points_number == 1:
+            self.mode = 'single'
+            self.get_logger().info("UN PUNTO RECIBIDO (VERSION1_CONTROLLER). EJECUTANDO ...")
+            self.handle_single_point()
+
+        elif self.points_number == 2:
+            self.mode = 'two_point'
+            self.get_logger().info("DOS PUNTOS RECIBIDOS (VERSION2_CONTROLLER). EJECUTANDO ...")
+            self.start_two_point_trajectory()
+        elif self.points_number >= 3:
+            self.mode = 'multi'
+            self.get_logger().info(f"{self.points_number} PUNTOS RECIBIDOS (VERSION3_CONTROLLER). EJECUTANDO ...")
+            self.start_multi_point_trajectory()
+        self.marker_received = True
 
     def handle_single_point(self):
         x, y = self.points[0]
