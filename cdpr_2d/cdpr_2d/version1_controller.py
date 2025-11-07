@@ -12,7 +12,10 @@ from std_msgs.msg import Float32MultiArray
 # TERMINAL 3: ros2 topic echo /effector_coordinates
 # TERMINAL 4: ros2 topic echo /cable_parameters
 # TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6: ros2 topic pub --once /version1 geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}"
+# TERMINAL 6: ros2 topic pub --once /version1
+# geometry_msgs/msg/PoseStamped "{header: {frame_id: 'world'}, pose:
+# {position: {x: 0.3, y: 0.3, z: 0.0}}}"
+
 
 class Version1Controller(Node):
 
@@ -28,13 +31,23 @@ class Version1Controller(Node):
         self.reference_x = self.plane_width / 2.0
         self.reference_y = self.plane_height / 2.0
         qos_profile = QoSProfile(depth=10)
-        self.effector_coordinates_publisher = self.create_publisher(Point, '/effector_coordinates', qos_profile)
-        self.cable_parameters_publisher = self.create_publisher(Float32MultiArray, '/cable_parameters', qos_profile)
-        self.pulley_parameters_publisher = self.create_publisher(Float32MultiArray, '/pulley_parameters', qos_profile)
-        self.joint_state_publisher = self.create_publisher(JointState, 'joint_states', qos_profile)
-        self.coordinates_subscriber = self.create_subscription(PoseStamped, '/version1', self.position_callback, qos_profile)
-        (self.reference_left_cable_length, self.reference_right_cable_length,
-         self.reference_left_cable_angle, self.reference_right_cable_angle) = self.calculate_cable_parameters(self.reference_x, self.reference_y)
+        self.effector_coordinates_publisher = self.create_publisher(
+            Point, '/effector_coordinates', qos_profile)
+        self.cable_parameters_publisher = self.create_publisher(
+            Float32MultiArray, '/cable_parameters', qos_profile)
+        self.pulley_parameters_publisher = self.create_publisher(
+            Float32MultiArray, '/pulley_parameters', qos_profile)
+        self.joint_state_publisher = self.create_publisher(
+            JointState, 'joint_states', qos_profile)
+        self.coordinates_subscriber = self.create_subscription(
+            PoseStamped, '/version1', self.position_callback, qos_profile)
+        (
+            self.reference_left_cable_length,
+            self.reference_right_cable_length,
+            self.reference_left_cable_angle,
+            self.reference_right_cable_angle) = self.calculate_cable_parameters(
+            self.reference_x,
+            self.reference_y)
         self.received = False
         self.get_logger().info("CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...")
 
@@ -45,10 +58,22 @@ class Version1Controller(Node):
         left_connection_y = y + self.effector_height / 2.0
         right_connection_x = x + self.effector_width / 2.0
         right_connection_y = y + self.effector_height / 2.0
-        left_cable_length = math.sqrt((left_connection_x - left_pulley_x)**2 + (left_connection_y - left_pulley_y)**2)
-        right_cable_length = math.sqrt((right_connection_x - right_pulley_x)**2 + (right_connection_y - right_pulley_y)**2)
-        left_cable_angle = math.degrees(math.atan2(left_connection_x - left_pulley_x, left_pulley_y - left_connection_y))
-        right_cable_angle = math.degrees(math.atan2(right_pulley_x - right_connection_x, right_pulley_y - right_connection_y))
+        left_cable_length = math.sqrt(
+            (left_connection_x - left_pulley_x)**2 + (left_connection_y - left_pulley_y)**2)
+        right_cable_length = math.sqrt(
+            (right_connection_x - right_pulley_x)**2 + (right_connection_y - right_pulley_y)**2)
+        left_cable_angle = math.degrees(
+            math.atan2(
+                left_connection_x -
+                left_pulley_x,
+                left_pulley_y -
+                left_connection_y))
+        right_cable_angle = math.degrees(
+            math.atan2(
+                right_pulley_x -
+                right_connection_x,
+                right_pulley_y -
+                right_connection_y))
         return left_cable_length, right_cable_length, left_cable_angle, right_cable_angle
 
     def calculate_pulley_changes(self, x, y):
@@ -65,12 +90,15 @@ class Version1Controller(Node):
         try:
             pos = msg.pose.position
         except AttributeError:
-            self.get_logger().error("ERROR. FORMATO CORRECTO DEL MENSAJE: {pose: {position: {x:..., y:..., z:...}}}")
+            self.get_logger().error(
+                "ERROR. FORMATO CORRECTO DEL MENSAJE: {pose: {position: {x:..., y:..., z:...}}}")
             return
         self.received = True
         self.current_x, self.current_y = float(pos.x), float(pos.y)
-        delta_l1, delta_l2, pulley1_angle, pulley2_angle = self.calculate_pulley_changes(self.current_x, self.current_y)
-        left_len, right_len, left_ang, right_ang = self.calculate_cable_parameters(self.current_x, self.current_y)
+        delta_l1, delta_l2, pulley1_angle, pulley2_angle = self.calculate_pulley_changes(
+            self.current_x, self.current_y)
+        left_len, right_len, left_ang, right_ang = self.calculate_cable_parameters(
+            self.current_x, self.current_y)
         effector_msg = Point()
         effector_msg.x = self.current_x
         effector_msg.y = self.current_y
@@ -89,14 +117,21 @@ class Version1Controller(Node):
         self.joint_state_publisher.publish(joint_state_msg)
         print("=" * 100)
         print("POSICIÓN DEL EFECTOR FINAL (X, Y)")
-        print(f"• POSICIÓN OBJETIVO: ({self.current_x:.3f}, {self.current_y:.3f}) m")
+        print(
+            f"• POSICIÓN OBJETIVO: ({
+                self.current_x:.3f}, {
+                self.current_y:.3f}) m")
         print(f"LONGITUDES DE CADA CABLE (L1, L2)")
         print(f"• L1: {left_len:.3f} m, L2: {right_len:.3f} m")
         print("ÁNGULOS DE CADA CABLE (Q1, Q2)")
         print(f"• Q1: {left_ang:.2f} °, Q2: {right_ang:.2f} °")
         print("MOVIMIENTO DE CADA POLEA (P1, P2)")
-        print(f"• CABLE ELONGADO / RECOGIDO:  P1: {delta_l1:+.3f} m,   P2: {delta_l2:+.3f} m")
-        print(f"• ÁNGULOS DE GIRO (RADIANES): P1: {pulley1_angle:+.3f} rad, P2: {pulley2_angle:+.3f} rad")
+        print(
+            f"• CABLE ELONGADO / RECOGIDO:  P1: {delta_l1:+.3f} m,   P2: {delta_l2:+.3f} m")
+        print(
+            f"• ÁNGULOS DE GIRO (RADIANES): P1: {
+                pulley1_angle:+.3f} rad, P2: {
+                pulley2_angle:+.3f} rad")
         print("=" * 100)
         self.get_logger().info("CERRANDO CONTROLADOR ...")
         self.create_timer(0.05, self.shutdown_node)
@@ -104,6 +139,7 @@ class Version1Controller(Node):
     def shutdown_node(self):
         self.destroy_node()
         rclpy.shutdown()
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -119,8 +155,9 @@ def main(args=None):
             if rclpy.ok():
                 controller.destroy_node()
                 rclpy.shutdown()
-        except:
+        except BaseException:
             pass
+
 
 if __name__ == '__main__':
     main()
