@@ -8,6 +8,8 @@ from launch_ros.actions import Node
 import xacro
 
 
+# generate_launch_description() function
+# Creates and returns the ROS2 launch description with all required nodes
 def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time')

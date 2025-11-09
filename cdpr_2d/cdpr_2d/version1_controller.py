@@ -26,6 +26,8 @@ from std_msgs.msg import Float32MultiArray
 
 class Version1Controller(Node):
 
+    # __init__() function
+    # Initializes node parameters, publishers, subscribers, and reference cable values
     def __init__(self):
         super().__init__('version1_controller')
         self.plane_width = 1.0
@@ -58,6 +60,8 @@ class Version1Controller(Node):
         self.received = False
         self.get_logger().info('CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...')
 
+    # calculate_cable_parameters() function
+    # Computes cable lengths and angles from current effector coordinates
     def calculate_cable_parameters(self, x, y):
         left_pulley_x, left_pulley_y = 0.0, self.plane_height
         right_pulley_x, right_pulley_y = self.plane_width, self.plane_height
@@ -83,6 +87,8 @@ class Version1Controller(Node):
                 right_connection_y))
         return left_cable_length, right_cable_length, left_cable_angle, right_cable_angle
 
+    # calculate_pulley_changes() function
+    # Computes cable length variations and pulley rotation angles relative to reference
     def calculate_pulley_changes(self, x, y):
         l1, l2, _, _ = self.calculate_cable_parameters(x, y)
         delta_l1 = l1 - self.reference_left_cable_length
@@ -91,6 +97,8 @@ class Version1Controller(Node):
         pulley2_angle = delta_l2 / self.pulley_radius
         return delta_l1, delta_l2, pulley1_angle, pulley2_angle
 
+    # position_callback() function
+    # Handles incoming target positions and publishes all derived control parameters
     def position_callback(self, msg: Path):
         if self.received:
             return
@@ -141,11 +149,15 @@ class Version1Controller(Node):
         self.get_logger().info('CERRANDO CONTROLADOR ...')
         self.create_timer(0.05, self.shutdown_node)
 
+    # shutdown_node() function
+    # Safely destroys the node and shuts down the ROS2 client library
     def shutdown_node(self):
         self.destroy_node()
         rclpy.shutdown()
 
 
+# main() function
+# Initializes ROS2, launches the controller node, and manages its lifecycle
 def main(args=None):
     rclpy.init(args=args)
     controller = Version1Controller()

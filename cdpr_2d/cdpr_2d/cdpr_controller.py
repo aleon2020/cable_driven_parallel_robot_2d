@@ -69,6 +69,8 @@ from tf2_ros import TransformBroadcaster
 
 class CDPRController(Node):
 
+    # __init__() function
+    # Initializes node parameters, publishers, subscribers, and reference cable values
     def __init__(self):
         super().__init__('cdpr_controller')
         self.plane_width = 1.0
@@ -115,6 +117,8 @@ class CDPRController(Node):
             0.5, self.publish_pulley_parameters)
         self.get_logger().info('CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...')
 
+    # calculate_cable_parameters() function
+    # Computes cable lengths and angles from current effector coordinates
     def calculate_cable_parameters(self, x, y):
         left_pulley_x, left_pulley_y = 0.0, self.plane_height
         right_pulley_x, right_pulley_y = self.plane_width, self.plane_height
@@ -140,6 +144,8 @@ class CDPRController(Node):
                 right_connection_y))
         return left_len, right_len, left_ang, right_ang
 
+    # calculate_pulley_movement() function
+    # Computes cable variations and pulley rotations between two positions
     def calculate_pulley_movement(self, start_x, start_y, end_x, end_y):
         l1_start, l2_start, _, _ = self.calculate_cable_parameters(
             start_x, start_y)
@@ -150,6 +156,8 @@ class CDPRController(Node):
         pulley2_angle = delta_l2 / self.pulley_radius
         return delta_l1, delta_l2, pulley1_angle, pulley2_angle
 
+    # path_callback() function
+    # Receives incoming path points and selects the correct execution mode
     def path_callback(self, msg: Path):
         self.points = []
         for pose_stamped in msg.poses:
@@ -176,6 +184,8 @@ class CDPRController(Node):
             self.start_multi_point_trajectory()
         self.marker_received = True
 
+    # handle_single_point() function
+    # Processes a single target position and publishes its cable and pulley parameters
     def handle_single_point(self):
         x, y = self.points[0]
         self.current_x, self.current_y = x, y
@@ -219,6 +229,8 @@ class CDPRController(Node):
         self.get_logger().info('CERRANDO CONTROLADOR ...')
         self.create_timer(0.05, self.shutdown_node)
 
+    # start_two_point_trajectory() function
+    # Initializes a two-point trajectory and computes target cable variations
     def start_two_point_trajectory(self):
         self.initial_x, self.initial_y = self.points[0]
         self.current_x, self.current_y = self.initial_x, self.initial_y
@@ -244,6 +256,8 @@ class CDPRController(Node):
                 self.target_x:.3f}, {
                     self.target_y:.3f})')
 
+    # start_multi_point_trajectory() function
+    # Initializes multi-segment trajectories and precomputes per-segment parameters
     def start_multi_point_trajectory(self):
         self.points_number = len(self.points)
         self.segment_index = 0
@@ -273,6 +287,8 @@ class CDPRController(Node):
         self.get_logger().info(f'TRAYECTORIA CREADA: {self.points_number} puntos, {
             len(self.segment_target_params)} segmentos.')
 
+    # control_loop() function
+    # Updates effector motion, pulley states, and handles controller shutdown logic
     def control_loop(self):
         if self.objective_achieved and not self.shutdown_scheduled:
             self.shutdown_scheduled = True
@@ -319,6 +335,8 @@ class CDPRController(Node):
             self.current_x = new_x
             self.current_y = new_y
 
+    # publish_effector_parameters() function
+    # Publishes current and target effector poses during motion
     def publish_effector_parameters(self):
         path_msg = Path()
         pose_current = PoseStamped()
@@ -349,6 +367,8 @@ class CDPRController(Node):
             self.get_logger().info(
                 f'EFECTOR: EN REPOSO - POSICIÓN=({self.current_x:.3f}, {self.current_y:.3f})')
 
+    # publish_cable_parameters() function
+    # Publishes current cable lengths and angles
     def publish_cable_parameters(self):
         L1, L2, Q1, Q2 = self.calculate_cable_parameters(
             self.current_x, self.current_y)
@@ -362,6 +382,8 @@ class CDPRController(Node):
                 Q1:.2f}, {
                     Q2:.2f})°')
 
+    # publish_pulley_parameters() function
+    # Publishes instantaneous pulley cable changes and rotation values
     def publish_pulley_parameters(self):
         if self.moving:
             seg_start_x, seg_start_y = self.initial_x, self.initial_y
@@ -381,6 +403,8 @@ class CDPRController(Node):
             self.get_logger().info(f'POLEAS: DIF=({
                 dl1:+.3f} m, {dl2:+.3f} m), ÁNGULOS=({pa1:+.3f} rad, {pa2:+.3f} rad)')
 
+    # publish_joint_states() function
+    # Publishes joint positions corresponding to pulley rotation angles
     def publish_joint_states(self):
         msg = JointState()
         msg.header.stamp = self.get_clock().now().to_msg()
@@ -388,6 +412,8 @@ class CDPRController(Node):
         msg.position = [self.left_pulley_position, self.right_pulley_position]
         self.joint_state_publisher.publish(msg)
 
+    # show_final_summary() function
+    # Prints a detailed summary of the final effector and cable parameters
     def show_final_summary(self):
         if self.mode == 'two_point':
             final_left_length, final_right_length, final_left_angle, final_right_angle = \
@@ -477,6 +503,8 @@ class CDPRController(Node):
         elif self.mode == 'single':
             pass
 
+    # shutdown_node() function
+    # Safely destroys the node and shuts down the ROS2 client library
     def shutdown_node(self):
         try:
             self.destroy_node()
@@ -485,6 +513,8 @@ class CDPRController(Node):
         rclpy.shutdown()
 
 
+# main() function
+# Initializes ROS2, launches the controller node, and manages its lifecycle
 def main(args=None):
     rclpy.init(args=args)
     controller = CDPRController()

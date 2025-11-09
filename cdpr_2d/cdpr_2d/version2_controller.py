@@ -29,6 +29,8 @@ from tf2_ros import TransformBroadcaster
 
 class Version2Controller(Node):
 
+    # __init__() function
+    # Initializes node parameters, publishers, subscribers, and reference cable values
     def __init__(self):
         super().__init__('version2_controller')
         self.plane_width = 1.0
@@ -75,6 +77,8 @@ class Version2Controller(Node):
             Path, '/version2', self.target_coordinates_callback, qos_profile)
         self.get_logger().info('CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...')
 
+    # target_coordinates_callback() function
+    # Receives initial and target positions and prepares motion parameters
     def target_coordinates_callback(self, msg: Path):
         if len(msg.poses) < 2:
             self.get_logger().error('ERROR. FORMATO DE MENSAJE INCORRECTO.')
@@ -105,6 +109,8 @@ class Version2Controller(Node):
                 self.target_x:.3f}, {
                     self.target_y:.3f})')
 
+    # calculate_target_parameters() function
+    # Computes target cable length variations and pulley rotation angles
     def calculate_target_parameters(self):
         l1, l2, a1, a2 = self.calculate_cable_parameters(
             self.target_x, self.target_y)
@@ -115,6 +121,8 @@ class Version2Controller(Node):
         self.target_left_pulley_angle = self.target_left_cable_change / self.pulley_radius
         self.target_right_pulley_angle = self.target_right_cable_change / self.pulley_radius
 
+    # calculate_cable_parameters() function
+    # Computes cable lengths and angles from current effector coordinates
     def calculate_cable_parameters(self, x, y):
         left_pulley_x, left_pulley_y = 0.0, self.plane_height
         right_pulley_x, right_pulley_y = self.plane_width, self.plane_height
@@ -140,6 +148,8 @@ class Version2Controller(Node):
                 right_conn_y))
         return left_len, right_len, left_ang, right_ang
 
+    # calculate_pulley_movement() function
+    # Computes cable variations and pulley rotations between two positions
     def calculate_pulley_movement(self, x1, y1, x2, y2):
         l1_start, l2_start, *_ = self.calculate_cable_parameters(x1, y1)
         l1_end, l2_end, *_ = self.calculate_cable_parameters(x2, y2)
@@ -147,6 +157,8 @@ class Version2Controller(Node):
         d2 = l2_end - l2_start
         return d1, d2, d1 / self.pulley_radius, d2 / self.pulley_radius
 
+    # control_loop() function
+    # Updates effector motion, pulley states, and handles controller shutdown logic
     def control_loop(self):
         if self.objective_achieved and not self.shutdown_scheduled:
             self.shutdown_scheduled = True
@@ -176,6 +188,8 @@ class Version2Controller(Node):
             self.current_y = new_y
             self.publish_joint_states()
 
+    # check_objective_achieved() function
+    # Checks if the effector is within tolerance of the target position
     def check_objective_achieved(self):
         return abs(
             self.current_x -
@@ -183,6 +197,8 @@ class Version2Controller(Node):
             self.current_y -
             self.target_y) < 0.005
 
+    # publish_effector_parameters() function
+    # Publishes current and target effector poses during motion
     def publish_effector_parameters(self):
         if self.objective_achieved:
             return
@@ -208,6 +224,8 @@ class Version2Controller(Node):
             self.get_logger().info(
                 f'EFECTOR: EN REPOSO - POSICIÓN=({self.current_x:.3f}, {self.current_y:.3f})')
 
+    # publish_cable_parameters() function
+    # Publishes current cable lengths and angles
     def publish_cable_parameters(self):
         if self.objective_achieved:
             return
@@ -223,6 +241,8 @@ class Version2Controller(Node):
                 a1:.2f}, {
                     a2:.2f})°')
 
+    # publish_pulley_parameters() function
+    # Publishes instantaneous pulley cable changes and rotation values
     def publish_pulley_parameters(self):
         if self.objective_achieved:
             return
@@ -237,6 +257,8 @@ class Version2Controller(Node):
         self.get_logger().info(
             f'POLEAS: ΔL=({d1:+.3f}, {d2:+.3f}) m, ÁNGULOS=({a1:+.3f}, {a2:+.3f}) rad')
 
+    # publish_joint_states() function
+    # Publishes joint positions corresponding to pulley rotation angles
     def publish_joint_states(self):
         msg = JointState()
         msg.header.stamp = self.get_clock().now().to_msg()
@@ -244,6 +266,8 @@ class Version2Controller(Node):
         msg.position = [self.left_pulley_position, self.right_pulley_position]
         self.joint_state_publisher.publish(msg)
 
+    # show_final_summary() function
+    # Prints a detailed summary of the final effector and cable parameters
     def show_final_summary(self):
         final_left_length, final_right_length, \
             final_left_angle, final_right_angle = self.calculate_cable_parameters(
@@ -305,11 +329,15 @@ class Version2Controller(Node):
                     self.target_right_pulley_angle):+.2f} °)')
         print('═' * 100)
 
+    # shutdown_node() function
+    # Safely destroys the node and shuts down the ROS2 client library
     def shutdown_node(self):
         self.destroy_node()
         rclpy.shutdown()
 
 
+# main() function
+# Initializes ROS2, launches the controller node, and manages its lifecycle
 def main(args=None):
     rclpy.init(args=args)
     controller = Version2Controller()

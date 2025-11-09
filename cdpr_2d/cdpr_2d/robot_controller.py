@@ -10,6 +10,8 @@ from tf2_ros import TransformBroadcaster, TransformStamped
 
 class RobotController(Node):
 
+    # __init__() function
+    # Initializes node parameters, publishers, subscribers, and reference cable values
     def __init__(self):
         super().__init__('robot_controller')
         qos_profile = QoSProfile(depth=10)
@@ -24,6 +26,8 @@ class RobotController(Node):
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
         self.get_logger().info(f'{self.get_name()} started')
 
+    # cmd_vel_callback() function
+    # Processes velocity commands and updates odometry and joint states
     def cmd_vel_callback(self, msg):
         vx = msg.linear.x
         vy = 0.0
@@ -57,6 +61,8 @@ class RobotController(Node):
         self.joint_pub.publish(joint_state)
         self.broadcaster.sendTransform(odom_trans)
 
+    # update_odom() function
+    # Updates robot odometry using velocity inputs and elapsed time
     def update_odom(self, vx, vy, vr, time_now):
         dt = (time_now.nanoseconds - self.time_last.nanoseconds) * 10**-9
         if dt > 0.1:
@@ -71,6 +77,8 @@ class RobotController(Node):
             cos(self.odom['th']) * delta_y
         self.odom['th'] += delta_th
 
+    # update_joint_positions() function
+    # Updates wheel joint positions based on commanded velocities
     def update_joint_positions(self, vx, vy, vr, time_now):
         L = 10
         r = 0.5
@@ -81,6 +89,8 @@ class RobotController(Node):
         self.right_wheel_joint_pos += r_omega * dt
 
 
+# euler_to_quaternion() function
+# Converts Euler angles (roll, pitch, yaw) into a quaternion orientation
 def euler_to_quaternion(roll, pitch, yaw):
     qx = sin(roll / 2) * cos(pitch / 2) * cos(yaw / 2) - \
         cos(roll / 2) * sin(pitch / 2) * sin(yaw / 2)
@@ -93,6 +103,8 @@ def euler_to_quaternion(roll, pitch, yaw):
     return Quaternion(x=qx, y=qy, z=qz, w=qw)
 
 
+# main() function
+# Initializes ROS2, launches the controller node, and manages its lifecycle
 def main(args=None):
     try:
         rclpy.init(args=args)
