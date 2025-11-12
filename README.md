@@ -226,8 +226,6 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 }"
 ```
 
-**NOTE**: In version 3 and in all cases of the full version, the point (-1.0,-1.0) is published as a marker to let the controller know that no more points will be sent and therefore, it can start executing each case, always depending on the number of points (or messages of the geometry_msgs/msg/PoseStamped type that have been sent to it).
-
 ---
 
 ### References
