@@ -1,36 +1,36 @@
+# ------------- PARAMS.YAML OF CDPR_CONTROLLER.PY -------------
 cdpr_controller:
-  ros__parameters:
 
-    # Dimensions of the work surface
+  ros__parameters:
     plane_width: 1.0
     plane_height: 1.0
-
-    # End effector dimensions
     effector_width: 0.1
     effector_height: 0.1
-
-    # Mechanical parameters
     pulley_radius: 0.05
 
-    # CDPR_CONTROLLER_RVIZ.PY
-
-    # Pulley positions
-    # left_pulley_position: []
-    # right_pulley_position: []
-
-    # Segment duration (seconds)
-    # segment_duration: 3.0
-
     timers:
-
-      # CDPR_CONTROLLER.PY
       control_loop_period: 0.5
       effector_pub_period: 0.5
       cable_pub_period: 0.5
       pulley_pub_period: 0.5
 
-      # CDPR_CONTROLLER_RVIZ.PY
-      # control_loop_period: 0.02
-      # effector_pub_period: 0.033
-      # cable_pub_period: 0.05
-      # pulley_pub_period: 0.05
+
+# ---------- PARAMS.YAML OF CDPR_CONTROLLER_RVIZ.PY -----------
+
+# cdpr_controller:
+
+#   ros__parameters:
+#     plane_width: 1.0
+#     plane_height: 1.0
+#     effector_width: 0.1
+#     effector_height: 0.1
+#     pulley_radius: 0.05
+#     left_pulley_position: []
+#     right_pulley_position: []
+#     segment_duration: 3.0
+
+#     timers:
+#       control_loop_period: 0.02
+#       effector_pub_period: 0.033
+#       cable_pub_period: 0.05
+#       pulley_pub_period: 0.05
