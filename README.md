@@ -118,7 +118,7 @@ git pull
 
 ## Usage
 
-1. Run one of the following commands to run the controller you want to test:
+1. Run ONE of the controllers you want to test:
 
 ```sh
 # WITHOUT RVIZ
@@ -128,20 +128,27 @@ ros2 run cdpr_2d cdpr_controller
 ros2 run cdpr_2d cdpr_controller_rviz
 ```
 
-2. Launch each of the topics to see data related to the end effector:
+2. Launch the simulation and visualization in RViZ:
 
 ```sh
-# Position (x,y) of the end effector
+# RViZ AND TF
+ros2 run cdpr_2d robot_state_publisher.launch.py
+```
+
+3. Launch each of the topics to see data related to the end effector (each of them in a different terminal):
+
+```sh
+# POSITION (X,Y) OF THE END EFFECTOR
 ros2 topic echo /effector_coordinates
 
-# Cable lengths and angles with the vertical
+# CABLE LENGTHS AND ANGLES WITH THE VERTICAL
 ros2 topic echo /cable_parameters
 
-# Elongated/retracted cable length and angle of rotation of each pulley
+# ELONGATED / RETRACTED CABLE LENGTH AND ANGLE OF ROTATION OF EACH PULLEY
 ros2 topic echo /pulley_parameters
 ```
 
-3. Publish ONLY ONE of the following sets of commands messages in the corresponding topic to send the coordinates to which you want to move the end effector:
+4. Publish ONE of the following commands messages in the corresponding topic to send the coordinates to which you want to move the end effector:
 
 ```sh
 # 1 POINT (FIXED POSITION)
