@@ -38,32 +38,30 @@ The project integrates topics such as **kinematic modeling**, **control algorith
 ```sh
 src
 ├── cdpr_2d
-│   ├── cdpr_controller.py
-│   ├── __init__.py
-│   ├── robot_controller.py
-│   ├── version1_controller.py
-│   ├── version2_controller.py
-│   └── version3_controller.py
-├── config
-│   └── robot.rviz
-├── description
-│   ├── robot.xacro
-│   └── urdf
-│       └── robot.urdf
-├── launch
-│   └── robot_state_publisher.launch.py
-├── package.xml
-├── resource
-│   └── cdpr_2d
-├── setup.cfg
-├── setup.py
-└── test
-│   ├── test_copyright.py
-│   ├── test_flake8.py
-│   └── test_pep257.py
-docs
-media
-README.md
+│   ├── cdpr_2d
+│   │   ├── cdpr_controller.py
+│   │   ├── __init__.py
+│   │   └── robot_controller.py
+│   ├── config
+│   │   └── robot.rviz
+│   ├── description
+│   │   ├── robot.xacro
+│   │   └── urdf
+│   │       └── robot.urdf
+│   ├── launch
+│   │   └── robot_state_publisher.launch.py
+│   ├── package.xml
+│   ├── resource
+│   │   └── cdpr_2d
+│   ├── setup.cfg
+│   ├── setup.py
+│   └── test
+│       ├── test_copyright.py
+│       ├── test_flake8.py
+│       └── test_pep257.py
+├── docs
+├── media
+└── README.md
 ```
 
 ---
@@ -119,19 +117,9 @@ git pull
 
 ## Usage
 
-1. Run one of the following commands depending on the driver version you want to run:
+1. Run the following command to run the controller:
 
 ```sh
-# VERSION 1 (1 POINT)
-ros2 run cdpr_2d version1_controller
-
-# VERSION 2 (2 POINTS)
-ros2 run cdpr_2d version2_controller
-
-# VERSION 3 (3 OR MORE POINTS)
-ros2 run cdpr_2d version3_controller
-
-# FULL VERSION
 ros2 run cdpr_2d cdpr_controller
 ```
 
@@ -151,44 +139,7 @@ ros2 topic echo /pulley_parameters
 3. Publish one of the following sets of commands messages in the corresponding topic to send the coordinates to which you want to move the end effector:
 
 ```sh
-# VERSION 1
-ros2 topic pub --once /version1 nav_msgs/msg/Path \
-"{header: {frame_id: 'world'}, \
-  poses: [ \
-    {header: {frame_id: 'world'}, \
-     pose: {position: {x: 0.3, y: 0.3, z: 0.0}}} \
-  ] \
-}"
-
-# VERSION 2
-ros2 topic pub --once /version2 nav_msgs/msg/Path \
-"{header: {frame_id: 'world'}, \
-  poses: [ \
-    {header: {frame_id: 'world'}, \
-     pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}, \
-    {header: {frame_id: 'world'}, \
-     pose: {position: {x: 0.7, y: 0.7, z: 0.0}}} \
-  ] \
-}"
-
-# VERSION 3
-ros2 topic pub --once /version3 nav_msgs/msg/Path \
-"{header: {frame_id: 'world'}, \
-  poses: [ \
-    {header: {frame_id: 'world'}, \
-     pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}, \
-    {header: {frame_id: 'world'}, \
-     pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}, \
-    {header: {frame_id: 'world'}, \
-     pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}, \
-    {header: {frame_id: 'world'}, \
-     pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}, \
-    {header: {frame_id: 'world'}, \
-     pose: {position: {x: 0.2, y: 0.2, z: 0.0}}} \
-  ] \
-}"
-
-# FULL VERSION (VERSION 1)
+# 1 POINT (FIXED POSITION)
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 "{header: {frame_id: 'world'}, \
   poses: [ \
@@ -197,7 +148,7 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
   ] \
 }"
 
-# FULL VERSION (VERSION 2)
+# 2 POINTS (INITIAL AND FINAL POSITION)
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 "{header: {frame_id: 'world'}, \
   poses: [ \
@@ -208,7 +159,7 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
   ] \
 }"
 
-# FULL VERSION (VERSION 3)
+# 3 OR MORE POINTS (TRAJECTORY)
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 "{header: {frame_id: 'world'}, \
   poses: [ \
