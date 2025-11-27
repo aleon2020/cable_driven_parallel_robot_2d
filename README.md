@@ -132,7 +132,7 @@ ros2 run cdpr_2d cdpr_controller_rviz
 
 ```sh
 # RViZ AND TF
-ros2 run cdpr_2d robot_state_publisher.launch.py
+ros2 launch cdpr_2d robot_state_publisher.launch.py
 ```
 
 3. Launch each of the topics to see data related to the end effector (each of them in a different terminal):
