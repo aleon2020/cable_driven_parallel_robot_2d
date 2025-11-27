@@ -1,0 +1,20 @@
+cdpr_controller:
+  ros__parameters:
+
+    # Dimensions of the work surface
+    plane_width: 1.0
+    plane_height: 1.0
+
+    # End effector dimensions
+    effector_width: 0.1
+    effector_height: 0.1
+
+    # Mechanical parameters
+    pulley_radius: 0.05
+
+    # Timer frequencies (seconds)
+    timers:
+      control_loop_period: 0.5
+      effector_pub_period: 0.5
+      cable_pub_period: 0.5
+      pulley_pub_period: 0.5

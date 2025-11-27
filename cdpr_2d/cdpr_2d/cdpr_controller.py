@@ -16,11 +16,35 @@ class CDPRController(Node):
     # Initializes node parameters, publishers, subscribers, and reference cable values
     def __init__(self):
         super().__init__('cdpr_controller')
-        self.plane_width = 1.0
-        self.plane_height = 1.0
-        self.effector_width = 0.1
-        self.effector_height = 0.1
-        self.pulley_radius = 0.05
+
+        # self.plane_width = 1.0
+        # self.plane_height = 1.0
+        # self.effector_width = 0.1
+        # self.effector_height = 0.1
+        # self.pulley_radius = 0.05
+        self.declare_parameters(
+            namespace='',
+            parameters=[
+                ('plane_width', 1.0),
+                ('plane_height', 1.0),
+                ('effector_width', 0.1),
+                ('effector_height', 0.1),
+                ('pulley_radius', 0.05),
+                ('timers.control_loop_period', 0.5),
+                ('timers.effector_pub_period', 0.5),
+                ('timers.cable_pub_period', 0.5),
+                ('timers.pulley_pub_period', 0.5),
+            ]
+        )
+        self.plane_width = self.get_parameter('plane_width').value
+        self.plane_height = self.get_parameter('plane_height').value
+        self.effector_width = self.get_parameter('effector_width').value
+        self.effector_height = self.get_parameter('effector_height').value
+        self.pulley_radius = self.get_parameter('pulley_radius').value
+        ctrl = self.get_parameter('timers.control_loop_period').value
+        eff = self.get_parameter('timers.effector_pub_period').value
+        cab = self.get_parameter('timers.cable_pub_period').value
+        pul = self.get_parameter('timers.pulley_pub_period').value
         self.points = []
         self.marker_received = False
         self.mode = None
@@ -51,13 +75,17 @@ class CDPRController(Node):
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
         self.coordinates_subscriber = self.create_subscription(
             Path, '/cdpr', self.path_callback, qos_profile)
-        self.control_timer = self.create_timer(0.5, self.control_loop)
-        self.effector_timer = self.create_timer(
-            0.5, self.publish_effector_parameters)
-        self.cable_timer = self.create_timer(
-            0.5, self.publish_cable_parameters)
-        self.pulley_timer = self.create_timer(
-            0.5, self.publish_pulley_parameters)
+        # self.control_timer = self.create_timer(0.5, self.control_loop)
+        # self.effector_timer = self.create_timer(
+        #     0.5, self.publish_effector_parameters)
+        # self.cable_timer = self.create_timer(
+        #     0.5, self.publish_cable_parameters)
+        # self.pulley_timer = self.create_timer(
+        #     0.5, self.publish_pulley_parameters)
+        self.control_timer = self.create_timer(ctrl, self.control_loop)
+        self.effector_timer = self.create_timer(eff, self.publish_effector_parameters)
+        self.cable_timer = self.create_timer(cab, self.publish_cable_parameters)
+        self.pulley_timer = self.create_timer(pul, self.publish_pulley_parameters)
         self.get_logger().info('CONTROLLER ACTIVATED. WAITING FOR COORDINATES...')
 
     # calculate_cable_parameters() function
