@@ -1,6 +1,7 @@
 import math
+from typing import List, Tuple
 
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, TransformStamped
 from nav_msgs.msg import Path
 import rclpy
 from rclpy.node import Node
@@ -13,9 +14,10 @@ from tf2_ros import TransformBroadcaster
 class CDPRController(Node):
 
     # __init__() function
-    # Initializes node parameters, publishers, subscribers, and reference cable values
+    # Initializes ROS2 node, parameters, publishers, subscribers, and timers
     def __init__(self):
         super().__init__('cdpr_controller')
+        qos_profile = QoSProfile(depth=10)
         self.declare_parameters(
             namespace='',
             parameters=[
@@ -24,10 +26,13 @@ class CDPRController(Node):
                 ('effector_width', 0.1),
                 ('effector_height', 0.1),
                 ('pulley_radius', 0.05),
-                ('timers.control_loop_period', 0.5),
-                ('timers.effector_pub_period', 0.5),
-                ('timers.cable_pub_period', 0.5),
-                ('timers.pulley_pub_period', 0.5),
+                ('left_pulley_position', []),
+                ('right_pulley_position', []),
+                ('segment_duration', 3.0),
+                ('timers.control_loop_period', 0.02),
+                ('timers.effector_pub_period', 0.033),
+                ('timers.cable_pub_period', 0.05),
+                ('timers.pulley_pub_period', 0.05),
             ]
         )
         self.plane_width = self.get_parameter('plane_width').value
@@ -35,20 +40,34 @@ class CDPRController(Node):
         self.effector_width = self.get_parameter('effector_width').value
         self.effector_height = self.get_parameter('effector_height').value
         self.pulley_radius = self.get_parameter('pulley_radius').value
-        ctrl = self.get_parameter('timers.control_loop_period').value
-        eff = self.get_parameter('timers.effector_pub_period').value
-        cab = self.get_parameter('timers.cable_pub_period').value
-        pul = self.get_parameter('timers.pulley_pub_period').value
-        self.points = []
-        self.marker_received = False
-        self.mode = None
+        left_p_pos = self.get_parameter('left_pulley_position').value
+        right_p_pos = self.get_parameter('right_pulley_position').value
+        self.default_left_pulley = (0.00, -0.125, 1.70)
+        self.default_right_pulley = (1.00, -0.125, 1.70)
+        self.effector_z = 1.20
+        if left_p_pos and len(left_p_pos) == 3:
+            self.left_pulley_pos_xyz = tuple(left_p_pos)
+        else:
+            self.left_pulley_pos_xyz = self.default_left_pulley
+        if right_p_pos and len(right_p_pos) == 3:
+            self.right_pulley_pos_xyz = tuple(right_p_pos)
+        else:
+            self.right_pulley_pos_xyz = self.default_right_pulley
+        self.segment_duration = self.get_parameter('segment_duration').value
+        ctrl_period = self.get_parameter('timers.control_loop_period').value
+        eff_period = self.get_parameter('timers.effector_pub_period').value
+        cab_period = self.get_parameter('timers.cable_pub_period').value
+        pul_period = self.get_parameter('timers.pulley_pub_period').value
+        self.points: List[Tuple[float, float]] = []
         self.points_number = 0
-        self.current_x = 0.5
-        self.current_y = 0.5
-        self.initial_x = 0.5
-        self.initial_y = 0.5
-        self.target_x = 0.5
-        self.target_y = 0.5
+        self.mode = None
+        self.marker_received = False
+        self.current_x = self.plane_width / 2.0
+        self.current_y = self.plane_height / 2.0
+        self.initial_x = self.current_x
+        self.initial_y = self.current_y
+        self.target_x = self.current_x
+        self.target_y = self.current_y
         self.segment_index = 0
         self.animation_progress = 0.0
         self.moving = False
@@ -57,7 +76,6 @@ class CDPRController(Node):
         self.left_pulley_position = 0.0
         self.right_pulley_position = 0.0
         self.segment_target_params = []
-        qos_profile = QoSProfile(depth=10)
         self.effector_coordinates_publisher = self.create_publisher(
             Path, '/effector_coordinates', qos_profile)
         self.cable_parameters_publisher = self.create_publisher(
@@ -69,41 +87,42 @@ class CDPRController(Node):
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
         self.coordinates_subscriber = self.create_subscription(
             Path, '/cdpr', self.path_callback, qos_profile)
-        self.control_timer = self.create_timer(ctrl, self.control_loop)
-        self.effector_timer = self.create_timer(eff, self.publish_effector_parameters)
-        self.cable_timer = self.create_timer(cab, self.publish_cable_parameters)
-        self.pulley_timer = self.create_timer(pul, self.publish_pulley_parameters)
+        self.control_timer = self.create_timer(ctrl_period, self.control_loop)
+        self.effector_timer = self.create_timer(
+            eff_period, self.publish_effector_parameters)
+        self.cable_timer = self.create_timer(
+            cab_period, self.publish_cable_parameters)
+        self.pulley_timer = self.create_timer(
+            pul_period, self.publish_pulley_parameters)
         self.get_logger().info('CONTROLLER ACTIVATED. WAITING FOR COORDINATES...')
 
     # calculate_cable_parameters() function
-    # Computes cable lengths and angles from current effector coordinates
-    def calculate_cable_parameters(self, x, y):
-        left_pulley_x, left_pulley_y = 0.0, self.plane_height
-        right_pulley_x, right_pulley_y = self.plane_width, self.plane_height
-        left_connection_x = x - self.effector_width / 2.0
-        left_connection_y = y + self.effector_height / 2.0
-        right_connection_x = x + self.effector_width / 2.0
-        right_connection_y = y + self.effector_height / 2.0
-        left_len = math.sqrt((left_connection_x - left_pulley_x)
-                             ** 2 + (left_connection_y - left_pulley_y)**2)
-        right_len = math.sqrt((right_connection_x - right_pulley_x)
-                              ** 2 + (right_connection_y - right_pulley_y)**2)
-        left_ang = math.degrees(
-            math.atan2(
-                left_connection_x -
-                left_pulley_x,
-                left_pulley_y -
-                left_connection_y))
-        right_ang = math.degrees(
-            math.atan2(
-                right_pulley_x -
-                right_connection_x,
-                right_pulley_y -
-                right_connection_y))
+    # Computes cable lengths and angles for given end-effector coordinates
+    def calculate_cable_parameters(self, x: float, y: float):
+        left_p_x, left_p_y, left_p_z = self.left_pulley_pos_xyz
+        right_p_x, right_p_y, right_p_z = self.right_pulley_pos_xyz
+        left_connection_x = x - (self.effector_width / 2.0)
+        left_connection_y = y + (self.effector_height / 2.0)
+        right_connection_x = x + (self.effector_width / 2.0)
+        right_connection_y = y + (self.effector_height / 2.0)
+        dz_left = self.effector_z - left_p_z
+        dz_right = self.effector_z - right_p_z
+        left_len = math.sqrt((left_connection_x - left_p_x) ** 2 +
+                             (left_connection_y - left_p_y) ** 2 + dz_left ** 2)
+        right_len = math.sqrt((right_connection_x - right_p_x) ** 2 +
+                              (right_connection_y - right_p_y) ** 2 + dz_right ** 2)
+        left_ang_rad = math.atan2(
+            left_connection_x - left_p_x,
+            left_p_z - left_connection_y)
+        right_ang_rad = math.atan2(
+            right_p_x - right_connection_x,
+            right_p_z - right_connection_y)
+        left_ang = math.degrees(left_ang_rad)
+        right_ang = math.degrees(right_ang_rad)
         return left_len, right_len, left_ang, right_ang
 
     # calculate_pulley_movement() function
-    # Computes cable variations and pulley rotations between two positions
+    # Computes cable length changes and pulley rotation for movement
     def calculate_pulley_movement(self, start_x, start_y, end_x, end_y):
         l1_start, l2_start, _, _ = self.calculate_cable_parameters(
             start_x, start_y)
@@ -115,7 +134,7 @@ class CDPRController(Node):
         return delta_l1, delta_l2, pulley1_angle, pulley2_angle
 
     # path_callback() function
-    # Receives incoming path points and selects the correct execution mode
+    # Receives Path message and sets trajectory mode based on points
     def path_callback(self, msg: Path):
         self.points = []
         for pose_stamped in msg.poses:
@@ -124,39 +143,56 @@ class CDPRController(Node):
             self.points.append((x, y))
         self.points_number = len(self.points)
         if self.points_number == 0:
-            self.get_logger().error('ERROR. INCORRECT MESSAGE FORMAT.')
+            self.get_logger().error('ERROR. /cdpr Path contains no points.')
             return
         if self.points_number == 1:
             self.mode = 'single'
-            self.get_logger().info('1 POINT RECEIVED (VERSION 1). RUNNING...')
+            self.get_logger().info('1 point received: moving effector to that position (single).')
             self.handle_single_point()
-
         elif self.points_number == 2:
             self.mode = 'two_point'
-            self.get_logger().info('TWO POINTS RECEIVED (VERSION 2). RUNNING ...')
-            self.start_two_point_trajectory()
-        elif self.points_number >= 3:
+            self.initial_x, self.initial_y = self.points[0]
+            self.target_x, self.target_y = self.points[1]
+            self.current_x, self.current_y = self.initial_x, self.initial_y
+            self.segment_index = 0
+            self.moving = True
+            self.animation_progress = 0.0
+            self.objective_achieved = False
+            self.shutdown_scheduled = False
+            l1_init, l2_init, _, _ = self.calculate_cable_parameters(
+                self.initial_x, self.initial_y)
+            l1_end, l2_end, _, _ = self.calculate_cable_parameters(
+                self.target_x, self.target_y)
+            self.target_left_cable_change = l1_end - l1_init
+            self.target_right_cable_change = l2_end - l2_init
+            self.target_left_pulley_angle = self.target_left_cable_change / self.pulley_radius
+            self.target_right_pulley_angle = self.target_right_cable_change / self.pulley_radius
+            self.get_logger().info(
+                f'Two-point path received: {self.initial_x, self.initial_y} \
+                -> {self.target_x, self.target_y}')
+        else:
             self.mode = 'multi'
             self.get_logger().info(
-                f'{self.points_number} POINTS RECEIVED (VERSION 3). RUNNING ...')
+                f'{self.points_number} points received: starting multi-segment trajectory.')
             self.start_multi_point_trajectory()
         self.marker_received = True
 
     # handle_single_point() function
-    # Processes a single target position and publishes its cable and pulley parameters
+    # Instantly moves effector to single target point and publishes data
     def handle_single_point(self):
         x, y = self.points[0]
         self.current_x, self.current_y = x, y
-        L1, L2, Q1, Q2 = self.calculate_cable_parameters(
-            self.current_x, self.current_y)
-        delta_l1, delta_l2, p1_ang, p2_ang = self.calculate_pulley_movement(
-            self.plane_width / 2.0, self.plane_height / 2.0, self.current_x, self.current_y)
         path_msg = Path()
         ps = PoseStamped()
         ps.pose.position.x = self.current_x
         ps.pose.position.y = self.current_y
+        ps.pose.position.z = self.effector_z
         path_msg.poses = [ps]
         self.effector_coordinates_publisher.publish(path_msg)
+        L1, L2, Q1, Q2 = self.calculate_cable_parameters(
+            self.current_x, self.current_y)
+        delta_l1, delta_l2, p1_ang, p2_ang = self.calculate_pulley_movement(
+            self.plane_width / 2.0, self.plane_height / 2.0, self.current_x, self.current_y)
         cable_msg = Float32MultiArray()
         cable_msg.data = [L1, L2, Q1, Q2]
         self.cable_parameters_publisher.publish(cable_msg)
@@ -184,37 +220,14 @@ class CDPRController(Node):
         print(f'- ROTATION ANGLES (RADIANS):   P1: {
               p1_ang:+.3f} rad, P2: {p2_ang:+.3f} rad')
         print('=' * 100)
-        self.get_logger().info('CLOSING CONTROLLER...')
-
-    # start_two_point_trajectory() function
-    # Initializes a two-point trajectory and computes target cable variations
-    def start_two_point_trajectory(self):
-        self.initial_x, self.initial_y = self.points[0]
-        self.current_x, self.current_y = self.initial_x, self.initial_y
-        self.target_x, self.target_y = self.points[1]
-        self.moving = True
-        self.animation_progress = 0.0
-        self.objective_achieved = False
-        self.shutdown_scheduled = False
-        self.left_pulley_position = 0.0
-        self.right_pulley_position = 0.0
-        l1, l2, a1, a2 = self.calculate_cable_parameters(
-            self.target_x, self.target_y)
-        l1_init, l2_init, a1_init, a2_init = self.calculate_cable_parameters(
-            self.initial_x, self.initial_y)
-        self.target_left_cable_change = l1 - l1_init
-        self.target_right_cable_change = l2 - l2_init
-        self.target_left_pulley_angle = self.target_left_cable_change / self.pulley_radius
-        self.target_right_pulley_angle = self.target_right_cable_change / self.pulley_radius
         self.get_logger().info(
-            f'NEW PATH: ({
-                self.initial_x:.3f}, {
-                self.initial_y:.3f}) → ({
-                self.target_x:.3f}, {
-                    self.target_y:.3f})')
+            f'Moved effector instantly to ({
+                self.current_x:.3f}, {
+                self.current_y:.3f}).')
+        self.get_logger().info('CLOSING CONTROLLER (single point).')
 
     # start_multi_point_trajectory() function
-    # Initializes multi-segment trajectories and precomputes per-segment parameters
+    # Prepares segment parameters for multi-point trajectory
     def start_multi_point_trajectory(self):
         self.points_number = len(self.points)
         self.segment_index = 0
@@ -241,80 +254,104 @@ class CDPRController(Node):
                 'delta_l': (delta_l1, delta_l2),
                 'pulley_angles': (p1_angle, p2_angle)
             })
-        self.get_logger().info(f'CREATED PATH: {self.points_number} POINTS, {
-            len(self.segment_target_params)} SEGMENTS.')
+        self.get_logger().info(f'CREATED PATH: {self.points_number} points, {
+            len(self.segment_target_params)} segments.')
 
     # control_loop() function
-    # Updates effector motion, pulley states, and handles controller shutdown logic
+    # Moves effector incrementally and updates pulley/joint states
     def control_loop(self):
         if self.objective_achieved and not self.shutdown_scheduled:
             self.shutdown_scheduled = True
-            self.get_logger().info('CLOSING CONTROLLER...')
+            self.get_logger().info('Objective achieved. Closing controller...')
             return
-        if self.moving and not self.objective_achieved:
-            self.animation_progress += 0.02
-            if self.animation_progress >= 1.0:
-                self.animation_progress = 1.0
-                self.current_x = self.target_x
-                self.current_y = self.target_y
-                dl1, dl2, p1_ang, p2_ang = self.calculate_pulley_movement(
-                    self.initial_x, self.initial_y, self.current_x, self.current_y)
-                self.left_pulley_position += p1_ang
-                self.right_pulley_position += p2_ang
-                self.publish_joint_states()
-                if self.mode == 'multi' and self.segment_index < (
-                        self.points_number - 2):
-                    self.segment_index += 1
-                    self.initial_x, self.initial_y = self.points[self.segment_index]
-                    self.target_x, self.target_y = self.points[self.segment_index + 1]
-                    self.animation_progress = 0.0
-                else:
-                    self.objective_achieved = True
-                    self.moving = False
-                    self.show_final_summary()
-                return
-            new_x = self.initial_x + \
-                (self.target_x - self.initial_x) * self.animation_progress
-            new_y = self.initial_y + \
-                (self.target_y - self.initial_y) * self.animation_progress
+        if not self.moving:
+            return
+        try:
+            ctrl_period = self.get_parameter(
+                'timers.control_loop_period').value
+        except Exception:
+            ctrl_period = 0.02
+        if self.segment_duration <= 0:
+            increment = 1.0
+        else:
+            increment = float(ctrl_period) / float(self.segment_duration)
+        self.animation_progress += increment
+        if self.animation_progress >= 1.0:
+            self.animation_progress = 1.0
+            self.current_x = self.target_x
+            self.current_y = self.target_y
             dl1, dl2, p1_ang, p2_ang = self.calculate_pulley_movement(
-                self.current_x, self.current_y, new_x, new_y)
+                self.initial_x, self.initial_y, self.current_x, self.current_y)
             self.left_pulley_position += p1_ang
             self.right_pulley_position += p2_ang
             self.publish_joint_states()
-            self.current_x = new_x
-            self.current_y = new_y
+            if self.mode == 'multi' and self.segment_index < (
+                    self.points_number - 2):
+                self.segment_index += 1
+                self.initial_x, self.initial_y = self.points[self.segment_index]
+                self.target_x, self.target_y = self.points[self.segment_index + 1]
+                self.animation_progress = 0.0
+                self.get_logger().info(f'Starting segment {
+                    self.segment_index + 1}/{max(1, self.points_number - 1)}')
+            else:
+                self.objective_achieved = True
+                self.moving = False
+                self.show_final_summary()
+            return
+        new_x = self.initial_x + \
+            (self.target_x - self.initial_x) * self.animation_progress
+        new_y = self.initial_y + \
+            (self.target_y - self.initial_y) * self.animation_progress
+        dl1, dl2, p1_ang, p2_ang = self.calculate_pulley_movement(
+            self.current_x, self.current_y, new_x, new_y)
+        self.left_pulley_position += p1_ang
+        self.right_pulley_position += p2_ang
+        self.publish_joint_states()
+        self.current_x = new_x
+        self.current_y = new_y
 
     # publish_effector_parameters() function
-    # Publishes current and target effector poses during motion
+    # Publishes effector Path and transform for visualization
     def publish_effector_parameters(self):
         path_msg = Path()
         pose_current = PoseStamped()
         pose_current.pose.position.x = self.current_x
         pose_current.pose.position.y = self.current_y
+        pose_current.pose.position.z = self.effector_z
         pose_target = PoseStamped()
         pose_target.pose.position.x = self.target_x
         pose_target.pose.position.y = self.target_y
+        pose_target.pose.position.z = self.effector_z
         path_msg.poses = [pose_current, pose_target]
         self.effector_coordinates_publisher.publish(path_msg)
+        t = TransformStamped()
+        t.header.stamp = self.get_clock().now().to_msg()
+        t.header.frame_id = 'base_link'
+        t.child_frame_id = 'end_effector'
+        t.transform.translation.x = self.current_x
+        t.transform.translation.y = self.current_y
+        t.transform.translation.z = self.effector_z
+        t.transform.rotation.x = 0.0
+        t.transform.rotation.y = 0.0
+        t.transform.rotation.z = 0.0
+        t.transform.rotation.w = 1.0
+        self.broadcaster.sendTransform(t)
         if self.moving:
             progress_percent = self.animation_progress * 100.0
             if self.mode == 'multi':
                 self.get_logger().info(
                     f'PROGRESS [{self.segment_index + 1}/{max(1, self.points_number - 1)}] '
-                    f'{progress_percent:.1f}% GOING=({self.current_x:.3f}, {self.current_y:.3f}) '
-                    f'TARGET=({self.target_x:.3f}, {self.target_y:.3f})'
+                    f'{progress_percent:.1f}% POS=({self.current_x:.3f}, {self.current_y:.3f}) '
+                    f'TGT=({self.target_x:.3f}, {self.target_y:.3f})'
                 )
             else:
                 self.get_logger().info(
                     f'PROGRESS {
-                        progress_percent:.1f}% - GOING=({
+                        progress_percent:.1f}% - POS=({
                         self.current_x:.3f}, {
-                        self.current_y:.3f}) TARGET=({
+                        self.current_y:.3f}) ' f'TGT=({
                         self.target_x:.3f}, {
                         self.target_y:.3f})')
-        else:
-            return
 
     # publish_cable_parameters() function
     # Publishes current cable lengths and angles
@@ -326,7 +363,7 @@ class CDPRController(Node):
         self.cable_parameters_publisher.publish(msg)
 
     # publish_pulley_parameters() function
-    # Publishes instantaneous pulley cable changes and rotation values
+    # Publishes pulley movement and rotation data
     def publish_pulley_parameters(self):
         if self.moving:
             seg_start_x, seg_start_y = self.initial_x, self.initial_y
@@ -339,7 +376,7 @@ class CDPRController(Node):
         self.pulley_parameters_publisher.publish(msg)
 
     # publish_joint_states() function
-    # Publishes joint positions corresponding to pulley rotation angles
+    # Publishes joint states for ROS2 joint visualization
     def publish_joint_states(self):
         msg = JointState()
         msg.header.stamp = self.get_clock().now().to_msg()
@@ -348,28 +385,21 @@ class CDPRController(Node):
         self.joint_state_publisher.publish(msg)
 
     # show_final_summary() function
-    # Prints a detailed summary of the final effector and cable parameters
+    # Prints detailed summary of effector movement and cable data
     def show_final_summary(self):
         if self.mode == 'two_point':
             final_left_length, final_right_length, final_left_angle, final_right_angle = \
                 self.calculate_cable_parameters(self.current_x, self.current_y)
             initial_left_length, initial_right_length, initial_left_angle, initial_right_angle = \
                 self.calculate_cable_parameters(self.initial_x, self.initial_y)
-            print('═' * 100)
+            print('═' * 80)
             print('END EFFECTOR POSITIONS (X, Y)')
             print(
-                f'- INITIAL POSITION:  ({
-                    self.initial_x:.3f}, {
-                    self.initial_y:.3f}) m')
+                f'- INITIAL POSITION:  ({self.initial_x:.3f}, {self.initial_y:.3f}) m')
             print(
-                f'- FINAL POSITION:    ({
-                    self.current_x:.3f}, {
-                    self.current_y:.3f}) m')
+                f'- FINAL POSITION:    ({self.current_x:.3f}, {self.current_y:.3f}) m')
             print(
-                f'- TARGET POSITION:   ({
-                    self.target_x:.3f}, {
-                    self.target_y:.3f}) m')
-            print('')
+                f'- TARGET POSITION:   ({self.target_x:.3f}, {self.target_y:.3f}) m\n')
             print('LENGTHS OF EACH CABLE (L1, L2)')
             print(
                 f'- INITIAL LENGTHS:       L1: {
@@ -379,9 +409,8 @@ class CDPRController(Node):
                 f'- FINAL LENGTHS:         L1: {
                     final_left_length:.3f} m,  L2: {
                     final_right_length:.3f} m')
-            print(f'- DIFFERENCE IN LENGTHS: L1: {self.target_left_cable_change:+.3f} m, '
-                  f'L2: {self.target_right_cable_change:+.3f} m')
-            print('')
+            print(f'- DIFFERENCE IN LENGTHS: L1: {self.target_left_cable_change:+.3f} m, L2: {
+                  self.target_right_cable_change:+.3f} m\n')
             print('ANGLES OF EACH CABLE (Q1, Q2)')
             print(
                 f'- INITIAL ANGLES:  Q1: {
@@ -390,26 +419,19 @@ class CDPRController(Node):
             print(
                 f'- FINAL ANGLES:    Q1: {
                     final_left_angle:.2f} °, Q2: {
-                    final_right_angle:.2f} °')
-            print('')
+                    final_right_angle:.2f} °\n')
             print('MOVEMENT OF EACH PULLEY (P1, P2)')
             print(
                 f'- EXTENDED / COLLAPSED CABLE BY P1: {self.target_left_cable_change:+.3f} m')
             print(
                 f'- EXTENDED / COLLAPSED CABLE BY P2: {self.target_right_cable_change:+.3f} m')
-            print(
-                f'- P1 ROTATING ANGLE:                {
-                    self.target_left_pulley_angle:+.3f} rad ({
-                    math.degrees(
-                        self.target_left_pulley_angle):+.2f} °)')
-            print(
-                f'- P2 ROTATING ANGLE:                {
-                    self.target_right_pulley_angle:+.3f} rad ({
-                    math.degrees(
-                        self.target_right_pulley_angle):+.2f} °)')
-            print('═' * 100)
+            print(f'- P1 ROTATING ANGLE: {self.target_left_pulley_angle:+.3f} rad ({
+                  math.degrees(self.target_left_pulley_angle):+.2f} °)')
+            print(f'- P2 ROTATING ANGLE: {self.target_right_pulley_angle:+.3f} rad ({
+                  math.degrees(self.target_right_pulley_angle):+.2f} °)')
+            print('═' * 80)
         elif self.mode == 'multi':
-            print('═' * 100)
+            print('═' * 80)
             print(f'NUMBER OF POINTS: {self.points_number}')
             print('\nPOINTS THE EFFECTOR HAS PASSED THROUGH')
             for i, (x, y) in enumerate(self.points):
@@ -434,12 +456,12 @@ class CDPRController(Node):
                     f'- P1 = {P1_mov_rad:+.3f} rad ({math.degrees(P1_mov_rad):+.2f} °)')
                 print(
                     f'- P2 = {P2_mov_rad:+.3f} rad ({math.degrees(P2_mov_rad):+.2f} °)')
-            print('═' * 100)
+            print('═' * 80)
         elif self.mode == 'single':
             pass
 
     # __del__() function
-    # Safely destroys the node and shuts down the ROS2 client library
+    # Safely shuts down ROS2 node
     def __del__(self):
         try:
             self.destroy_node()
@@ -449,7 +471,7 @@ class CDPRController(Node):
 
 
 # main() function
-# Initializes ROS2, launches the controller node, and manages its lifecycle
+# Initializes ROS2 and starts the CDPR controller node
 def main(args=None):
     rclpy.init(args=args)
     controller = CDPRController()

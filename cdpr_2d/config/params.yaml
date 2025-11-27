@@ -12,9 +12,25 @@ cdpr_controller:
     # Mechanical parameters
     pulley_radius: 0.05
 
-    # Timer frequencies (seconds)
+    # CDPR_CONTROLLER_RVIZ.PY
+
+    # Pulley positions
+    # left_pulley_position: []
+    # right_pulley_position: []
+
+    # Segment duration (seconds)
+    # segment_duration: 3.0
+
     timers:
+
+      # CDPR_CONTROLLER.PY
       control_loop_period: 0.5
       effector_pub_period: 0.5
       cable_pub_period: 0.5
       pulley_pub_period: 0.5
+
+      # CDPR_CONTROLLER_RVIZ.PY
+      # control_loop_period: 0.02
+      # effector_pub_period: 0.033
+      # cable_pub_period: 0.05
+      # pulley_pub_period: 0.05

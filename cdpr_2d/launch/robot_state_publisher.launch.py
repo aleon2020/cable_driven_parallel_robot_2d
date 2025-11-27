@@ -38,12 +38,6 @@ def generate_launch_description():
         name='joint_state_publisher_gui',
     )
 
-    # robot_controller_node = Node(
-    #     package='cdpr_2d',
-    #     executable='robot_controller',
-    #     name='robot_controller',
-    # )
-
     cdpr_controller_node = Node(
         package='cdpr_2d',
         executable='cdpr_controller',
@@ -60,6 +54,5 @@ def generate_launch_description():
         robot_state_publisher_node,
         rviz2_node,
         joint_state_publisher_gui_node,
-        # robot_controller_node,
         cdpr_controller_node,
     ])

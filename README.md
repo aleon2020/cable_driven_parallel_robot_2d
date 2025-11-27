@@ -40,9 +40,10 @@ src
 ├── cdpr_2d
 │   ├── cdpr_2d
 │   │   ├── cdpr_controller.py
-│   │   ├── __init__.py
-│   │   └── robot_controller.py
+│   │   ├── cdpr_controller_rviz.py
+│   │   └── __init__.py
 │   ├── config
+│   │   ├── params.yaml
 │   │   └── robot.rviz
 │   ├── description
 │   │   ├── robot.xacro
@@ -117,10 +118,14 @@ git pull
 
 ## Usage
 
-1. Run the following command to run the controller:
+1. Run one of the following commands to run the controller you want to test:
 
 ```sh
+# WITHOUT RVIZ
 ros2 run cdpr_2d cdpr_controller
+
+# WITH RVIZ
+ros2 run cdpr_2d cdpr_controller_rviz
 ```
 
 2. Launch each of the topics to see data related to the end effector:

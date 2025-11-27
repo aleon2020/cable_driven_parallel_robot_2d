@@ -34,8 +34,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'cdpr_controller = cdpr_2d.cdpr_controller:main'
-            # 'robot_controller = cdpr_2d.robot_controller:main'
+            'cdpr_controller = cdpr_2d.cdpr_controller:main',
+            'cdpr_controller_rviz = cdpr_2d.cdpr_controller_rviz:main',
         ],
     },
 )
