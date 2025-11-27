@@ -136,7 +136,7 @@ ros2 topic echo /cable_parameters
 ros2 topic echo /pulley_parameters
 ```
 
-3. Publish one of the following sets of commands messages in the corresponding topic to send the coordinates to which you want to move the end effector:
+3. Publish ONLY ONE of the following sets of commands messages in the corresponding topic to send the coordinates to which you want to move the end effector:
 
 ```sh
 # 1 POINT (FIXED POSITION)
@@ -147,7 +147,9 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
      pose: {position: {x: 0.3, y: 0.3, z: 0.0}}} \
   ] \
 }"
+```
 
+```sh
 # 2 POINTS (INITIAL AND FINAL POSITION)
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 "{header: {frame_id: 'world'}, \
@@ -158,7 +160,9 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
      pose: {position: {x: 0.7, y: 0.7, z: 0.0}}} \
   ] \
 }"
+```
 
+```sh
 # 3 OR MORE POINTS (TRAJECTORY)
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 "{header: {frame_id: 'world'}, \

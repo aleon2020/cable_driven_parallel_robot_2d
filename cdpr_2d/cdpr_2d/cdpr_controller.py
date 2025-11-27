@@ -9,63 +9,6 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Float32MultiArray
 from tf2_ros import TransformBroadcaster
 
-# COMPILING, LINKING, AND EXECUTING
-
-# 1 POINT (FIXED POSITION)
-# TERMINAL 1: colcon build --symlink-install
-# TERMINAL 2: ros2 run cdpr_2d cdpr_controller
-# TERMINAL 3: ros2 topic echo /effector_coordinates
-# TERMINAL 4: ros2 topic echo /cable_parameters
-# TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6:
-# ros2 topic pub --once /cdpr nav_msgs/msg/Path \
-# "{header: {frame_id: 'world'}, \
-#   poses: [ \
-#     {header: {frame_id: 'world'}, \
-#      pose: {position: {x: 0.3, y: 0.3, z: 0.0}}} \
-#   ] \
-# }"
-
-# 2 POINTS (INITIAL AND FINAL POSITION)
-# TERMINAL 1: colcon build --symlink-install
-# TERMINAL 2: ros2 run cdpr_2d cdpr_controller
-# TERMINAL 3: ros2 topic echo /effector_coordinates
-# TERMINAL 4: ros2 topic echo /cable_parameters
-# TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6:
-# ros2 topic pub --once /cdpr nav_msgs/msg/Path \
-# "{header: {frame_id: 'world'}, \
-#   poses: [ \
-#     {header: {frame_id: 'world'}, \
-#      pose: {position: {x: 0.3, y: 0.3, z: 0.0}}}, \
-#     {header: {frame_id: 'world'}, \
-#      pose: {position: {x: 0.7, y: 0.7, z: 0.0}}} \
-#   ] \
-# }"
-
-# 3 OR MORE POINTS (TRAJECTORY)
-# TERMINAL 1: colcon build --symlink-install
-# TERMINAL 2: ros2 run cdpr_2d cdpr_controller
-# TERMINAL 3: ros2 topic echo /effector_coordinates
-# TERMINAL 4: ros2 topic echo /cable_parameters
-# TERMINAL 5: ros2 topic echo /pulley_parameters
-# TERMINAL 6:
-# ros2 topic pub --once /cdpr nav_msgs/msg/Path \
-# "{header: {frame_id: 'world'}, \
-#   poses: [ \
-#     {header: {frame_id: 'world'}, \
-#      pose: {position: {x: 0.2, y: 0.2, z: 0.0}}}, \
-#     {header: {frame_id: 'world'}, \
-#      pose: {position: {x: 0.2, y: 0.8, z: 0.0}}}, \
-#     {header: {frame_id: 'world'}, \
-#      pose: {position: {x: 0.8, y: 0.8, z: 0.0}}}, \
-#     {header: {frame_id: 'world'}, \
-#      pose: {position: {x: 0.8, y: 0.2, z: 0.0}}}, \
-#     {header: {frame_id: 'world'}, \
-#      pose: {position: {x: 0.2, y: 0.2, z: 0.0}}} \
-#   ] \
-# }"
-
 
 class CDPRController(Node):
 
@@ -115,7 +58,7 @@ class CDPRController(Node):
             0.5, self.publish_cable_parameters)
         self.pulley_timer = self.create_timer(
             0.5, self.publish_pulley_parameters)
-        self.get_logger().info('CONTROLADOR ACTIVADO. ESPERANDO COORDENADAS ...')
+        self.get_logger().info('CONTROLLER ACTIVATED. WAITING FOR COORDINATES...')
 
     # calculate_cable_parameters() function
     # Computes cable lengths and angles from current effector coordinates
@@ -166,21 +109,21 @@ class CDPRController(Node):
             self.points.append((x, y))
         self.points_number = len(self.points)
         if self.points_number == 0:
-            self.get_logger().error('ERROR. FORMATO DE MENSAJE INCORRECTO.')
+            self.get_logger().error('ERROR. INCORRECT MESSAGE FORMAT.')
             return
         if self.points_number == 1:
             self.mode = 'single'
-            self.get_logger().info('UN PUNTO RECIBIDO (VERSION1_CONTROLLER). EJECUTANDO ...')
+            self.get_logger().info('1 POINT RECEIVED (VERSION 1). RUNNING...')
             self.handle_single_point()
 
         elif self.points_number == 2:
             self.mode = 'two_point'
-            self.get_logger().info('DOS PUNTOS RECIBIDOS (VERSION2_CONTROLLER). EJECUTANDO ...')
+            self.get_logger().info('TWO POINTS RECEIVED (VERSION 2). RUNNING ...')
             self.start_two_point_trajectory()
         elif self.points_number >= 3:
             self.mode = 'multi'
             self.get_logger().info(
-                f'{self.points_number} PUNTOS RECIBIDOS (VERSION3_CONTROLLER). EJECUTANDO ...')
+                f'{self.points_number} POINTS RECEIVED (VERSION 3). RUNNING ...')
             self.start_multi_point_trajectory()
         self.marker_received = True
 
@@ -211,22 +154,22 @@ class CDPRController(Node):
         joint_state_msg.position = [p1_ang, p2_ang]
         self.joint_state_publisher.publish(joint_state_msg)
         print('=' * 100)
-        print('POSICIÓN DEL EFECTOR FINAL (X, Y)')
+        print('END EFFECTOR POSITION (X, Y)')
         print(
-            f'• POSICIÓN OBJETIVO: ({
+            f'- TARGET POSITION: ({
                 self.current_x:.3f}, {
                 self.current_y:.3f}) m')
-        print('LONGITUDES DE CADA CABLE (L1, L2)')
-        print(f'• L1: {L1:.3f} m, L2: {L2:.3f} m')
-        print('ÁNGULOS DE CADA CABLE (Q1, Q2)')
-        print(f'• Q1: {Q1:.2f} °, Q2: {Q2:.2f} °')
-        print('MOVIMIENTO DE CADA POLEA (P1, P2)')
+        print('LENGTHS OF EACH CABLE (L1, L2)')
+        print(f'- L1: {L1:.3f} m, L2: {L2:.3f} m')
+        print('ANGLES OF EACH CABLE (Q1, Q2)')
+        print(f'- Q1: {Q1:.2f} °, Q2: {Q2:.2f} °')
+        print('MOVEMENT OF EACH PULLEY (P1, P2)')
         print(
-            f'• CABLE ELONGADO / RECOGIDO:  P1: {delta_l1:+.3f} m,   P2: {delta_l2:+.3f} m')
-        print(f'• ÁNGULOS DE GIRO (RADIANES): P1: {
+            f'- EXTENDED / COLLAPSED CABLE:  P1: {delta_l1:+.3f} m,   P2: {delta_l2:+.3f} m')
+        print(f'- ROTATION ANGLES (RADIANS):   P1: {
               p1_ang:+.3f} rad, P2: {p2_ang:+.3f} rad')
         print('=' * 100)
-        self.get_logger().info('CERRANDO CONTROLADOR ...')
+        self.get_logger().info('CLOSING CONTROLLER...')
         self.create_timer(0.05, self.shutdown_node)
 
     # start_two_point_trajectory() function
@@ -250,7 +193,7 @@ class CDPRController(Node):
         self.target_left_pulley_angle = self.target_left_cable_change / self.pulley_radius
         self.target_right_pulley_angle = self.target_right_cable_change / self.pulley_radius
         self.get_logger().info(
-            f'NUEVA TRAYECTORIA: ({
+            f'NEW PATH: ({
                 self.initial_x:.3f}, {
                 self.initial_y:.3f}) → ({
                 self.target_x:.3f}, {
@@ -284,15 +227,15 @@ class CDPRController(Node):
                 'delta_l': (delta_l1, delta_l2),
                 'pulley_angles': (p1_angle, p2_angle)
             })
-        self.get_logger().info(f'TRAYECTORIA CREADA: {self.points_number} puntos, {
-            len(self.segment_target_params)} segmentos.')
+        self.get_logger().info(f'CREATED PATH: {self.points_number} POINTS, {
+            len(self.segment_target_params)} SEGMENTS.')
 
     # control_loop() function
     # Updates effector motion, pulley states, and handles controller shutdown logic
     def control_loop(self):
         if self.objective_achieved and not self.shutdown_scheduled:
             self.shutdown_scheduled = True
-            self.get_logger().info('CERRANDO CONTROLADOR ...')
+            self.get_logger().info('CLOSING CONTROLLER...')
             self.create_timer(0.05, self.shutdown_node)
             return
         if self.moving and not self.objective_achieved:
@@ -312,12 +255,6 @@ class CDPRController(Node):
                     self.initial_x, self.initial_y = self.points[self.segment_index]
                     self.target_x, self.target_y = self.points[self.segment_index + 1]
                     self.animation_progress = 0.0
-                    self.get_logger().info(
-                        f'DESPLAZAMIENTO DESDE EL PUNTO {
-                            self.segment_index +
-                            1} HASTA EL PUNTO {
-                            self.segment_index +
-                            2}')
                 else:
                     self.objective_achieved = True
                     self.moving = False
@@ -351,21 +288,20 @@ class CDPRController(Node):
             progress_percent = self.animation_progress * 100.0
             if self.mode == 'multi':
                 self.get_logger().info(
-                    f'PROGRESO [{self.segment_index + 1}/{max(1, self.points_number - 1)}] '
-                    f'{progress_percent:.1f}% ACTUAL=({self.current_x:.3f}, {self.current_y:.3f}) '
-                    f'OBJETIVO=({self.target_x:.3f}, {self.target_y:.3f})'
+                    f'PROGRESS [{self.segment_index + 1}/{max(1, self.points_number - 1)}] '
+                    f'{progress_percent:.1f}% GOING=({self.current_x:.3f}, {self.current_y:.3f}) '
+                    f'TARGET=({self.target_x:.3f}, {self.target_y:.3f})'
                 )
             else:
                 self.get_logger().info(
-                    f'PROGRESO {
-                        progress_percent:.1f}% - ACTUAL=({
+                    f'PROGRESS {
+                        progress_percent:.1f}% - GOING=({
                         self.current_x:.3f}, {
-                        self.current_y:.3f}) OBJETIVO=({
+                        self.current_y:.3f}) TARGET=({
                         self.target_x:.3f}, {
                         self.target_y:.3f})')
         else:
-            self.get_logger().info(
-                f'EFECTOR: EN REPOSO - POSICIÓN=({self.current_x:.3f}, {self.current_y:.3f})')
+            return
 
     # publish_cable_parameters() function
     # Publishes current cable lengths and angles
@@ -375,12 +311,6 @@ class CDPRController(Node):
         msg = Float32MultiArray()
         msg.data = [L1, L2, Q1, Q2]
         self.cable_parameters_publisher.publish(msg)
-        self.get_logger().info(
-            f'CABLES: (L1, L2)=({
-                L1:.3f}, {
-                L2:.3f}) m, (Q1, Q2)=({
-                Q1:.2f}, {
-                    Q2:.2f})°')
 
     # publish_pulley_parameters() function
     # Publishes instantaneous pulley cable changes and rotation values
@@ -394,14 +324,6 @@ class CDPRController(Node):
         msg = Float32MultiArray()
         msg.data = [dl1, dl2, pa1, pa2]
         self.pulley_parameters_publisher.publish(msg)
-        if self.mode == 'multi':
-            self.get_logger().info(
-                f'POLEAS: SEGMENTO [{self.segment_index + 1}/{max(1, self.points_number - 1)}] '
-                f'DIF=({dl1:+.3f} m, {dl2:+.3f} m), ÁNGULOS=({pa1:+.3f} rad, {pa2:+.3f} rad)'
-            )
-        else:
-            self.get_logger().info(f'POLEAS: DIF=({
-                dl1:+.3f} m, {dl2:+.3f} m), ÁNGULOS=({pa1:+.3f} rad, {pa2:+.3f} rad)')
 
     # publish_joint_states() function
     # Publishes joint positions corresponding to pulley rotation angles
@@ -421,69 +343,69 @@ class CDPRController(Node):
             initial_left_length, initial_right_length, initial_left_angle, initial_right_angle = \
                 self.calculate_cable_parameters(self.initial_x, self.initial_y)
             print('═' * 100)
-            print('POSICIONES DEL EFECTOR FINAL (X, Y)')
+            print('END EFFECTOR POSITIONS (X, Y)')
             print(
-                f'• POSICIÓN INICIAL:  ({
+                f'- INITIAL POSITION:  ({
                     self.initial_x:.3f}, {
                     self.initial_y:.3f}) m')
             print(
-                f'• POSICIÓN FINAL:    ({
+                f'- FINAL POSITION:    ({
                     self.current_x:.3f}, {
                     self.current_y:.3f}) m')
             print(
-                f'• POSICIÓN OBJETIVO: ({
+                f'- TARGET POSITION:   ({
                     self.target_x:.3f}, {
                     self.target_y:.3f}) m')
             print('')
-            print('LONGITUDES DE CADA CABLE (L1, L2)')
+            print('LENGTHS OF EACH CABLE (L1, L2)')
             print(
-                f'• LONGITUDES INICIALES:     L1: {
-                    initial_left_length:.3f} m, L2: {
+                f'- INITIAL LENGTHS:       L1: {
+                    initial_left_length:.3f} m,  L2: {
                     initial_right_length:.3f} m')
             print(
-                f'• LONGITUDES FINALES:       L1: {
-                    final_left_length:.3f} m, L2: {
+                f'- FINAL LENGTHS:         L1: {
+                    final_left_length:.3f} m,  L2: {
                     final_right_length:.3f} m')
-            print(f'• DIFERENCIA DE LONGITUDES: L1: {self.target_left_cable_change:+.3f} m, '
+            print(f'- DIFFERENCE IN LENGTHS: L1: {self.target_left_cable_change:+.3f} m, '
                   f'L2: {self.target_right_cable_change:+.3f} m')
             print('')
-            print('ÁNGULOS DE CADA CABLE (Q1, Q2)')
+            print('ANGLES OF EACH CABLE (Q1, Q2)')
             print(
-                f'• ÁNGULOS INICIALES:  Q1: {
+                f'- INITIAL ANGLES:  Q1: {
                     initial_left_angle:.2f} °, Q2: {
                     initial_right_angle:.2f} °')
             print(
-                f'• ÁNGULOS FINALES: Q1: {
+                f'- FINAL ANGLES:    Q1: {
                     final_left_angle:.2f} °, Q2: {
                     final_right_angle:.2f} °')
             print('')
-            print('MOVIMIENTO DE CADA POLEA (P1, P2)')
+            print('MOVEMENT OF EACH PULLEY (P1, P2)')
             print(
-                f'• CABLE ELONGADO / RECOGIDO POR P1: {self.target_left_cable_change:+.3f} m')
+                f'- EXTENDED / COLLAPSED CABLE BY P1: {self.target_left_cable_change:+.3f} m')
             print(
-                f'• CABLE ELONGADO / RECOGIDO POR P2: {self.target_right_cable_change:+.3f} m')
+                f'- EXTENDED / COLLAPSED CABLE BY P2: {self.target_right_cable_change:+.3f} m')
             print(
-                f'• ÁNGULO DE GIRO DE P1: {
+                f'- P1 ROTATING ANGLE:                {
                     self.target_left_pulley_angle:+.3f} rad ({
                     math.degrees(
                         self.target_left_pulley_angle):+.2f} °)')
             print(
-                f'• ÁNGULO DE GIRO DE P2: {
+                f'- P2 ROTATING ANGLE:                {
                     self.target_right_pulley_angle:+.3f} rad ({
                     math.degrees(
                         self.target_right_pulley_angle):+.2f} °)')
             print('═' * 100)
         elif self.mode == 'multi':
             print('═' * 100)
-            print(f'NÚMERO DE PUNTOS: {self.points_number}')
-            print('\nPUNTOS POR LOS QUE HA PASADO EL EFECTOR')
+            print(f'NUMBER OF POINTS: {self.points_number}')
+            print('\nPOINTS THE EFFECTOR HAS PASSED THROUGH')
             for i, (x, y) in enumerate(self.points):
-                print(f'• {i + 1:02d}: ({x:.3f}, {y:.3f}) m')
+                print(f'- POINT {i + 1}: ({x:.3f}, {y:.3f}) m')
             for i, (x, y) in enumerate(self.points):
                 L1, L2, q1, q2 = self.calculate_cable_parameters(x, y)
-                print(f'\nDATOS POSICIÓN NÚMERO {i + 1}')
-                print(f'• L1 = {L1:.3f} m, L2 = {L2:.3f} m')
-                print(f'• Q1 = {q1:.2f} °, Q2 = {q2:.2f} °')
+                print(f'\nDATA POSITION NUMBER {i + 1}')
+                print(f'- L1 = {L1:.3f} m, L2 = {L2:.3f} m')
+                print(f'- Q1 = {q1:.2f} °, Q2 = {q2:.2f} °')
             for i in range(self.points_number - 1):
                 sx, sy = self.points[i]
                 ex, ey = self.points[i + 1]
@@ -493,12 +415,12 @@ class CDPRController(Node):
                 L2_mov = L2_f - L2_i
                 P1_mov_rad = L1_mov / self.pulley_radius
                 P2_mov_rad = L2_mov / self.pulley_radius
-                print(f'\nMOVIMIENTO ENTRE POSICIONES {i + 1} Y {i + 2}')
-                print(f'• ΔL1 = {L1_mov:+.3f} m, ΔL2 = {L2_mov:+.3f} m')
+                print(f'\nMOVEMENT BETWEEN POSITIONS {i + 1} AND {i + 2}')
+                print(f'- DL1 = {L1_mov:+.3f} m, DL2 = {L2_mov:+.3f} m')
                 print(
-                    f'• P1 = {P1_mov_rad:+.3f} rad ({math.degrees(P1_mov_rad):+.2f} °)')
+                    f'- P1 = {P1_mov_rad:+.3f} rad ({math.degrees(P1_mov_rad):+.2f} °)')
                 print(
-                    f'• P2 = {P2_mov_rad:+.3f} rad ({math.degrees(P2_mov_rad):+.2f} °)')
+                    f'- P2 = {P2_mov_rad:+.3f} rad ({math.degrees(P2_mov_rad):+.2f} °)')
             print('═' * 100)
         elif self.mode == 'single':
             pass
@@ -521,9 +443,9 @@ def main(args=None):
     try:
         rclpy.spin(controller)
     except KeyboardInterrupt:
-        print('\nCERRANDO CONTROLADOR ...')
+        print('\nCLOSING CONTROLLER...')
     except Exception as e:
-        print(f'Error: {e}')
+        print(f'ERROR: {e}')
     finally:
         try:
             if rclpy.ok():
