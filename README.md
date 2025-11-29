@@ -27,8 +27,8 @@ The project integrates topics such as **kinematic modeling**, **control algorith
   - **resource/**: Resource file.
   - **test/**: Test files.
   - **package.xml**: Package metadata.
-  - **setup.cfg/**: Build configuration.
-  - **setup.py/**: Build configuration.
+  - **setup.cfg**: Build configuration.
+  - **setup.py**: Build configuration.
 - Built using **colcon**.
 
 ---
