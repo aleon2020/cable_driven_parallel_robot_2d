@@ -123,7 +123,9 @@ git pull
 ```sh
 # WITHOUT RVIZ
 ros2 run cdpr_2d cdpr_controller
+```
 
+```sh
 # WITH RVIZ
 ros2 run cdpr_2d cdpr_controller_rviz
 ```
@@ -140,10 +142,14 @@ ros2 launch cdpr_2d robot_state_publisher.launch.py
 ```sh
 # POSITION (X,Y) OF THE END EFFECTOR
 ros2 topic echo /effector_coordinates
+```
 
+```sh
 # CABLE LENGTHS AND ANGLES WITH THE VERTICAL
 ros2 topic echo /cable_parameters
+```
 
+```sh
 # ELONGATED / RETRACTED CABLE LENGTH AND ANGLE OF ROTATION OF EACH PULLEY
 ros2 topic echo /pulley_parameters
 ```
