@@ -32,11 +32,11 @@ def generate_launch_description():
         arguments=['-d', [os.path.join(pkg_path, 'config', 'robot.rviz')]]
     )
 
-    joint_state_publisher_gui_node = Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        name='joint_state_publisher_gui',
-    )
+    # joint_state_publisher_gui_node = Node(
+    #     package='joint_state_publisher_gui',
+    #     executable='joint_state_publisher_gui',
+    #     name='joint_state_publisher_gui',
+    # )
 
     cdpr_controller_node = Node(
         package='cdpr_2d',
@@ -53,6 +53,6 @@ def generate_launch_description():
         ),
         robot_state_publisher_node,
         rviz2_node,
-        joint_state_publisher_gui_node,
+        # joint_state_publisher_gui_node,
         cdpr_controller_node,
     ])

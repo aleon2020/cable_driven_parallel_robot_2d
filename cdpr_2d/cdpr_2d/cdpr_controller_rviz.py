@@ -44,6 +44,8 @@ class CDPRController(Node):
         right_p_pos = self.get_parameter('right_pulley_position').value
         self.default_left_pulley = (0.00, -0.125, 1.70)
         self.default_right_pulley = (1.00, -0.125, 1.70)
+        # self.default_left_pulley = (0.00, 1.70, -0.125)
+        # self.default_right_pulley = (1.00, 1.70, -0.125)
         self.effector_z = -0.125
         if left_p_pos and len(left_p_pos) == 3:
             self.left_pulley_pos_xyz = tuple(left_p_pos)

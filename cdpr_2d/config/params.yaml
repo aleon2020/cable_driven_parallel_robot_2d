@@ -11,14 +11,6 @@ cdpr_controller:
     segment_duration: 3.0
 
     timers:
-
-      # CDPR_CONTROLLER.PY
-      # control_loop_period: 0.5
-      # effector_pub_period: 0.5
-      # cable_pub_period: 0.5
-      # pulley_pub_period: 0.5
-
-      # CDPR_CONTROLLER_RVIZ.PY
       control_loop_period: 0.02
       effector_pub_period: 0.033
       cable_pub_period: 0.05
