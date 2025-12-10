@@ -44,7 +44,7 @@ class CDPRController(Node):
         right_p_pos = self.get_parameter('right_pulley_position').value
         self.default_left_pulley = (0.00, -0.125, 1.70)
         self.default_right_pulley = (1.00, -0.125, 1.70)
-        self.effector_z = 1.20
+        self.effector_z = 0.0
         if left_p_pos and len(left_p_pos) == 3:
             self.left_pulley_pos_xyz = tuple(left_p_pos)
         else:
@@ -329,8 +329,8 @@ class CDPRController(Node):
         t.header.frame_id = 'base_link'
         t.child_frame_id = 'end_effector'
         t.transform.translation.x = self.current_x
-        t.transform.translation.y = self.current_y
-        t.transform.translation.z = self.effector_z
+        t.transform.translation.y = self.effector_z
+        t.transform.translation.z = self.current_y
         t.transform.rotation.x = 0.0
         t.transform.rotation.y = 0.0
         t.transform.rotation.z = 0.0
