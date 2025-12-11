@@ -35,7 +35,6 @@ setup(
     entry_points={
         'console_scripts': [
             'cdpr_controller = cdpr_2d.cdpr_controller:main',
-            'cdpr_controller_rviz = cdpr_2d.cdpr_controller_rviz:main',
         ],
     },
 )

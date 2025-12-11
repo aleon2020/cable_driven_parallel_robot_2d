@@ -3,7 +3,7 @@
 <package format="3">
   <name>cdpr_2d</name>
   <version>0.0.1</version>
-  <description>Implementación de un robot por cables para el control de un efector final en diversas tareas</description>
+  <description>Cable Driven Parallel Robot in 2 Dimensions (cdpr_2d)</description>
   <maintainer email="a.leon.2020@alumnos.urjc.es">aalbeerto-02</maintainer>
   <license>Apache-2.0</license>
 

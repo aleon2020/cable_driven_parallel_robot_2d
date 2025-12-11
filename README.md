@@ -118,16 +118,11 @@ git pull
 
 ## Usage
 
-1. Run ONE of the controllers you want to test:
-
-```sh
-# WITHOUT RVIZ
-ros2 run cdpr_2d cdpr_controller
-```
+1. Run the controller:
 
 ```sh
 # WITH RVIZ
-ros2 run cdpr_2d cdpr_controller_rviz
+ros2 run cdpr_2d cdpr_controller
 ```
 
 2. Launch the simulation and visualization in RViZ:
