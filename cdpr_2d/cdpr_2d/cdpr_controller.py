@@ -219,8 +219,6 @@ class CDPRController(Node):
         self.animation_progress = 0.0
         self.objective_achieved = False
         self.shutdown_scheduled = False
-        self.left_pulley_position = 0.0
-        self.right_pulley_position = 0.0
         self.segment_target_params = []
         for i in range(self.points_number - 1):
             sx, sy = self.points[i]
@@ -254,15 +252,16 @@ class CDPRController(Node):
             increment = 1.0
         else:
             increment = float(ctrl_period) / float(self.segment_duration)
-        self.animation_progress += increment
-        if self.animation_progress >= 1.0:
-            self.animation_progress = 1.0
-            self.current_x = self.target_x
-            self.current_y = self.target_y
+        next_progress = self.animation_progress + increment
+        if next_progress >= 1.0:
+            remaining_new_x = self.target_x
+            remaining_new_y = self.target_y
             dl1, dl2, p1_ang, p2_ang = self.calculate_pulley_movement(
-                self.initial_x, self.initial_y, self.current_x, self.current_y)
+                self.current_x, self.current_y, remaining_new_x, remaining_new_y)
             self.left_pulley_position += p1_ang
             self.right_pulley_position += p2_ang
+            self.current_x = remaining_new_x
+            self.current_y = remaining_new_y
             self.publish_joint_states()
             if self.mode == 'multi' and self.segment_index < (self.points_number - 2):
                 self.segment_index += 1
@@ -272,8 +271,10 @@ class CDPRController(Node):
             else:
                 self.objective_achieved = True
                 self.moving = False
+                self.animation_progress = 1.0
                 self.show_final_summary()
             return
+        self.animation_progress = next_progress
         new_x = self.initial_x + (self.target_x - self.initial_x) * self.animation_progress
         new_y = self.initial_y + (self.target_y - self.initial_y) * self.animation_progress
         dl1, dl2, p1_ang, p2_ang = self.calculate_pulley_movement(
