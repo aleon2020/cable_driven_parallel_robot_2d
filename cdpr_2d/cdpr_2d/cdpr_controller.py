@@ -44,8 +44,6 @@ class CDPRController(Node):
         right_p_pos = self.get_parameter('right_pulley_position').value
         self.default_left_pulley = (0.00, -0.125, 1.70)
         self.default_right_pulley = (1.00, -0.125, 1.70)
-        # self.default_left_pulley = (0.00, 1.70, -0.125)
-        # self.default_right_pulley = (1.00, 1.70, -0.125)
         self.effector_z = -0.125
         if left_p_pos and len(left_p_pos) == 3:
             self.left_pulley_pos_xyz = tuple(left_p_pos)
@@ -145,11 +143,12 @@ class CDPRController(Node):
             self.points.append((x, y))
         self.points_number = len(self.points)
         if self.points_number == 0:
-            self.get_logger().error('ERROR. /cdpr Path contains no points.')
+            self.get_logger().error('ERROR. PATH WITH NO POINTS')
             return
         if self.points_number == 1:
             self.mode = 'single'
-            self.get_logger().info('1 point received: moving effector to that position (single).')
+            self.get_logger().info('=' * 80)
+            self.get_logger().info('1 POINT RECEIVED')
             self.handle_single_point()
         elif self.points_number == 2:
             self.mode = 'two_point'
@@ -169,13 +168,11 @@ class CDPRController(Node):
             self.target_right_cable_change = l2_end - l2_init
             self.target_left_pulley_angle = self.target_left_cable_change / self.pulley_radius
             self.target_right_pulley_angle = self.target_right_cable_change / self.pulley_radius
-            self.get_logger().info(
-                f'Two-point path received: {self.initial_x, self.initial_y} \
-                -> {self.target_x, self.target_y}')
+            self.get_logger().info('2 POINTS RECEIVED')
         else:
             self.mode = 'multi'
             self.get_logger().info(
-                f'{self.points_number} points received: starting multi-segment trajectory.')
+                f'{self.points_number} POINTS RECEIVED')
             self.start_multi_point_trajectory()
         self.marker_received = True
 
@@ -206,27 +203,22 @@ class CDPRController(Node):
         joint_state_msg.name = ['left_wheel_joint', 'right_wheel_joint']
         joint_state_msg.position = [p1_ang, p2_ang]
         self.joint_state_publisher.publish(joint_state_msg)
-        print('=' * 100)
-        print('END EFFECTOR POSITION (X, Y)')
-        print(
+        # self.get_logger().info('=' * 80)
+        self.get_logger().info('END EFFECTOR POSITION (X, Y)')
+        self.get_logger().info(
             f'- TARGET POSITION: ({
                 self.current_x:.3f}, {
                 self.current_y:.3f}) m')
-        print('LENGTHS OF EACH CABLE (L1, L2)')
-        print(f'- L1: {L1:.3f} m, L2: {L2:.3f} m')
-        print('ANGLES OF EACH CABLE (Q1, Q2)')
-        print(f'- Q1: {Q1:.2f} °, Q2: {Q2:.2f} °')
-        print('MOVEMENT OF EACH PULLEY (P1, P2)')
-        print(
-            f'- EXTENDED / COLLAPSED CABLE:  P1: {delta_l1:+.3f} m,   P2: {delta_l2:+.3f} m')
-        print(f'- ROTATION ANGLES (RADIANS):   P1: {
-              p1_ang:+.3f} rad, P2: {p2_ang:+.3f} rad')
-        print('=' * 100)
+        self.get_logger().info('LENGTHS OF EACH CABLE (L1, L2)')
+        self.get_logger().info(f'- L1: {L1:.3f} m, L2: {L2:.3f} m')
+        self.get_logger().info('ANGLES OF EACH CABLE (Q1, Q2)')
+        self.get_logger().info(f'- Q1: {Q1:.2f} °, Q2: {Q2:.2f} °')
+        self.get_logger().info('MOVEMENT OF EACH PULLEY (P1, P2)')
         self.get_logger().info(
-            f'Moved effector instantly to ({
-                self.current_x:.3f}, {
-                self.current_y:.3f}).')
-        self.get_logger().info('CLOSING CONTROLLER (single point).')
+            f'- EXTENDED / COLLAPSED CABLE:  P1: {delta_l1:+.3f} m,   P2: {delta_l2:+.3f} m')
+        self.get_logger().info(f'- ROTATION ANGLES (RADIANS):   P1: {
+              p1_ang:+.3f} rad, P2: {p2_ang:+.3f} rad')
+        self.get_logger().info('=' * 80)
 
     # start_multi_point_trajectory() function
     # Prepares segment parameters for multi-point trajectory
@@ -256,15 +248,14 @@ class CDPRController(Node):
                 'delta_l': (delta_l1, delta_l2),
                 'pulley_angles': (p1_angle, p2_angle)
             })
-        self.get_logger().info(f'CREATED PATH: {self.points_number} points, {
-            len(self.segment_target_params)} segments.')
+        self.get_logger().info(f'CREATED PATH WITH {self.points_number} POINTS AND {
+            len(self.segment_target_params)} SEGMENTS')
 
     # control_loop() function
     # Moves effector incrementally and updates pulley/joint states
     def control_loop(self):
         if self.objective_achieved and not self.shutdown_scheduled:
             self.shutdown_scheduled = True
-            self.get_logger().info('Objective achieved. Closing controller...')
             return
         if not self.moving:
             return
@@ -293,8 +284,6 @@ class CDPRController(Node):
                 self.initial_x, self.initial_y = self.points[self.segment_index]
                 self.target_x, self.target_y = self.points[self.segment_index + 1]
                 self.animation_progress = 0.0
-                self.get_logger().info(f'Starting segment {
-                    self.segment_index + 1}/{max(1, self.points_number - 1)}')
             else:
                 self.objective_achieved = True
                 self.moving = False
@@ -331,8 +320,6 @@ class CDPRController(Node):
         t.header.frame_id = 'base_link'
         t.child_frame_id = 'end_effector'
         t.transform.translation.x = self.current_x
-        # t.transform.translation.y = self.current_y
-        # t.transform.translation.z = self.effector_z
         t.transform.translation.y = self.effector_z
         t.transform.translation.z = self.current_y + 0.7
         t.transform.rotation.x = 0.0
@@ -396,55 +383,53 @@ class CDPRController(Node):
                 self.calculate_cable_parameters(self.current_x, self.current_y)
             initial_left_length, initial_right_length, initial_left_angle, initial_right_angle = \
                 self.calculate_cable_parameters(self.initial_x, self.initial_y)
-            print('═' * 80)
-            print('END EFFECTOR POSITIONS (X, Y)')
-            print(
+            self.get_logger().info('END EFFECTOR POSITIONS (X, Y)')
+            self.get_logger().info(
                 f'- INITIAL POSITION:  ({self.initial_x:.3f}, {self.initial_y:.3f}) m')
-            print(
+            self.get_logger().info(
                 f'- FINAL POSITION:    ({self.current_x:.3f}, {self.current_y:.3f}) m')
-            print(
-                f'- TARGET POSITION:   ({self.target_x:.3f}, {self.target_y:.3f}) m\n')
-            print('LENGTHS OF EACH CABLE (L1, L2)')
-            print(
+            self.get_logger().info(
+                f'- TARGET POSITION:   ({self.target_x:.3f}, {self.target_y:.3f}) m')
+            self.get_logger().info('LENGTHS OF EACH CABLE (L1, L2)')
+            self.get_logger().info(
                 f'- INITIAL LENGTHS:       L1: {
                     initial_left_length:.3f} m,  L2: {
                     initial_right_length:.3f} m')
-            print(
+            self.get_logger().info(
                 f'- FINAL LENGTHS:         L1: {
                     final_left_length:.3f} m,  L2: {
                     final_right_length:.3f} m')
-            print(f'- DIFFERENCE IN LENGTHS: L1: {self.target_left_cable_change:+.3f} m, L2: {
-                  self.target_right_cable_change:+.3f} m\n')
-            print('ANGLES OF EACH CABLE (Q1, Q2)')
-            print(
+            self.get_logger().info(f'- DIFFERENCE IN LENGTHS: L1: {self.target_left_cable_change:+.3f} m, L2: {
+                  self.target_right_cable_change:+.3f} m')
+            self.get_logger().info('ANGLES OF EACH CABLE (Q1, Q2)')
+            self.get_logger().info(
                 f'- INITIAL ANGLES:  Q1: {
                     initial_left_angle:.2f} °, Q2: {
                     initial_right_angle:.2f} °')
-            print(
+            self.get_logger().info(
                 f'- FINAL ANGLES:    Q1: {
                     final_left_angle:.2f} °, Q2: {
-                    final_right_angle:.2f} °\n')
-            print('MOVEMENT OF EACH PULLEY (P1, P2)')
-            print(
+                    final_right_angle:.2f} °')
+            self.get_logger().info('MOVEMENT OF EACH PULLEY (P1, P2)')
+            self.get_logger().info(
                 f'- EXTENDED / COLLAPSED CABLE BY P1: {self.target_left_cable_change:+.3f} m')
-            print(
+            self.get_logger().info(
                 f'- EXTENDED / COLLAPSED CABLE BY P2: {self.target_right_cable_change:+.3f} m')
-            print(f'- P1 ROTATING ANGLE: {self.target_left_pulley_angle:+.3f} rad ({
+            self.get_logger().info(f'- P1 ROTATING ANGLE: {self.target_left_pulley_angle:+.3f} rad ({
                   math.degrees(self.target_left_pulley_angle):+.2f} °)')
-            print(f'- P2 ROTATING ANGLE: {self.target_right_pulley_angle:+.3f} rad ({
+            self.get_logger().info(f'- P2 ROTATING ANGLE: {self.target_right_pulley_angle:+.3f} rad ({
                   math.degrees(self.target_right_pulley_angle):+.2f} °)')
-            print('═' * 80)
+            self.get_logger().info('=' * 80)
         elif self.mode == 'multi':
-            print('═' * 80)
-            print(f'NUMBER OF POINTS: {self.points_number}')
-            print('\nPOINTS THE EFFECTOR HAS PASSED THROUGH')
+            self.get_logger().info(f'NUMBER OF POINTS: {self.points_number}')
+            self.get_logger().info('POINTS THE EFFECTOR HAS PASSED THROUGH')
             for i, (x, y) in enumerate(self.points):
-                print(f'- POINT {i + 1}: ({x:.3f}, {y:.3f}) m')
+                self.get_logger().info(f'- POINT {i + 1}: ({x:.3f}, {y:.3f}) m')
             for i, (x, y) in enumerate(self.points):
                 L1, L2, q1, q2 = self.calculate_cable_parameters(x, y)
-                print(f'\nDATA POSITION NUMBER {i + 1}')
-                print(f'- L1 = {L1:.3f} m, L2 = {L2:.3f} m')
-                print(f'- Q1 = {q1:.2f} °, Q2 = {q2:.2f} °')
+                self.get_logger().info(f'DATA POSITION NUMBER {i + 1}')
+                self.get_logger().info(f'- L1 = {L1:.3f} m, L2 = {L2:.3f} m')
+                self.get_logger().info(f'- Q1 = {q1:.2f} °, Q2 = {q2:.2f} °')
             for i in range(self.points_number - 1):
                 sx, sy = self.points[i]
                 ex, ey = self.points[i + 1]
@@ -454,13 +439,13 @@ class CDPRController(Node):
                 L2_mov = L2_f - L2_i
                 P1_mov_rad = L1_mov / self.pulley_radius
                 P2_mov_rad = L2_mov / self.pulley_radius
-                print(f'\nMOVEMENT BETWEEN POSITIONS {i + 1} AND {i + 2}')
-                print(f'- DL1 = {L1_mov:+.3f} m, DL2 = {L2_mov:+.3f} m')
-                print(
+                self.get_logger().info(f'MOVEMENT BETWEEN POSITIONS {i + 1} AND {i + 2}')
+                self.get_logger().info(f'- DL1 = {L1_mov:+.3f} m, DL2 = {L2_mov:+.3f} m')
+                self.get_logger().info(
                     f'- P1 = {P1_mov_rad:+.3f} rad ({math.degrees(P1_mov_rad):+.2f} °)')
-                print(
+                self.get_logger().info(
                     f'- P2 = {P2_mov_rad:+.3f} rad ({math.degrees(P2_mov_rad):+.2f} °)')
-            print('═' * 80)
+            self.get_logger().info('=' * 80)
         elif self.mode == 'single':
             pass
 

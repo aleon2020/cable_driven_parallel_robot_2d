@@ -47,6 +47,5 @@ def generate_launch_description():
         ),
         robot_state_publisher_node,
         rviz2_node,
-        # joint_state_publisher_gui_node,
         cdpr_controller_node,
     ])
