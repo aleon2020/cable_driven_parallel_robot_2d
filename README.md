@@ -40,8 +40,11 @@ src
 ├── cdpr_2d
 │   ├── cdpr_2d
 │   │   ├── cdpr_controller.py
-│   │   ├── cdpr_controller_rviz.py
-│   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       ├── cdpr_controller.cpython-312.pyc
+│   │       ├── cdpr_controller_rviz.cpython-312.pyc
+│   │       └── __init__.cpython-312.pyc
 │   ├── config
 │   │   ├── params.yaml
 │   │   └── robot.rviz
@@ -61,7 +64,28 @@ src
 │       ├── test_flake8.py
 │       └── test_pep257.py
 ├── docs
+│   ├── Geometric Figures and Shapes Coordinates (X, Y) Glossary (40 x 40 Surface Area).pdf
+│   ├── Geometric Figures and Shapes Coordinates (X, Y) Glossary (60 x 60 Surface Area).pdf
+│   ├── Geometric Figures and Shapes Coordinates (X, Y) Glossary (80 x 80 Surface Area).pdf
+│   ├── Geometric Figures and Shapes Images Glossary.pdf
+│   ├── Project Offer.pdf
+│   ├── Structure of the Cable Driven Parallel Robot (CDPR).pdf
+│   └── TF Tree.pdf
 ├── media
+│   ├── files
+│   │   ├── 1_point_output
+│   │   ├── 2_points_output
+│   │   └── 3_or_more_points_output
+│   ├── gifs
+│   │   ├── 1_point_execution.gif
+│   │   ├── 2_points_execution.gif
+│   │   └── 3_or_more_points_execution.gif
+│   ├── images
+│   │   └── cable_driven_parallel_robot.png
+│   └── videos
+│       ├── 1_point_execution.mp4
+│       ├── 2_points_execution.mp4
+│       └── 3_or_more_points_execution.mp4
 └── README.md
 ```
 
@@ -121,38 +145,40 @@ git pull
 1. Run the controller:
 
 ```sh
-# WITH RVIZ
 ros2 run cdpr_2d cdpr_controller
 ```
 
 2. Launch the simulation and visualization in RViZ:
 
 ```sh
-# RVIZ AND TF
 ros2 launch cdpr_2d robot_state_publisher.launch.py
 ```
 
 3. Launch each of the topics to see data related to the end effector (each of them in a different terminal):
 
+**POSITION (X,Y) OF THE END EFFECTOR**
+
 ```sh
-# POSITION (X,Y) OF THE END EFFECTOR
 ros2 topic echo /effector_coordinates
 ```
 
+**CABLE LENGTHS AND ANGLES WITH THE VERTICAL OF EACH CABLE**
+
 ```sh
-# CABLE LENGTHS AND ANGLES WITH THE VERTICAL
 ros2 topic echo /cable_parameters
 ```
 
+**ELONGATED / RETRACTED CABLE LENGTH AND ANGLE OF ROTATION OF EACH PULLEY**
+
 ```sh
-# ELONGATED / RETRACTED CABLE LENGTH AND ANGLE OF ROTATION OF EACH PULLEY
 ros2 topic echo /pulley_parameters
 ```
 
 4. Publish ONE of the following commands messages in the corresponding topic to send the coordinates to which you want to move the end effector:
 
+**1 POINT (FIXED POSITION)**
+
 ```sh
-# 1 POINT (FIXED POSITION)
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 "{header: {frame_id: 'world'}, \
   poses: [ \
@@ -168,8 +194,9 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 
 To view the output generated in the controller when running this case, click on the [following link](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/files/1_point_output).
 
+**2 POINTS (INITIAL AND FINAL POSITION)**
+
 ```sh
-# 2 POINTS (INITIAL AND FINAL POSITION)
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 "{header: {frame_id: 'world'}, \
   poses: [ \
@@ -187,8 +214,9 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 
 To view the output generated in the controller when running this case, click on the [following link](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/files/2_points_output).
 
+**3 OR MORE POINTS (TRAJECTORY)**
+
 ```sh
-# 3 OR MORE POINTS (TRAJECTORY)
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 "{header: {frame_id: 'world'}, \
   poses: [ \
