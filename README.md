@@ -9,7 +9,7 @@ This repository is part of a Final Degree Project (FDP / TFG) focused on the des
 The project integrates topics such as **kinematic modeling**, **control algorithms**, **software development in Python**, and **integration with ROS2 Rolling**, providing a modular and scalable framework for experimentation with cable-driven robotic platforms.
 
 <p align="center">
-  <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/cable_driven_parallel_robot.png?raw=true">
+  <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cable_driven_parallel_robot.png?raw=true">
 </p>
 
 ---
@@ -128,7 +128,7 @@ ros2 run cdpr_2d cdpr_controller
 2. Launch the simulation and visualization in RViZ:
 
 ```sh
-# RViZ AND TF
+# RVIZ AND TF
 ros2 launch cdpr_2d robot_state_publisher.launch.py
 ```
 
@@ -162,6 +162,12 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 }"
 ```
 
+<p align="center">
+  <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/gifs/1_point_execution.gif?raw=true">
+</p>
+
+To view the output generated in the controller when running this case, click on the [following link]().
+
 ```sh
 # 2 POINTS (INITIAL AND FINAL POSITION)
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
@@ -174,6 +180,12 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
   ] \
 }"
 ```
+
+<p align="center">
+  <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/gifs/2_points_execution.gif?raw=true">
+</p>
+
+To view the output generated in the controller when running this case, click on the [following link]().
 
 ```sh
 # 3 OR MORE POINTS (TRAJECTORY)
@@ -193,6 +205,12 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
   ] \
 }"
 ```
+
+<p align="center">
+  <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/gifs/3_or_more_points_execution.gif?raw=true">
+</p>
+
+To view the output generated in the controller when running this case, click on the [following link]().
 
 ---
 

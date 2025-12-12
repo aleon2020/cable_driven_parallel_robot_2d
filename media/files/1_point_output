@@ -1,0 +1,13 @@
+[INFO] [1765526618.749430224] [cdpr_controller]: CONTROLLER ACTIVATED. WAITING FOR COORDINATES...
+[INFO] [1765526618.749693620] [cdpr_controller]: ================================================================================
+[INFO] [1765526716.680982405] [cdpr_controller]: 1 POINT RECEIVED
+[INFO] [1765526716.681317266] [cdpr_controller]: END EFFECTOR POSITION (X, Y)
+[INFO] [1765526716.681512592] [cdpr_controller]: - TARGET POSITION: (0.300, 0.300) m
+[INFO] [1765526716.681697689] [cdpr_controller]: LENGTHS OF EACH CABLE (L1, L2)
+[INFO] [1765526716.681885046] [cdpr_controller]: - L1: 0.696 m, L2: 0.919 m
+[INFO] [1765526716.682064991] [cdpr_controller]: ANGLES OF EACH CABLE (Q1, Q2)
+[INFO] [1765526716.682245966] [cdpr_controller]: - Q1: 21.04 °, Q2: 45.00 °
+[INFO] [1765526716.682430090] [cdpr_controller]: MOVEMENT OF EACH PULLEY (P1, P2)
+[INFO] [1765526716.682633641] [cdpr_controller]: - EXTENDED / COLLAPSED CABLE:  P1: +0.060 m,   P2: +0.283 m
+[INFO] [1765526716.682854315] [cdpr_controller]: - ROTATION ANGLES (RADIANS):   P1: +0.240 rad, P2: +1.131 rad
+[INFO] [1765526716.683172560] [cdpr_controller]: ================================================================================
