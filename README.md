@@ -166,7 +166,7 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/gifs/1_point_execution.gif?raw=true">
 </p>
 
-To view the output generated in the controller when running this case, click on the [following link]().
+To view the output generated in the controller when running this case, click on the [following link](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/files/1_point_output).
 
 ```sh
 # 2 POINTS (INITIAL AND FINAL POSITION)
@@ -185,7 +185,7 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/gifs/2_points_execution.gif?raw=true">
 </p>
 
-To view the output generated in the controller when running this case, click on the [following link]().
+To view the output generated in the controller when running this case, click on the [following link](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/files/2_points_output).
 
 ```sh
 # 3 OR MORE POINTS (TRAJECTORY)
@@ -210,7 +210,7 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/gifs/3_or_more_points_execution.gif?raw=true">
 </p>
 
-To view the output generated in the controller when running this case, click on the [following link]().
+To view the output generated in the controller when running this case, click on the [following link](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/files/3_or_more_points_output).
 
 ---
 
