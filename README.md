@@ -40,11 +40,7 @@ src
 ├── cdpr_2d
 │   ├── cdpr_2d
 │   │   ├── cdpr_controller.py
-│   │   ├── __init__.py
-│   │   └── __pycache__
-│   │       ├── cdpr_controller.cpython-312.pyc
-│   │       ├── cdpr_controller_rviz.cpython-312.pyc
-│   │       └── __init__.cpython-312.pyc
+│   │   └── __init__.py
 │   ├── config
 │   │   ├── params.yaml
 │   │   └── robot.rviz
@@ -64,28 +60,11 @@ src
 │       ├── test_flake8.py
 │       └── test_pep257.py
 ├── docs
-│   ├── Geometric Figures and Shapes Coordinates (X, Y) Glossary (40 x 40 Surface Area).pdf
-│   ├── Geometric Figures and Shapes Coordinates (X, Y) Glossary (60 x 60 Surface Area).pdf
-│   ├── Geometric Figures and Shapes Coordinates (X, Y) Glossary (80 x 80 Surface Area).pdf
-│   ├── Geometric Figures and Shapes Images Glossary.pdf
-│   ├── Project Offer.pdf
-│   ├── Structure of the Cable Driven Parallel Robot (CDPR).pdf
-│   └── TF Tree.pdf
 ├── media
 │   ├── files
-│   │   ├── 1_point_output
-│   │   ├── 2_points_output
-│   │   └── 3_or_more_points_output
 │   ├── gifs
-│   │   ├── 1_point_execution.gif
-│   │   ├── 2_points_execution.gif
-│   │   └── 3_or_more_points_execution.gif
 │   ├── images
-│   │   └── cable_driven_parallel_robot.png
 │   └── videos
-│       ├── 1_point_execution.mp4
-│       ├── 2_points_execution.mp4
-│       └── 3_or_more_points_execution.mp4
 └── README.md
 ```
 
