@@ -83,29 +83,37 @@ src
 
 In this case, the repository is the equivalent of the **src/** directory of a workspace, so it would be necessary to create a new workspace from scratch.
 
+**CLONING THE WORKSPACE**
+
 ```sh
-# Cloning the workspace
-
 mkdir <my_workspace>
+```
 
+```sh
 cd <my_workspace>/
+```
 
+```sh
 git clone https://<my_token>@github.com/aleon2020/cable_driven_parallel_robot_2d.git
 ```
 
-```sh
-# Repository name change
+**REPOSITORY NAME CHANGE**
 
+```sh
 mv cable_driven_parallel_robot_2d src
 ```
 
+**COMPILING THE WORKSPACE**
+
 ```sh
-# Compiling the workspace
-
 cd <my_workspace>/
+```
 
+```sh
 colcon build --symlink-install
+```
 
+```sh
 source ~/<my_workspace>/install/setup.bash
 ```
 
