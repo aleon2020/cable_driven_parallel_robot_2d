@@ -75,15 +75,15 @@ src
 ### Prerequisites
 
 - **RViZ**.
-- **ROS 2 Rolling**.
+- **ROS2 Rolling**.
 - **Python ≥ 3.12.3**.
 - **colcon** for building.
 
-### Steps
+### Setup
 
 In this case, the repository is the equivalent of the **src/** directory of a workspace, so it would be necessary to create a new workspace from scratch.
 
-**CLONING THE WORKSPACE**
+1. Clone the workspace:
 
 ```sh
 mkdir <my_workspace>
@@ -97,13 +97,13 @@ cd <my_workspace>/
 git clone https://<my_token>@github.com/aleon2020/cable_driven_parallel_robot_2d.git
 ```
 
-**REPOSITORY NAME CHANGE**
+2. Rename the cloned repository:
 
 ```sh
 mv cable_driven_parallel_robot_2d src
 ```
 
-**COMPILING THE WORKSPACE**
+3. Compile the workspace:
 
 ```sh
 cd <my_workspace>/
@@ -143,27 +143,24 @@ ros2 launch cdpr_2d robot_state_publisher.launch.py
 
 3. Launch each of the topics to see data related to the end effector (each of them in a different terminal):
 
-**POSITION (X,Y) OF THE END EFFECTOR**
-
 ```sh
+# Position (X,Y) of the end effector
 ros2 topic echo /effector_coordinates
 ```
 
-**CABLE LENGTHS AND ANGLES WITH THE VERTICAL OF EACH CABLE**
-
 ```sh
+# Cable lengths and angles with the vertical of each cable
 ros2 topic echo /cable_parameters
 ```
 
-**ELONGATED / RETRACTED CABLE LENGTH AND ANGLE OF ROTATION OF EACH PULLEY**
-
 ```sh
+# Elongated / Retracted cable length and rotated angle of each pulley
 ros2 topic echo /pulley_parameters
 ```
 
 4. Publish ONE of the following commands messages in the corresponding topic to send the coordinates to which you want to move the end effector:
 
-**1 POINT (FIXED POSITION)**
+### Case 1: 1 point (Fixed Position)
 
 ```sh
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
@@ -181,7 +178,7 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 
 To view the output generated in the controller when running this case, click on the [following link](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/files/1_point_output).
 
-**2 POINTS (INITIAL AND FINAL POSITION)**
+### Case 2: 2 points (Initial and Final Position)
 
 ```sh
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
@@ -201,7 +198,7 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 
 To view the output generated in the controller when running this case, click on the [following link](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/files/2_points_output).
 
-**3 OR MORE POINTS (TRAJECTORY)**
+### Case 3: 3 or more points (Trajectory)
 
 ```sh
 ros2 topic pub --once /cdpr nav_msgs/msg/Path \
