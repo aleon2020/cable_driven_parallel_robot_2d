@@ -42,8 +42,12 @@ class CDPRController(Node):
         self.effector_height = self.get_parameter('effector_height').value
         self.pulley_radius = self.get_parameter('pulley_radius').value
         self.pulley_angle_scale = self.get_parameter('pulley_angle_scale').value
-        left_p_pos = self.get_parameter('left_pulley_position').value
-        right_p_pos = self.get_parameter('right_pulley_position').value
+        left_p_pos = self.get_parameter_or('left_pulley_position', [])
+        if hasattr(left_p_pos, 'value'):
+            left_p_pos = left_p_pos.value
+        right_p_pos = self.get_parameter_or('right_pulley_position', [])
+        if hasattr(right_p_pos, 'value'):
+            right_p_pos = right_p_pos.value
         self.effector_z = -0.125
         self.default_left_pulley = (0.0, 1.0, self.effector_z)
         self.default_right_pulley = (1.0, 1.0, self.effector_z)
