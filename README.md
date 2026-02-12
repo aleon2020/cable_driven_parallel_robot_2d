@@ -233,5 +233,5 @@ To view the output generated in the controller when running this case, click on 
 
 **Alberto León Luengo**  
 Software Robotics Engineering at **Rey Juan Carlos University**.  
-Github: [aleon2020](https:/github.com/aleon2020)  
+Github: [aleon2020](https://github.com/aleon2020)  
 Developed under the supervision of [Professor Juan Sebastián Cely Gutiérrez](https://github.com/juanscelyg), within the [Intelligent Robotics Lab](https://github.com/IntelligentRoboticsLabs).
