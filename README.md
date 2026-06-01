@@ -1,12 +1,12 @@
 # Cable Driven Parallel Robot 2D
 
 ![distro](https://img.shields.io/badge/Ubuntu%2024-Jammy%20Jellyfish-orange)
-![distro](https://img.shields.io/badge/ROS2-Rolling-blue)
+![distro](https://img.shields.io/badge/ROS2-Jazzy-blue)
 [![jazzy](https://github.com/aleon2020/cable_driven_parallel_robot_2d/actions/workflows/main.yaml/badge.svg)](https://github.com/aleon2020/cable_driven_parallel_robot_2d/actions/workflows/main.yaml)
 
 This repository is part of a Final Degree Project (FDP / TFG) focused on the design, construction, and commissioning of a **Cable-Driven Parallel Robot (CDPR)** capable of controlling a suspended end-effector to perform trajectory planning and motion control tasks.
 
-The project integrates topics such as **kinematic modeling**, **control algorithms**, **software development in Python**, and **integration with ROS2 Rolling**, providing a modular and scalable framework for experimentation with cable-driven robotic platforms.
+The project integrates topics such as **kinematic modeling**, **control algorithms**, **software development in Python**, and **integration with ROS2 Jazzy**, providing a modular and scalable framework for experimentation with cable-driven robotic platforms.
 
 <p align="center">
   <img width="684" height="392" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cable_driven_parallel_robot.png?raw=true">
@@ -17,7 +17,7 @@ The project integrates topics such as **kinematic modeling**, **control algorith
 ## Features
 
 - Management of a Cable Driven Parallel Robot using ROS2 and RViZ.
-- Compatible with **ROS2 Rolling**.
+- Compatible with **ROS2 Jazzy**.
 - Implemented in **Python** with support for configuration via **ROS2 launch files**.
 - Modular architecture:
   - **cdpr_2d/**: CDPR source code.
@@ -72,7 +72,7 @@ src
 ### Prerequisites
 
 - **RViZ**.
-- **ROS2 Rolling**.
+- **ROS2 Jazzy**.
 - **Python ≥ 3.12.3**.
 - **colcon** for building.
 

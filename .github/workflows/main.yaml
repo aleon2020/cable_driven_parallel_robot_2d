@@ -32,7 +32,7 @@ jobs:
     # Define the operating system on which the workflow runs.
     runs-on: ${{ matrix.os }}
 
-    # Use Ubuntu 24.04 to run ROS2 Rolling (continues even if jobs fail).
+    # Use Ubuntu 24.04 to run ROS2 Jazzy (continues even if jobs fail).
     strategy:
       matrix:
         os: [ubuntu-24.04]
@@ -44,11 +44,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Environment configuration in ROS2 Rolling.
+      # Environment configuration in ROS2 Jazzy.
       - name: Setup ROS 2 environment
         uses: ros-tooling/setup-ros@0.7.13
         with:
-          required-ros-distributions: rolling
+          required-ros-distributions: jazzy
 
       # Construction, testing and analysis of the cdpr_2d package.
       - name: Build and test cdpr_2d package
@@ -59,7 +59,7 @@ jobs:
           package-name: cdpr_2d
 
           # ROS2 distribution to be used.
-          target-ros2-distro: rolling
+          target-ros2-distro: jazzy
 
           # Request the Github token only if the repository is private.
           import-token: ${{ secrets.GITHUB_TOKEN }}
