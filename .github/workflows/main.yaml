@@ -50,6 +50,15 @@ jobs:
         with:
           required-ros-distributions: jazzy
 
+      # Install ROS 2 lint tools explicitly
+      - name: Install test dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            ros-jazzy-ament-flake8 \
+            ros-jazzy-ament-pep257 \
+            ros-jazzy-ament-copyright
+
       # Construction, testing and analysis of the cdpr_2d package.
       - name: Build and test cdpr_2d package
         uses: ros-tooling/action-ros-ci@0.4.3
