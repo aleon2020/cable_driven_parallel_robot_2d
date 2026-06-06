@@ -50,7 +50,7 @@ g++ cinematic_model_v2.cpp -o cinematic_model_v2 $(python3-config --embed --cfla
 
 And finally, a video is attached showing the complete execution of this version, as well as an image corresponding to the final result once the animation is finished:
 
-VIDEO V2 C++
+https://github.com/user-attachments/assets/eda6e7cd-b6bb-4175-8fa7-64bbac433423
 
 <p align="center">
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cpp_kinematic_model_v2.png?raw=true">
@@ -76,7 +76,7 @@ g++ cinematic_model_v3.cpp -o cinematic_model_v3 $(python3-config --embed --cfla
 
 And finally, a video is attached showing the complete execution of this version, as well as an image corresponding to the final result once the animation is finished:
 
-VIDEO V3 C++
+https://github.com/user-attachments/assets/57b63029-464f-4fad-a872-5e934b025f10
 
 <p align="center">
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cpp_kinematic_model_v3.png?raw=true">
