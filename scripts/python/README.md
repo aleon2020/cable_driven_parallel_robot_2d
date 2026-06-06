@@ -42,7 +42,7 @@ python3 cinematic_model_v2.py
 
 And finally, a video is attached showing the complete execution of this version, as well as an image corresponding to the final result once the animation is finished:
 
-VIDEO V2 PYTHON
+https://github.com/user-attachments/assets/6e31bfea-51b2-4fde-aecc-0d71958802be
 
 <p align="center">
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v2.png?raw=true">
@@ -64,7 +64,7 @@ python3 cinematic_model_v3.py
 
 And finally, a video is attached showing the complete execution of this version, as well as an image corresponding to the final result once the animation is finished:
 
-VIDEO V3 PYTHON
+https://github.com/user-attachments/assets/0bd4f634-4c52-4a3a-b2fb-efb51e589639
 
 <p align="center">
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v3.png?raw=true">
