@@ -17,7 +17,11 @@ This C++ implementation evolves from a static simulation, through a trajectory a
 To compile and run this version, run the following commands in a terminal:
 
 ```sh
-g++ cinematic_model_v1.cpp -o cinematic_model_v1 $(python3-config --embed --cflags) -I $(python3 -c "import numpy; print(numpy.get_include())") $(python3-config --embed --ldflags) -Wno-deprecated-declarations
+g++ cinematic_model_v1.cpp -o cinematic_model_v1 \
+    $(python3-config --embed --cflags) \
+    -I$(python3 -c 'import numpy; print(numpy.get_include())') \
+    $(python3-config --embed --ldflags) \
+    -Wno-deprecated-declarations
 ```
 
 ```sh
@@ -41,7 +45,11 @@ And finally, an image is attached showing the final result of this version:
 To compile and run this version, run the following commands in a terminal:
 
 ```sh
-g++ cinematic_model_v2.cpp -o cinematic_model_v2 $(python3-config --embed --cflags) -I $(python3 -c "import numpy; print(numpy.get_include())") $(python3-config --embed --ldflags) -Wno-deprecated-declarations
+g++ cinematic_model_v2.cpp -o cinematic_model_v2 \
+    $(python3-config --embed --cflags) \
+    -I$(python3 -c 'import numpy; print(numpy.get_include())') \
+    $(python3-config --embed --ldflags) \
+    -Wno-deprecated-declarations
 ```
 
 ```sh
@@ -67,7 +75,11 @@ https://github.com/user-attachments/assets/eda6e7cd-b6bb-4175-8fa7-64bbac433423
 To compile and run this version, run the following commands in a terminal:
 
 ```sh
-g++ cinematic_model_v3.cpp -o cinematic_model_v3 $(python3-config --embed --cflags) -I $(python3 -c "import numpy; print(numpy.get_include())") $(python3-config --embed --ldflags) -Wno-deprecated-declarations
+g++ cinematic_model_v3.cpp -o cinematic_model_v3 \
+    $(python3-config --embed --cflags) \
+    -I$(python3 -c 'import numpy; print(numpy.get_include())') \
+    $(python3-config --embed --ldflags) \
+    -Wno-deprecated-declarations
 ```
 
 ```sh
