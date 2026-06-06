@@ -2,7 +2,7 @@
 
 ## 1. Introduction
 
-This README show the execution results of a cable-powered robot in the C++ programming language.
+This README shows the execution results of a cable-powered robot in the C++ programming language.
 
 To do this, the [**matplotlibcpp.h**](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/scripts/c%2B%2B/matplotlibcpp.h) library is used to display all the elements in the interface.
 
@@ -50,7 +50,7 @@ g++ cinematic_model_v2.cpp -o cinematic_model_v2 $(python3-config --embed --cfla
 
 And finally, a video is attached showing the complete execution of this version, as well as an image corresponding to the final result once the animation is finished:
 
-<video controls src="cpp_kinematic_model_v2_execution.mp4" title="Title"></video>
+VIDEO V2 C++
 
 <p align="center">
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cpp_kinematic_model_v2.png?raw=true">
@@ -76,7 +76,7 @@ g++ cinematic_model_v3.cpp -o cinematic_model_v3 $(python3-config --embed --cfla
 
 And finally, a video is attached showing the complete execution of this version, as well as an image corresponding to the final result once the animation is finished:
 
-<video controls src="cpp_kinematic_model_v3_execution.mp4" title="Title"></video>
+VIDEO V3 C++
 
 <p align="center">
   <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cpp_kinematic_model_v3.png?raw=true">
