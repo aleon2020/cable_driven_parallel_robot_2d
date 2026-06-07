@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <robot>
 
-    <!-- 0. RAÍZ -->
+    <!-- 0. BASE LINK -->
     <link name="base_link"/>
 
-    <!-- 1. BORDE INFERIOR -->
+    <!-- 1. BOTTOM EDGE -->
     <joint name="bottom_edge_joint" type="fixed">
         <origin xyz="0.50 0.00 0.70" rpy="0.00 0.00 0.00"/>
         <parent link="base_link"/>
@@ -35,7 +35,7 @@
         </collision> -->
     </link>
 
-    <!-- 2. BORDE SUPERIOR -->
+    <!-- 2. TOP EDGE -->
     <joint name="top_edge_joint" type="fixed">
         <origin xyz="0.50 0.00 1.70" rpy="0.00 0.00 0.00"/>
         <parent link="base_link"/>
@@ -66,7 +66,7 @@
         </collision> -->
     </link>
 
-    <!-- 3. COLUMNA DERECHA -->
+    <!-- 3. RIGHT COLUMN -->
     <joint name="right_column_joint" type="fixed">
         <origin xyz="1.00 0.00 0.875" rpy="0.00 0.00 0.00"/>
         <parent link="base_link"/>
@@ -97,7 +97,7 @@
         </collision> -->
     </link>
 
-    <!-- 4. COLUMNA IZQUIERDA -->
+    <!-- 4. LEFT COLUMN -->
     <joint name="left_column_joint" type="fixed">
         <origin xyz="0.00 0.00 0.875" rpy="0.00 0.00 0.00"/>
         <parent link="base_link"/>
@@ -128,7 +128,7 @@
         </collision> -->
     </link>
 
-    <!-- 5. EFECTOR FINAL -->
+    <!-- 5. END EFFECTOR -->
     <joint name="end_effector_joint" type="fixed">
         <origin xyz="0.00 0.00 0.00" rpy="0.00 0.00 0.00"/>
         <parent link="base_link"/>
@@ -162,7 +162,7 @@
         </collision> -->
     </link>
 
-    <!-- 6. PIZARRA -->
+    <!-- 6. WHITEBOARD -->
     <joint name="whiteboard_joint" type="fixed">
         <origin xyz="0.50 0.00 1.20" rpy="0.00 0.00 0.00"/>
         <parent link="base_link"/>
@@ -193,7 +193,7 @@
         </collision> -->
     </link>
 
-    <!-- 7. POLEA DERECHA -->
+    <!-- 7. RIGHT WHEEL -->
     <joint name="right_wheel_joint" type="continuous">
         <origin xyz="1.00 -0.125 1.70" rpy="-1.57 0.00 0.00"/>
         <axis xyz="0.00 0.00 1.00"/>
@@ -225,7 +225,7 @@
         </collision> -->
     </link>
 
-    <!-- 8. POLEA IZQUIERDA -->
+    <!-- 8. LEFT WHEEL -->
     <joint name="left_wheel_joint" type="continuous">
         <origin xyz="0.00 -0.125 1.70" rpy="-1.57 0.00 0.00"/>
         <axis xyz="0.00 0.00 1.00"/>
@@ -257,7 +257,7 @@
         </collision> -->
     </link>
 
-    <!-- 9. SOPORTE DERECHO -->
+    <!-- 9. RIGHT SUPPORT -->
     <joint name="right_support_joint" type="fixed">
         <origin xyz="1.00 0.00 0.05" rpy="0.00 0.00 0.00"/>
         <parent link="base_link"/>
@@ -288,7 +288,7 @@
         </collision> -->
     </link>
 
-    <!-- 10. SOPORTE IZQUIERDO -->
+    <!-- 10. LEFT SUPPORT -->
     <joint name="left_support_joint" type="fixed">
         <origin xyz="0.00 0.00 0.05" rpy="0.00 0.00 0.00"/>
         <parent link="base_link"/>
@@ -319,7 +319,7 @@
         </collision> -->
     </link>
 
-    <!-- 11. SOPORTE POLEA DERECHA -->
+    <!-- 11. SUPPORT RIGHT WHEEL -->
     <joint name="support_right_wheel_joint" type="fixed">
         <origin xyz="1.00 -0.05 1.70" rpy="-1.57 0.00 0.00"/>
         <parent link="base_link"/>
@@ -350,7 +350,7 @@
         </collision> -->
     </link>
 
-    <!-- 12. SOPORTE POLEA IZQUIERDA -->
+    <!-- 12. SUPPORT LEFT WHEEL -->
     <joint name="support_left_wheel_joint" type="fixed">
         <origin xyz="0.00 -0.05 1.70" rpy="-1.57 0.00 0.00"/>
         <parent link="base_link"/>

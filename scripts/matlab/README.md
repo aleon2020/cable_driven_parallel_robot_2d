@@ -26,13 +26,13 @@ The forward kinematic model calculates the position of the end effector given th
 The end effector is a square centered at position (x_effector, y_effector). Therefore, the following formulas are used to calculate the position of each of the end effector's top corners (those to which the cables are attached):
 
 ```matlab
-% Upper left corner (x1, y1)
+% Top left corner (x1, y1)
 x1 = x_efector - (largo_efector / 2);
 y1 = y_efector + (alto_efector / 2);
 ```
 
 ```matlab
-% Upper right corner (x2, y2)
+% Top right corner (x2, y2)
 x2 = x_efector + (largo_efector / 2);
 y2 = y_efector + (alto_efector / 2);
 ```
@@ -42,12 +42,10 @@ y2 = y_efector + (alto_efector / 2);
 The length of each of the cables L1 (holds the left area) and L2 (holds the right area) can be calculated using the Euclidean distance (direct application of the Pythagorean theorem) between the position of each of the pulleys (M1x, M1y) and (M2x, M2y) and each of the upper corners of the end effector (x1, y1) and (x2, y2) as follows:
 
 ```matlab
-% Left cable (L1)
 L1 = sqrt((x1 - M1x)^2 + (y1 - M1y)^2);
 ```
 
 ```matlab
-% Right cable (L2)
 L2 = sqrt((x2 - M2x)^2 + (y2 - M2y)^2);
 ```
 
@@ -82,6 +80,9 @@ Although the inverse kinematic model is not directly implemented in the code, it
 
 ```matlab
 L1^2 = (x1 - largo_efector / 2)^2 + (y1 + alto_efector / 2 - 100)^2
+```
+
+```matlab
 L2^2 = (x2 + largo_efector / 2 - 100)^2 + (y2 + alto_efector / 2 - 100)^2
 ```
 
@@ -90,8 +91,8 @@ L2^2 = (x2 + largo_efector / 2 - 100)^2 + (y2 + alto_efector / 2 - 100)^2
 And finally, the code includes a series of checks to ensure that the effector remains within the workspace and that the effector does not collide with the edges of the structure:
 
 ```matlab
+% LIMIT VERIFICATION
 error = false;
-
 if x_efector >= (largo_plano - (largo_efector / 2))
     fprintf("FUERA DEL LÍMITE en x = %.2f\n", x_efector);
     error = true;
@@ -99,13 +100,15 @@ elseif x_efector <= (largo_efector / 2)
     fprintf("FUERA DEL LÍMITE en x = %.2f\n", x_efector);
     error = true;
 end
-
 if y_efector >= (alto_plano - (alto_efector / 2))
     fprintf("FUERA DEL LÍMITE en y = %.2f\n", y_efector);
     error = true;
 elseif y_efector <= (alto_efector / 2)
     fprintf("FUERA DEL LÍMITE en y = %.2f\n", y_efector);
     error = true;
+end
+if error
+    return;
 end
 ```
 

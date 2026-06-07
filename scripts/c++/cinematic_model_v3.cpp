@@ -1,6 +1,3 @@
-// Implementación de un robot por cables para el control
-// de un efector final en diversas tareas.
-
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -9,18 +6,14 @@
 
 namespace plt = matplotlibcpp;
 
-// COMPILACIÓN, ENLAZADO Y EJECUCIÓN
-// g++ cinematic_model_v3.cpp -o cinematic_model_v3 -I /usr/include/python3.12 -I $(python3 -c "import numpy; print(numpy.get_include())") -lpython3.12
-// ./cinematic_model_v3
-
-// PARÁMETROS
+// PARAMETERS
 const double largo_plano = 100;
 const double alto_plano = 100;
 const double largo_efector = 10;
 const double alto_efector = 10;
 const double radio_rueda = 5;
 
-// VERIFICACIÓN DE LÍMITES
+// LIMIT VERIFICATION
 std::vector<std::string> 
 verificar_limites(double x, double y) 
 {
@@ -34,26 +27,22 @@ verificar_limites(double x, double y)
     return errores;
 }
 
-// EFECTOR FINAL
+// END-EFFECTOR
 void 
 calcular_esquinas(double x, double y,
                   double& x1, double& y1, double& x2, double& y2,
                   double& x3, double& y3, double& x4, double& y4)
 {
-
-    // Esquina superior izquierda (x1, y1)
+    // Top left corner (x1, y1)
     x1 = x - (largo_efector / 2);
     y1 = y + (alto_efector / 2);
-
-    // Esquina superior derecha (x2, y2)
+    // Top right corner (x2, y2)
     x2 = x + (largo_efector / 2);
     y2 = y + (alto_efector / 2);
-
-    // Esquina inferior izquierda (x3, y3)
+    // Bottom left corner (x3, y3)
     x3 = x - (largo_efector / 2);
     y3 = y - (alto_efector / 2);
-
-    // Esquina inferior derecha (x4, y4)
+    // Bottom right corner (x4, y4)
     x4 = x + (largo_efector / 2);
     y4 = y - (alto_efector / 2);
 }
@@ -64,29 +53,25 @@ void calcular_cables(double x, double y,
 {
     double x1, y1, x2, y2, x3, y3, x4, y4;
     calcular_esquinas(x, y, x1, y1, x2, y2, x3, y3, x4, y4);
-    
-    // Cable esquina superior izquierda M1 = (M1x, M1y)
+    // Cable top left corner M1 = (M1x, M1y)
     double M1x = 0;
     double M1y = alto_plano;
-
-    // Cable esquina superior derecha M2 = (M2x, M2y)
+    // Cable top right corner M2 = (M2x, M2y)
     double M2x = largo_plano;
     double M2y = alto_plano;
-    
-    // LONGITUDES DE LOS CABLES
+    // CABLE LENGTHS
     L1 = std::sqrt(std::pow(x1 - M1x, 2) + std::pow(y1 - M1y, 2));
     L2 = std::sqrt(std::pow(x2 - M2x, 2) + std::pow(y2 - M2y, 2));
-    
-    // ÁNGULOS
+    // ANGLES
     q1 = -std::atan((x1 - M1x) / (y1 - M1y)) * (180.0 / M_PI);
     q2 = std::atan((x2 - M2x) / (y2 - M2y)) * (180.0 / M_PI);
 }
 
-// FUNCIÓN PRINCIPAL MAIN
-int main() 
-{
+// main() function
+// Main function of the program
+int main() {
 
-    // SOLICITUD DEL NÚMERO DE POSICIONES
+    // REQUEST FOR THE NUMBER OF COORDINATES
     std::cout << "\nNÚMERO DE POSICIONES (MÍNIMO 2, MÁXIMO 10): ";
     int num_posiciones;
     std::cin >> num_posiciones;
@@ -94,7 +79,7 @@ int main()
     std::vector<std::pair<double, double>> posiciones;
     std::map<int, std::vector<std::string>> errores;
 
-    // SOLICITUD DE LAS COORDENADAS DEL EFECTOR FINAL
+    // REQUEST FOR THE COORDINATES OF THE END-EFFECTOR
     for (int i = 0; i < num_posiciones; ++i) {
         std::cout << "\nPOSICIÓN NÚMERO " << i+1 << " DEL EFECTOR FINAL\n";
         double x, y;
@@ -105,15 +90,13 @@ int main()
         posiciones.push_back(std::make_pair(x, y));
     }
 
-    // VERIFICACIÓN DE LÍMITES
-
+    // LIMIT VERIFICATION
     for (int i = 0; i < num_posiciones; ++i) {
         auto errores_posicion = verificar_limites(posiciones[i].first, posiciones[i].second);
         if (!errores_posicion.empty()) {
             errores[i+1] = errores_posicion;
         }
     }
-
     if (!errores.empty()) {
         for (const auto& err : errores) {
             std::cout << "\nERROR EN LA POSICIÓN NÚMERO " << err.first << std::endl;
@@ -124,7 +107,7 @@ int main()
         return 1;
     }
 
-    // PLANO
+    // PLANE
     plt::figure_size(1500, 1200);
     plt::xlim(-largo_plano * 0.25, largo_plano * 1.25);
     plt::ylim(-alto_plano * 0.5, alto_plano * 1.25);
@@ -132,7 +115,7 @@ int main()
     plt::ylabel("Eje Y (centímetros)");
     plt::title("Robot por cables para el control de un efector final");
 
-    // ESTRUCTURA
+    // STRUCTURE
     std::vector<double> x_vertical1 = {0, 0};
     std::vector<double> y_vertical1 = {alto_plano, -(alto_plano / 2)};
     plt::plot(x_vertical1, y_vertical1, "k-");
@@ -152,15 +135,14 @@ int main()
     std::vector<double> y_base2 = {-(alto_plano / 2), -(alto_plano / 2)};
     plt::plot(x_base2, y_base2, "k-");
 
-    // REPRESENTACIÓN RUEDAS (fijas)
+    // PULLEYS REPRESENTATION
     std::vector<double> x_wheels = {0.0, largo_plano};
     std::vector<double> y_wheels = {alto_plano, alto_plano};
     plt::scatter(x_wheels, y_wheels, radio_rueda);
     plt::scatter(x_wheels, y_wheels, radio_rueda/2);
 
-    // ANIMACIÓN
+    // ANIMATION
     std::vector<double> trayectoria_x, trayectoria_y;
-    
     for (int i = 0; i <= 100; ++i) {
 
         // FRAMES
@@ -169,47 +151,45 @@ int main()
         int segmento_actual = std::min(i / frames_por_segmento, segmentos - 1);
         double progreso = (i % frames_por_segmento) / static_cast<double>(frames_por_segmento);
         
-        // POSICIÓN INICIAL Y FINAL DEL SEGMENTO ACTUAL
+        // INITIAL AND FINAL POSITION OF THE CURRENT SEGMENT
         double x_inicio = posiciones[segmento_actual].first;
         double y_inicio = posiciones[segmento_actual].second;
         double x_fin = posiciones[segmento_actual + 1].first;
         double y_fin = posiciones[segmento_actual + 1].second;
         
-        // CÁLCULO DE LA POSICIÓN ACTUAL
+        // CALCULATION OF CURRENT POSITION
         double x = x_inicio + (x_fin - x_inicio) * progreso;
         double y = y_inicio + (y_fin - y_inicio) * progreso;
         
-        // ESQUINAS EFECTOR FINAL
+        // END-EFFECTOR CORNERS
         double x1, y1, x2, y2, x3, y3, x4, y4;
         calcular_esquinas(x, y, x1, y1, x2, y2, x3, y3, x4, y4);
         
-        // REPRESENTACIÓN EFECTOR FINAL
+        // END-EFFECTOR REPRESENTATION
         std::vector<double> xe = {x3, x4, x2, x1, x3};
         std::vector<double> ye = {y3, y4, y2, y1, y3};
         plt::plot(xe, ye, "k-");
         
-        // CENTRO DEL EFECTOR
+        // EMD-EFFECTOR CENTER
         std::vector<double> x_scatter = {x};
         std::vector<double> y_scatter = {y};
         plt::scatter(x_scatter, y_scatter, 2.0);
         
         // CABLES
-        
-        // Cable esquina superior izquierda M1 = (M1x, M1y)
+        // Cable top left corner M1 = (M1x, M1y)
         double M1x = 0;
         double M1y = alto_plano;
         std::vector<double> x_cable1 = {M1x, x1};
         std::vector<double> y_cable1 = {M1y, y1};
         plt::plot(x_cable1, y_cable1, "r-");
-
-        // Cable esquina superior derecha M2 = (M2x, M2y)
+        // Cable top right corner M2 = (M2x, M2y)
         double M2x = largo_plano;
         double M2y = alto_plano;
         std::vector<double> x_cable2 = {M2x, x2};
         std::vector<double> y_cable2 = {M2y, y2};
         plt::plot(x_cable2, y_cable2, "r-");
         
-        // TRAYECTORIA
+        // TRAJECTORY
         trayectoria_x.push_back(x);
         trayectoria_y.push_back(y);
         plt::plot(trayectoria_x, trayectoria_y, "b--");
@@ -234,7 +214,7 @@ int main()
         }
     }
 
-    // MOSTRAR DATOS DE CADA POSICIÓN
+    // DISPLAY DATA FOR EACH POSITION
     for (int i = 0; i < num_posiciones; ++i) {
         std::cout << "\nDATOS POSICIÓN NÚMERO " << i+1 << std::endl;
         double L1, L2, q1, q2;
@@ -245,7 +225,7 @@ int main()
         std::cout << "Ángulo del cable L2 (q2) = " << q2 << " °" << std::endl;
     }
 
-    // MOSTRAR DATOS DE MOVIMIENTO ENTRE POSICIONES
+    // DISPLAY MOVEMENT DATA BETWEEN POSITIONS
     for (int i = 0; i < num_posiciones - 1; i++) {
         std::cout << "\nLONGITUD DE CABLE ELONGADA / RECOGIDA Y ÁNGULO DE GIRO DE CADA POLEA ENTRE LAS POSICIONES " << (i+1) << " Y " << (i+2) << std::endl;
         double L1_inicial, L2_inicial, q1_inicial, q2_inicial;

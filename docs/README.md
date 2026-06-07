@@ -1,4 +1,4 @@
-# Micro-ROS configuration and execution using ESP-IDF
+# Micro-ROS Configuration and Execution using ESP-IDF
 
 ## Features
 

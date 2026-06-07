@@ -1,6 +1,3 @@
-// Implementación de un robot por cables para el control
-// de un efector final en diversas tareas.
-
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -9,23 +6,18 @@
 
 namespace plt = matplotlibcpp;
 
-// COMPILACIÓN, ENLAZADO Y EJECUCIÓN
-// g++ cinematic_model_v1.cpp -o cinematic_model_v1 -I /usr/include/python3.12 -I $(python3 -c "import numpy; print(numpy.get_include())") -lpython3.12
-// ./cinematic_model_v1
+// main() function
+// Main function of the program
+int main() {
 
-// FUNCIÓN PRINCIPAL MAIN
-int 
-main() 
-{
-
-    // PARÁMETROS
+    // PARAMETERS
     double largo_plano = 100;
     double alto_plano = 100;
     double largo_efector = 10;
     double alto_efector = 10;
     double radio_rueda = 5;
 
-    // SOLICITUD DE LAS COORDENADAS DEL EFECTOR FINAL
+    // REQUEST FOR THE COORDINATES OF THE END-EFFECTOR
     std::cout << "\nCOORDENADAS DEL EFECTOR FINAL\n";
     double x_efector;
     double y_efector;
@@ -35,10 +27,8 @@ main()
     std::cin >> y_efector;
     std::cout << std::endl;
 
-    // VERIFICACIÓN DE LÍMITES
-
+    // LIMIT VERIFICATION
     bool error = false;
-
     if (x_efector >= (largo_plano - (largo_efector / 2))) {
         std::cout << "FUERA DEL LÍMITE en x = " << x_efector << std::endl;
         error = true;
@@ -46,7 +36,6 @@ main()
         std::cout << "FUERA DEL LÍMITE en x = " << x_efector << std::endl;
         error = true;
     }
-
     if (y_efector >= (alto_plano - (alto_efector / 2))) {
         std::cout << "FUERA DEL LÍMITE en y = " << y_efector << std::endl;
         error = true;
@@ -54,12 +43,11 @@ main()
         std::cout << "FUERA DEL LÍMITE en y = " << y_efector << std::endl;
         error = true;
     }
-
     if (error) {
         return 1;
     }
 
-    // PLANO
+    // PLANE
     plt::figure_size(1500, 1200);
     plt::xlim(-largo_plano * 0.25, largo_plano * 1.25);
     plt::ylim(-alto_plano * 0.5, alto_plano * 1.25);
@@ -67,7 +55,7 @@ main()
     plt::ylabel("Eje Y (centímetros)");
     plt::title("Robot por cables para el control de un efector final");
 
-    // ESTRUCTURA
+    // STRUCTURE
     std::vector<double> x_vertical1 = {0, 0};
     std::vector<double> y_vertical1 = {alto_plano, -(alto_plano / 2)};
     plt::plot(x_vertical1, y_vertical1, "k-");
@@ -87,41 +75,35 @@ main()
     std::vector<double> y_base2 = {-(alto_plano / 2), -(alto_plano / 2)};
     plt::plot(x_base2, y_base2, "k-");
 
-    // EFECTOR FINAL
-
-    // Esquina superior izquierda (x1, y1)
+    // END-EFFECTOR
+    // Top left corner (x1, y1)
     double x1 = x_efector - (largo_efector / 2);
     double y1 = y_efector + (alto_efector / 2);
-
-    // Esquina superior derecha (x2, y2)
+    // Top right corner (x2, y2)
     double x2 = x_efector + (largo_efector / 2);
     double y2 = y_efector + (alto_efector / 2);
-
-    // Esquina inferior izquierda (x3, y3)
+    // Bottom left corner (x3, y3)
     double x3 = x_efector - (largo_efector / 2);
     double y3 = y_efector - (alto_efector / 2);
-
-    // Esquina inferior derecha (x4, y4)
+    // Bottom right corner (x4, y4)
     double x4 = x_efector + (largo_efector / 2);
     double y4 = y_efector - (alto_efector / 2);
 
     // CABLES
-
-    // Cable esquina superior izquierda M1 = (M1x, M1y)
+    // Cable top left corner M1 = (M1x, M1y)
     double M1x = 0;
     double M1y = alto_plano;
     std::vector<double> x_cable1 = {M1x, x1};
     std::vector<double> y_cable1 = {M1y, y1};
     plt::plot(x_cable1, y_cable1, "r-");
-
-    // Cable esquina superior derecha M2 = (M2x, M2y)
+    // Cable top right corner M2 = (M2x, M2y)
     double M2x = largo_plano;
     double M2y = alto_plano;
     std::vector<double> x_cable2 = {M2x, x2};
     std::vector<double> y_cable2 = {M2y, y2};
     plt::plot(x_cable2, y_cable2, "r-");
 
-    // REPRESENTACIÓN EFECTOR FINAL
+    // END-EFFECTOR REPRESENTATION
     std::vector<double> xe = {x3, x4, x2, x1, x3};
     std::vector<double> ye = {y3, y4, y2, y1, y3};
     plt::plot(xe, ye, "k-");
@@ -129,19 +111,19 @@ main()
     std::vector<double> y_scatter = {y_efector};
     plt::scatter(x_scatter, y_scatter, 2.0);
 
-    // REPRESENTACIÓN RUEDAS
+    // PULLEYS REPRESENTATION
     std::vector<double> x_wheels = {0.0, largo_plano};
     std::vector<double> y_wheels = {alto_plano, alto_plano};
     plt::scatter(x_wheels, y_wheels, radio_rueda);
     plt::scatter(x_wheels, y_wheels, radio_rueda/2);
 
-    // LONGITUDES DE LOS CABLES
+    // CABLE LENGTHS
     double L1 = std::sqrt(std::pow(x1 - M1x, 2) + std::pow(y1 - M1y, 2));
     double L2 = std::sqrt(std::pow(x2 - M2x, 2) + std::pow(y2 - M2y, 2));
     std::cout << "Longitud del cable L1 = " << L1 << " cm" << std::endl;
     std::cout << "Longitud del cable L2 = " << L2 << " cm" << std::endl;
 
-    // ÁNGULOS
+    // ANGLES
     double q1 = -std::atan((x1 - M1x) / (y1 - M1y)) * (180.0 / M_PI);
     double q2 = std::atan((x2 - M2x) / (y2 - M2y)) * (180.0 / M_PI);
     std::cout << "Ángulo del cable L1 (q1) = " << q1 << " °" << std::endl;
