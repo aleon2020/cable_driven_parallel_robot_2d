@@ -1,0 +1,108 @@
+\chapter{Modelo cinemático}
+\label{cap:capitulo4}
+
+\vspace{0.25cm}
+
+\section{Introducción}
+\label{sec:segundaseccion}
+
+El modelo cinemático constituye uno de los pilares fundamentales en el desarrollo del CDPR presentado en este TFG, cuyo objetivo principal es establecer una relación matemática entre la posición $(x,y)$ del efector final, la longitud de cada cable y los ángulos asociados a su orientación y accionamiento mediante poleas.
+
+\vspace{0.25cm}
+
+En este capítulo se presenta el modelo cinemático del sistema, tomando como referencia la implementación del mismo en el nodo ROS 2 desarrollado, cuyo enfoque es puramente geométrico y adecuado para un sistema de dos grados de libertad como el que se tiene y con el que se pueden describir perfectamente todos sus comportamientos.
+
+\section{Descripción geométrica del sistema}
+\label{sec:segundaseccion}
+
+El sistema está formado por un efector final rígido, que se desplaza dentro de un plano bidimensional, suspendido mediante dos cables, cada uno de ellos conectado a una polea fija situada en cada una de las esquinas superiores de la estructura, las cuales se encuentran en posiciones ya conocidas dentro del marco de referencia global.
+
+\vspace{0.25cm}
+
+Sabiendo esto, se define un sistema de referencia cartesiano fijo $\{O\}$ asociado a la estructura del robot, donde el espacio de trabajo coincide con el plano $XY$. Por tanto, la posición del efector final se describe mediante el vector:
+
+\begin{myequation}[h]
+\begin{equation}
+p = (x,y)
+\end{equation}
+\caption[Vector de posición del efector final]{Vector de posición del efector final}
+\end{myequation}
+
+\newpage
+
+donde $x$ e $y$ representan las coordenadas del centro geométrico del efector final. Las dimensiones del efector final vienen definidas por un ancho $W_e$ y una altura $H_e$, donde los puntos de anclaje no coinciden con el centro del efector, sino con sus esquinas superiores.
+
+\section{Definición de los puntos de anclaje}
+\label{sec:segundaseccion}
+
+Siendo $P_i=(X_i,Y_i)$ y $P_d=(X_d,Y_d)$ las posiciones de las poleas izquierda y derecha respectivamente, las cuales son parámetros ya conocidos y fijos en el sistema, se pueden definir los puntos de conexión de cada cable al efector final de la siguiente forma:
+
+\begin{myequation}[h]
+\begin{equation}
+C_i = (X_{Ci}, Y_{Ci}) =
+\left(x-\frac{W_e}{2},\, y+\frac{H_e}{2}\right) \qquad C_d = (X_{Cd}, Y_{Cd}) =
+\left(x+\frac{W_e}{2},\, y+\frac{H_e}{2}\right)
+\end{equation}
+\caption[Puntos de anclaje entre cada cable y el efector final]{Puntos de anclaje entre cada cable y el efector final}
+\end{myequation}
+
+Esta definición refleja de forma directa la implementación real del sistema y permite incorporar explícitamente las dimensiones físicas del efector final en el modelo cinemático.
+
+\section{Cinemática inversa}
+\label{sec:segundaseccion}
+
+La cinemática inversa de este sistema consiste en determinar las longitudes de los cables necesarias para situar al efector final en cada una de las posiciones $(x,y)$ por las que se quiere mover el efector final, donde las longitudes de los cables izquierdo y derecho respectivamente, se obtienen como la distancia euclídea entre cada polea y su correspondiente punto de conexión con el efector final de la siguiente forma:
+
+\begin{myequation}[h]
+\begin{equation}
+L_i = \sqrt{(X_i - X_{Ci})^2 + (Y_i - Y_{Ci})^2} \qquad L_d = \sqrt{(X_d - X_{Cd})^2 + (Y_d - Y_{Cd})^2}
+\end{equation}
+\caption[Longitudes de cada cable]{Longitudes de cada cable}
+\end{myequation}
+
+En este modelo los cables se asumen como inextensibles y sin masa, resultando adecuado para el alcance que se le quiere dar a este TFG.
+
+\newpage
+
+\section{Cálculo de los ángulos de los cables}
+\label{sec:segundaseccion}
+
+Además de la longitud de cada cable, también es importante conocer el ángulo que forma cada cable con la vertical del sistema de referencia, los cuales se calculan de la siguiente forma:
+
+\begin{myequation}[h]
+\begin{equation}
+\theta_i = \operatorname{arctan2}(Y_i - Y_{Ci},\, X_{Ci} - X_i) \qquad \theta_d = \operatorname{arctan2}(Y_d - Y_{Cd},\, X_{Cd} - X_d)
+\end{equation}
+\caption[Orientación angular de cada cable]{Orientación angular de cada cable}
+\end{myequation}
+
+En términos de software, los ángulos obtenidos en radianes se pasan a grados, de forma que puedan adaptarse lo mejor posible a la hora de visualizar el sistema en movimiento desde RViZ.
+
+\section{Relación cables-poleas}
+\label{sec:segundaseccion}
+
+El accionamiento de los cables se realiza mediante el uso de dos poleas de radio $R_p$, lo que implica que un cambio en la longitud de uno de los cables se traduce directamente en una rotación de la polea correspondiente.
+
+\vspace{0.25cm}
+
+Siendo $\Delta$L la diferencia de longitud del cable entre dos posiciones consecutivas del efector final, el ángulo de rotación de la polea se puede obtener como:
+
+\begin{myequation}[h]
+\begin{equation}
+\Delta\theta = \frac{\Delta L}{R_p}
+\end{equation}
+\caption[Relación entre desplazamiento y rotación de cada cable y polea]{Relación entre desplazamiento y rotación de cada cable y polea}
+\end{myequation}
+
+Por tanto, este modelo permite relacionar el espacio cartesiano del efector final con el espacio articular del sistema, definido por los ángulos de rotación de cada una de las poleas.
+
+\newpage
+
+\section{Consideraciones y limitaciones}
+\label{sec:segundaseccion}
+
+El modelo cinemático presentado puede considerarse como una versión simplificada, ya que siempre se tiene en cuenta que los cables nunca se verán afectados por ningún tipo de fuerza externa o porque éstos no poseen ningún tipo de propiedad elástica, además de la ausencia de fricción en las poleas.
+
+\vspace{0.25cm}
+
+Sin embargo, a pesar de estas simplificaciones, el modelo cinemático descrito recoge requisitos más que suficientes para describir el comportamiento general del sistema y demostrar que es válido tanto para realizar pruebas simuladas como reales, las cuales también deben tenerse en cuenta a la hora de plantear mejoras en un futuro.

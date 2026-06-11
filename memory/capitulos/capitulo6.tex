@@ -1,0 +1,153 @@
+\chapter{Integración del sistema en ROS 2}
+\label{cap:capitulo6}
+
+\vspace{0.25cm}
+
+% \begin{figure} [h!]
+%     \begin{center}
+%         \includegraphics[width=0.5\textwidth]{figs/xxx.png}
+%     \end{center}
+%     \caption{...}
+% \end{figure}\
+
+\section{Introducción}
+\label{sec:segundaseccion}
+
+Una vez validado el modelo cinemático del CDPR en todas las simulaciones mencionadas en el capítulo anterior, el siguiente paso consiste en la integración completa del sistema en ROS 2 (Robot Operating System 2), lo que va a permitir dotar al sistema de una arquitectura modular y escalable, facilitando así su visualización a la hora de probarlo en un sistema físico real.
+
+\vspace{0.25cm}
+
+En este capítulo se describe la estructura general del paquete ROS 2 desarrollado, el funcionamiento del nodo que implementa toda la parte de control del CDPR, todo lo relacionado con las comunicaciones realizadas mediante topics y la visualización del sistema en RViZ.
+
+\vspace{0.25cm}
+
+Toda esta integración se ha llevado a cabo haciendo uso de la distribución Jazzy de ROS 2 y de Python como lenguaje de programación, tal y como se mencionó en el capítulo anterior.
+
+\section{Estructura del paquete ROS 2}
+\label{sec:segundaseccion}
+
+El sistema se ha organizado en un paquete ROS 2 llamado \textit{cdpr\_2d}, cuya organización y estructura siguen un modelo estándar, facilitando así la comprensión del código y lo que permite en un futuro modificar o ampliar componentes concretos del sistema sin tener que realizar grandes cambios.
+
+\vspace{0.25cm}
+
+En este paquete ROS 2 se pueden distinguir como elementos principales:
+
+\newpage
+
+\begin{itemize}
+\item Fichero \textit{cdpr\_controller.py}: Nodo principal que implementa el funcionamiento completo del sistema que incluye la planificación de trayectorias, todos los cálculos cinemáticos y la publicación de resultados haciendo uso de diferentes topics.
+\item Directorio \textit{config/}: Contiene un fichero de configuración llamado \textit{params.yaml} en el que se definen los parámetros del sistema, y otro fichero llamado \textit{robot.rviz} encargado de configurar la visualización del sistema en RViZ.
+\item Directorio \textit{description/}: Contiene los modelos del sistema en URDF en el fichero \textit{robot.urdf}, y en XACRO en el fichero \textit{robot.xacro}.
+\item Directorio \textit{launch/}: Contiene un fichero de lanzamiento llamado \newline \textit{robot\_state\_publisher.launch.py}, que permite inicializar de forma conjunta tanto la simulación como la visualización del sistema en RViZ.
+\item Directorio \textit{test/}: Contiene varios ficheros de test automáticos para verificar que el estilo seguido en el código es limpio y correcto.
+\end{itemize}
+
+\section{Nodo de control del CDPR}
+\label{sec:segundaseccion}
+
+El sistema integrado en ROS 2 tiene como núcleo el nodo \textit{cdpr\_controller}, encargado de recibir las posiciones objetivo por las que se quiere desplazar el efector final para así poder aplicarlas en el modelo cinemático desarrollado, con el objetivo de obtener todos los parámetros relacionados con los cables y las poleas del sistema.
+
+\vspace{0.25cm}
+
+El nodo se inicializa y se mantiene activo en todo momento para que pueda recibir todos los mensajes que contienen cada una de las posiciones objetivo, cuyo diseño y funcionalidad se concentran en un único nodo con el objetivo de simplificar la integración y el análisis del sistema completo.
+
+\vspace{0.25cm}
+
+Por ello, se adjunta a continuación un diagrama de clases simplificado que describe los elementos más importantes del nodo \textit{cdpr\_controller}, con el objetivo de facilitar la comprensión del mismo, ya que éste se considera el núcleo del sistema.
+
+\newpage
+
+\begin{figure} [h!]
+    \begin{center}
+        \includegraphics[width=0.5\textwidth]{figs/cdpr_controller_node_structure.png}
+    \end{center}
+    \caption{Estructura del nodo cdpr\_controller}
+\end{figure}\
+
+Como se puede observar, la clase principal corresponde al nodo \textit{cdpr\_controller}, encargado de gestionar la ejecución del sistema dentro de ROS 2.
+
+\vspace{0.25cm}
+
+Este nodo recibe todas las posiciones o trayectorias objetivo por las que se quiere desplazar el efector final a través de un topic y haciendo uso del modelo cinemático para calcular todos los parámetros asociados a los cables y a las poleas, para posteriormente, publicar toda esta información en distintos topics.
+
+\vspace{0.25cm}
+
+Es por ello que esta organización es la que permite concentrar toda la lógica del sistema en un único nodo siguiendo una estructura que facilita la comprensión del mismo, y donde podrían llevarse a cabo ampliaciones de cara al futuro.
+
+\vspace{0.25cm}
+
+Para una mejor comprensión del comportamiento dinámico del sistema mostrado en la figura, se adjunta un enlace de descarga a un vídeo demostrativo al que se puede acceder haciendo clic \href{https://github.com/aleon2020/cable_driven_parallel_robot_2d/raw/refs/heads/main/media/gifs/3_or_more_points_execution.gif}{aquí}.
+
+\begin{figure} [h!]
+    \begin{center}
+        \includegraphics[width=0.5\textwidth]{figs/cable_driven_parallel_robot.png}
+    \end{center}
+    \caption{Visualización en RViZ durante la ejecución de una trayectoria}
+\end{figure}\
+
+\section{Comunicación mediante topics}
+\label{sec:segundaseccion}
+
+La comunicación entre el nodo \textit{cdpr\_controller} y el resto del sistema se lleva a cabo utilizando topics que siguen un modelo publicador-suscriptor, lo que permite diferenciar los distintos componentes del sistema y monitorear el estado del mismo en tiempo real.
+
+\vspace{0.25cm}
+
+Por ello, se adjunta a continuación un diagrama de secuencia que muestra el intercambio de mensajes y cómo se produce esta comunicación entre los distintos componentes del sistema.
+
+\begin{figure} [h!]
+    \begin{center}
+        \includegraphics[width=0.5\textwidth]{figs/communication_via_topics.png}
+    \end{center}
+    \caption{Comunicación mediante topics en ROS 2}
+\end{figure}\
+
+\newpage
+
+En primer lugar, el usuario publica una única posición o un conjunto de posiciones objetivo en el topic correspondiente. Después, el nodo \textit{cdpr\_controller} recibe este mensaje y va procesando cada una de las posiciones objetivo que ha recibido haciendo uso del modelo cinemático. Y por último, el nodo \textit{cdpr\_controller} publica en cada topic correspondiente mensajes sobre la posición del efector final o parámetros asociados a los cables y a las poleas, los cuales son también utilizados por RViZ para poder representar el estado del sistema de forma visual y en tiempo real.
+
+\vspace{0.25cm}
+
+El nodo \textit{cdpr\_controller} se suscribe al topic \textit{/cdpr}, que recibe mensajes del tipo \textit{nav\_msgs/msg/Path}, que contiene una única o una secuencia de posiciones objetivo por las que se quiere desplazar el efector final. Una vez recibida esta información, el nodo publica en distintos topics:
+
+\begin{itemize}
+\item Topic \textit{/effector\_coordinates}: Muestra la posición en cada momento del efector final en el plano XY.
+\item Topic \textit{/cable\_parameters}: Muestra la longitud y el ángulo que forman con la vertical de cada uno de los cables.
+\item Topic \textit{/pulley\_parameters}: Muestra la diferencia de longitudes de cada cable y la diferencia de ángulos de rotación de las poleas entre dos posiciones consecutivas.
+\end{itemize}
+
+Estos topics permiten observar de forma detallada el comportamiento interno del sistema en todo momento
+
+\section{Gestión de trayectorias y movimientos}
+\label{sec:segundaseccion}
+
+Este sistema tiene implementados diferentes modos de comportamiento en función del número de puntos recibidos en el mensaje de tipo \textit{nav\_msgs/msg/Path}.
+
+\vspace{0.25cm}
+
+Cuando se recibe una única posición, el sistema interpreta la posición recibida como un posicionamiento fijo del efector final. En caso de que haya recibido dos posiciones, lo que se genera es un desplazamiento entre una posición inicial y una posición final. Y por último, si recibe tres o más posiciones, el sistema lo interpreta como una trayectoria compuesta por todas las posiciones que se le han pasado y por las que el efector final debe pasar en el orden especificado.
+
+\vspace{0.25cm}
+
+Para este último caso, el nodo interpola posiciones intermedias y aplica el modelo cinemático para calcular los parámetros correspondientes en todo momento para cada segmento de la trayectoria. Esto permite simular un movimiento contínuo y coherente del efector final dentro del espacio de trabajo.
+
+\section{Visualización del sistema en RViZ}
+\label{sec:segundaseccion}
+
+La integración del sistema y su visualización en RViZ son claves en el desarrollo del mismo, ya que permiten observar de forma mucho más clara el comportamiento del sistema. Para ello, se ha definido un modelo URDF que describe la estructura fija, los cables, las poleas y el efector final.
+
+\vspace{0.25cm}
+
+El lanzamiento conjunto del nodo \textit{cdpr\_controller} y del \textit{robot\_state\_publisher} permiten actualizar en todo momento la visualización del robot en RViZ según se va ejecutando cada trayectoria, cuya configuración facilita la observación de los distintos elementos que componen el sistema y su evolución cuando se encuentran en movimiento.
+
+\section{Compilación y ejecución del sistema}
+\label{sec:segundaseccion}
+
+Para llevar a cabo la ejecución del sistema, se ha definido un procedimiento de instalación basado en colcon, donde el \href{https://github.com/aleon2020/cable_driven_parallel_robot_2d}{repositorio de Github oficial} de este TFG actúa como el directorio \textit{src/} de un workspace, lo que permite compilar y ejecutar el paquete directamente.
+
+\vspace{0.25cm}
+
+Una vez compilado el workspace, la ejecución del sistema completo consiste en la ejecución del nodo \textit{cdpr\_controller} y el lanzamiento del entorno de visualización en RViZ. Por otro lado, se publican en el topic correspondiente los mensajes de tipo \newline \textit{nav\_msgs/msg/Path} que contienen las posiciones objetivo por las que se desea desplazar el efector final, lo que facilita las pruebas y la validación del comportamiento del sistema.
+
+\vspace{0.25cm}
+
+Este procedimiento asegura la reproducción correcta de todas las pruebas que se lleven a cabo y simplifica la puesta en marcha del sistema en todos los entornos utilizados.
