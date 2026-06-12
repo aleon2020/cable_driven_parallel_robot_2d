@@ -1,7 +1,7 @@
 import math
 from typing import List, Tuple
 
-from geometry_msgs.msg import PoseStamped, TransformStamped
+from geometry_msgs.msg import Point, PoseStamped, TransformStamped
 from nav_msgs.msg import Path
 import rclpy
 from rclpy.node import Node
@@ -9,6 +9,7 @@ from rclpy.qos import QoSProfile
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float32MultiArray
 from tf2_ros import TransformBroadcaster
+from visualization_msgs.msg import Marker
 
 
 class CDPRController(Node):
@@ -82,6 +83,9 @@ class CDPRController(Node):
         self.left_pulley_position = 0.0
         self.right_pulley_position = 0.0
         self.segment_target_params = []
+        self.trace_points = []
+        self.trace_publisher = self.create_publisher(
+            Marker, '/trajectory_trace', qos_profile)
         self.effector_coordinates_publisher = self.create_publisher(
             Path, '/effector_coordinates', qos_profile)
         self.cable_parameters_publisher = self.create_publisher(
@@ -129,9 +133,46 @@ class CDPRController(Node):
         pulley2_angle = delta_l2 / effective_radius
         return delta_l1, delta_l2, pulley1_angle, pulley2_angle
 
+    # clear_trace() function
+    # Deletes previous drawing from RViz
+    def clear_trace(self):
+        self.trace_points = []
+        marker = Marker()
+        marker.header.frame_id = 'base_link'
+        marker.header.stamp = self.get_clock().now().to_msg()
+        marker.ns = 'trajectory_trace'
+        marker.id = 0
+        marker.action = Marker.DELETE
+        self.trace_publisher.publish(marker)
+
+    # update_trace() function
+    # Updates blue trajectory drawing in RViz
+    def update_trace(self):
+        p = Point()
+        p.x = self.current_x
+        p.y = self.effector_z
+        p.z = self.current_y + 0.7
+        self.trace_points.append(p)
+        marker = Marker()
+        marker.header.frame_id = 'base_link'
+        marker.header.stamp = self.get_clock().now().to_msg()
+        marker.ns = 'trajectory_trace'
+        marker.id = 0
+        marker.type = Marker.LINE_STRIP
+        marker.action = Marker.ADD
+        marker.pose.orientation.w = 1.0
+        marker.scale.x = 0.01
+        marker.color.r = 0.0
+        marker.color.g = 0.0
+        marker.color.b = 1.0
+        marker.color.a = 1.0
+        marker.points = self.trace_points
+        self.trace_publisher.publish(marker)
+
     # path_callback() function
     # Receives Path message and sets trajectory mode based on points
     def path_callback(self, msg: Path):
+        self.clear_trace()
         self.points = []
         for pose_stamped in msg.poses:
             x = float(pose_stamped.pose.position.x)
@@ -150,6 +191,7 @@ class CDPRController(Node):
             self.initial_x, self.initial_y = self.points[0]
             self.target_x, self.target_y = self.points[1]
             self.current_x, self.current_y = self.initial_x, self.initial_y
+            self.update_trace()
             self.segment_index = 0
             self.moving = True
             self.animation_progress = 0.0
@@ -176,6 +218,7 @@ class CDPRController(Node):
     def handle_single_point(self):
         x, y = self.points[0]
         self.current_x, self.current_y = x, y
+        self.update_trace()
         path_msg = Path()
         ps = PoseStamped()
         ps.pose.position.x = self.current_x
@@ -218,6 +261,7 @@ class CDPRController(Node):
         self.segment_index = 0
         self.initial_x, self.initial_y = self.points[0]
         self.current_x, self.current_y = self.initial_x, self.initial_y
+        self.update_trace()
         self.target_x, self.target_y = self.points[1]
         self.moving = True
         self.animation_progress = 0.0
@@ -266,6 +310,7 @@ class CDPRController(Node):
             self.right_pulley_position += p2_ang
             self.current_x = remaining_new_x
             self.current_y = remaining_new_y
+            self.update_trace()
             self.publish_joint_states()
             if self.mode == 'multi' and self.segment_index < (self.points_number - 2):
                 self.segment_index += 1
@@ -288,6 +333,7 @@ class CDPRController(Node):
         self.publish_joint_states()
         self.current_x = new_x
         self.current_y = new_y
+        self.update_trace()
 
     # publish_effector_parameters() function
     # Publishes effector Path and transform for visualization
