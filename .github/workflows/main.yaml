@@ -59,13 +59,6 @@ jobs:
             ros-jazzy-ament-pep257 \
             ros-jazzy-ament-copyright
 
-      - name: Install Python ament modules
-        run: |
-          python3 -m pip install -U \
-            ament-copyright \
-            ament-flake8 \
-            ament-pep257
-
       # Construction, testing and analysis of the ROS 2 packages.
       - name: Build and test ROS 2 packages
         uses: ros-tooling/action-ros-ci@0.4.3
