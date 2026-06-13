@@ -50,8 +50,7 @@ src
 │   ├── package.xml
 │   ├── resource
 │   ├── setup.cfg
-│   ├── setup.py
-│   └── test
+│   └── setup.py
 ├── cdpr_figures
 │   ├── cdpr_figures
 │   │   ├── figures_library.py
@@ -63,14 +62,12 @@ src
 │   ├── resource
 │   │   └── cdpr_figures
 │   ├── setup.cfg
-│   ├── setup.py
-│   └── test
+│   └── setup.py
 ├── cdpr_interfaces
 │   ├── CMakeLists.txt
 │   ├── package.xml
-│   ├── srv
-│   │   └── DrawFigure.srv
-│   └── test
+│   └── srv
+│       └── DrawFigure.srv
 ├── docs
 ├── media
 ├── memory
@@ -267,12 +264,12 @@ ros2 interface show cdpr_interfaces/srv/DrawFigure
 Finally, a predefined figure can be requested by calling the service:
 
 ```sh
-# Draws a medium-sized lightning from the shape category
+# Draws a large-sized square from the polygon category (same as "Case 3")
 ros2 service call /draw_figure cdpr_interfaces/srv/DrawFigure \
-    "{category: shape, name: lightning, size: medium}"
+    "{category: polygon, name: square, size: medium}"
 ```
 
-where the request fields depend on the definition provided in [figures_library.py](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_figures/cdpr_figures/figures_library.py).
+**NOTE**: The request fields depend on the definition provided in [figures_library.py](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_figures/cdpr_figures/figures_library.py).
 
 ---
 
