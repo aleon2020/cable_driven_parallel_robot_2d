@@ -4,9 +4,11 @@
 ![distro](https://img.shields.io/badge/ROS2-Jazzy-blue)
 [![jazzy](https://github.com/aleon2020/cable_driven_parallel_robot_2d/actions/workflows/main.yaml/badge.svg)](https://github.com/aleon2020/cable_driven_parallel_robot_2d/actions/workflows/main.yaml)
 
-This repository is part of a Final Degree Project (FDP / TFG) focused on the design, construction, and commissioning of a **Cable-Driven Parallel Robot (CDPR)** capable of controlling a suspended end-effector to perform trajectory planning and motion control tasks.
+This repository is part of my Final Degree Project (FDP / TFG), focused on the design, construction, and commissioning of a **Cable-Driven Parallel Robot (CDPR)** capable of controlling a suspended end-effector to perform trajectory planning and motion control tasks.
 
-The project integrates topics such as **kinematic modeling**, **control algorithms**, **software development in Python**, and **integration with ROS2 Jazzy**, providing a modular and scalable framework for experimentation with cable-driven robotic platforms.
+This project integrates topics such as **kinematic modeling**, **control algorithms**, **software development in Python**, and **integration with ROS 2 Jazzy**, providing a modular and scalable framework for experimentation with cable-driven robotic platforms.
+
+This workspace is organized into multiple ROS 2 packages, separated into the **robot controller**, the **predefined figure generation logic** and the **custom communication interfaces** to improve modularity and maintainability.
 
 <p align="center">
   <img width="684" height="392" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cable_driven_parallel_robot.png?raw=true">
@@ -16,20 +18,14 @@ The project integrates topics such as **kinematic modeling**, **control algorith
 
 ## Features
 
-- Management of a Cable Driven Parallel Robot using ROS2 and RViZ.
-- Compatible with **ROS2 Jazzy**.
-- Implemented in **Python** with support for configuration via **ROS2 launch files**.
-- Modular architecture:
-  - **cdpr_2d/**: CDPR source code.
-  - **config/**: RViZ configuration.
-  - **description/**: CDPR model in URDF for RViZ.
-  - **launch/**: Launch files.
-  - **resource/**: Resource file.
-  - **test/**: Test files.
-  - **package.xml**: Package metadata.
-  - **setup.cfg**: Build configuration.
-  - **setup.py**: Build configuration.
+- Management of a Cable Driven Parallel Robot using ROS 2 and RViZ.
+- Compatible with **ROS 2 Jazzy**.
+- Implemented in **Python** with support for configuration via **launch files**, **RViZ** and **URDF descriptions**.
 - Built using **colcon**.
+- Modular ROS 2 architecture composed by 3 packages:
+  - **cdpr_2d/**: [Main controller](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_2d/cdpr_2d/cdpr_controller.py) of the CDPR that includes the [robot model](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_2d/description/urdf/robot.urdf) in URDF, the kinematic model and trayectory execution.
+  - **cdpr_figures/**: [Library of predefined figures](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_figures/cdpr_figures/figures_library.py) and [ROS 2 service server](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_figures/cdpr_figures/figures_service.py) used for generating trajectories automatically.
+  - **cdpr_interfaces/**: [Custom ROS 2 service definition](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_interfaces/srv/DrawFigure.srv) used in the communication between packages.
 
 ---
 
@@ -40,7 +36,8 @@ src
 ├── cdpr_2d
 │   ├── cdpr_2d
 │   │   ├── cdpr_controller.py
-│   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
 │   ├── config
 │   │   ├── params.yaml
 │   │   └── robot.rviz
@@ -52,13 +49,28 @@ src
 │   │   └── robot_state_publisher.launch.py
 │   ├── package.xml
 │   ├── resource
-│   │   └── cdpr_2d
 │   ├── setup.cfg
 │   ├── setup.py
 │   └── test
-│       ├── test_copyright.py
-│       ├── test_flake8.py
-│       └── test_pep257.py
+├── cdpr_figures
+│   ├── cdpr_figures
+│   │   ├── figures_library.py
+│   │   ├── figures_service.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   ├── CMakeLists.txt
+│   ├── package.xml
+│   ├── resource
+│   │   └── cdpr_figures
+│   ├── setup.cfg
+│   ├── setup.py
+│   └── test
+├── cdpr_interfaces
+│   ├── CMakeLists.txt
+│   ├── package.xml
+│   ├── srv
+│   │   └── DrawFigure.srv
+│   └── test
 ├── docs
 ├── media
 ├── memory
@@ -73,7 +85,7 @@ src
 ### Prerequisites
 
 - **RViZ**.
-- **ROS2 Jazzy**.
+- **ROS 2 Jazzy**.
 - **Python ≥ 3.12.3**.
 - **colcon** for building.
 
@@ -139,7 +151,13 @@ ros2 run cdpr_2d cdpr_controller
 ros2 launch cdpr_2d robot_state_publisher.launch.py
 ```
 
-3. Launch each of the topics to see data related to the end effector (each of them in a different terminal):
+3. (OPTIONAL) Run the figures service node that generates predefined trajectories and sends them to the controller:
+
+```sh
+ros2 run cdpr_figures figures_service
+```
+
+4. Launch each of the topics to see data related to the end effector (each of them in a different terminal):
 
 ```sh
 # Position (X,Y) of the end effector
@@ -156,7 +174,7 @@ ros2 topic echo /cable_parameters
 ros2 topic echo /pulley_parameters
 ```
 
-4. Publish ONE of the following commands messages in the corresponding topic to send the coordinates to which you want to move the end effector:
+5. Publish ONE of the following commands messages in the corresponding topic to send the coordinates to which you want to move the end effector:
 
 ### Case 1: 1 point (Fixed Position)
 
@@ -222,11 +240,39 @@ ros2 topic pub --once /cdpr nav_msgs/msg/Path \
 
 To view the output generated in the controller when running this case, click on the [following link](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/files/3_or_more_points_output).
 
----
+### Case X: Drawing predefined figures using ROS 2 services
 
-### References
+As an alternative way of publishing coordinates to the **/cdpr** topic, you can generate predefined figures divided in four different categories: **letters**, **numbers**, **polygons** or **shapes**.
 
-[https://ieeexplore.ieee.org/document/8920840](https://ieeexplore.ieee.org/document/8920840)
+The **cdpr_figures/** package provides a server that creates the requested trajectory and sends it to the controller, eliminating the need to specify each coordinate manually.
+
+Before calling the service, make sure that the corresponding node is running:
+
+```sh
+ros2 run cdpr_figures figures_service
+```
+
+To determine the type associated with the figure drawing service:
+
+```sh
+ros2 service type /draw_figure
+```
+
+The custom service definition can also be inspected with:
+
+```sh
+ros2 interface show cdpr_interfaces/srv/DrawFigure
+```
+
+Finally, a predefined figure can be requested by calling the service:
+
+```sh
+# Draws a medium-sized lightning from the shape category
+ros2 service call /draw_figure cdpr_interfaces/srv/DrawFigure \
+    "{category: shape, name: lightning, size: medium}"
+```
+
+where the request fields depend on the definition provided in [DrawFigure.srv](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_interfaces/srv/DrawFigure.srv).
 
 ---
 
