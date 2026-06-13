@@ -272,7 +272,7 @@ ros2 service call /draw_figure cdpr_interfaces/srv/DrawFigure \
     "{category: shape, name: lightning, size: medium}"
 ```
 
-where the request fields depend on the definition provided in [DrawFigure.srv](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_interfaces/srv/DrawFigure.srv).
+where the request fields depend on the definition provided in [figures_library.py](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_figures/cdpr_figures/figures_library.py).
 
 ---
 
