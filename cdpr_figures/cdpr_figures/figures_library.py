@@ -6,9 +6,7 @@ class FiguresLibrary:
 
     FIGURES = {
 
-        # -------
         # LETTERS
-        # -------
 
         'letter': {
 
@@ -206,9 +204,7 @@ class FiguresLibrary:
 
         },
 
-        # -------
         # NUMBERS
-        # -------
 
         'number': {
 
@@ -340,9 +336,7 @@ class FiguresLibrary:
 
         },
 
-        # --------
         # POLYGONS
-        # --------
 
         'polygon': {
 
@@ -507,9 +501,7 @@ class FiguresLibrary:
 
         },
 
-        # ------
         # SHAPES
-        # ------
 
         'shape': {
 
@@ -650,6 +642,8 @@ class FiguresLibrary:
         }
     }
 
+    # get_figure() function
+    # Retrieves a figure by category, name, and size, validating its existence
     @staticmethod
     def get_figure(category, name, size):
         try:
@@ -662,6 +656,8 @@ class FiguresLibrary:
                 f'size={size}'
             )
 
+    # build_path() function
+    # Constructs a ROS path from a list of 2D points
     @staticmethod
     def build_path(points):
         path = Path()

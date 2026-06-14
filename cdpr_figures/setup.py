@@ -15,7 +15,7 @@ setup(
     zip_safe=True,
     maintainer='aalbeerto-02',
     maintainer_email='a.leon.2020@alumnos.urjc.es',
-    description='Figure generator service for CDPR',
+    description='Cable Driven Parallel Robot in 2 Dimensions',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={

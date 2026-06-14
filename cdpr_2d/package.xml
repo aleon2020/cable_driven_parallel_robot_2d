@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+
 <package format="3">
+
   <name>cdpr_2d</name>
   <version>0.0.1</version>
-  <description>Cable Driven Parallel Robot in 2 Dimensions (cdpr_2d)</description>
+  <description>Cable Driven Parallel Robot in 2 Dimensions</description>
   <maintainer email="a.leon.2020@alumnos.urjc.es">aalbeerto-02</maintainer>
   <license>Apache-2.0</license>
 
@@ -15,4 +17,5 @@
   <export>
     <build_type>ament_python</build_type>
   </export>
+
 </package>

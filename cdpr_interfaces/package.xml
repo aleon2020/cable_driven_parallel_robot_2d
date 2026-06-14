@@ -2,10 +2,10 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 
 <package format="3">
+
   <name>cdpr_interfaces</name>
   <version>0.0.1</version>
-  <description>ROS 2 interfaces (services) for CDPR figures generation</description>
-
+  <description>Cable Driven Parallel Robot in 2 Dimensions</description>
   <maintainer email="a.leon.2020@alumnos.urjc.es">aalbeerto-02</maintainer>
   <license>Apache-2.0</license>
 
@@ -21,7 +21,6 @@
 
   <member_of_group>rosidl_interface_packages</member_of_group>
 
-  <!-- tests -->
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
@@ -30,4 +29,5 @@
   <export>
     <build_type>ament_cmake</build_type>
   </export>
+
 </package>

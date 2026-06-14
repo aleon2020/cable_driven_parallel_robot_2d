@@ -10,7 +10,7 @@ from .figures_library import FiguresLibrary
 class FigureService(Node):
 
     # __init__() function
-    # ...
+    # Initializes the node, service, and publisher for managing figures
     def __init__(self):
         super().__init__('figure_service')
         qos_profile = QoSProfile(depth=10)
@@ -21,7 +21,7 @@ class FigureService(Node):
         self.get_logger().info('FIGURES SERVICE READY')
 
     # draw_figure_callback() function
-    # ...
+    # Generates and publishes the requested figure through the service
     def draw_figure_callback(self, request, response):
         try:
             points = FiguresLibrary.get_figure(
@@ -49,7 +49,7 @@ class FigureService(Node):
 
 
 # main() function
-# ...
+# Initializes and keeps the figure service node running
 def main(args=None):
     rclpy.init(args=args)
     node = FigureService()
