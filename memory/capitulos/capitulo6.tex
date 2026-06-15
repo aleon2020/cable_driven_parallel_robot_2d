@@ -3,13 +3,6 @@
 
 \vspace{0.25cm}
 
-% \begin{figure} [h!]
-%     \begin{center}
-%         \includegraphics[width=0.5\textwidth]{figs/xxx.png}
-%     \end{center}
-%     \caption{...}
-% \end{figure}\
-
 \section{Introducción}
 \label{sec:segundaseccion}
 
@@ -80,7 +73,7 @@ Para una mejor comprensión del comportamiento dinámico del sistema mostrado en
 
 \begin{figure} [h!]
     \begin{center}
-        \includegraphics[width=0.5\textwidth]{figs/cable_driven_parallel_robot.png}
+        \includegraphics[width=\textwidth]{figs/cable_driven_parallel_robot.png}
     \end{center}
     \caption{Visualización en RViZ durante la ejecución de una trayectoria}
 \end{figure}\
@@ -96,7 +89,7 @@ Por ello, se adjunta a continuación un diagrama de secuencia que muestra el int
 
 \begin{figure} [h!]
     \begin{center}
-        \includegraphics[width=0.5\textwidth]{figs/communication_via_topics.png}
+        \includegraphics[width=\textwidth]{figs/communication_via_topics.png}
     \end{center}
     \caption{Comunicación mediante topics en ROS 2}
 \end{figure}\
@@ -108,6 +101,8 @@ En primer lugar, el usuario publica una única posición o un conjunto de posici
 \vspace{0.25cm}
 
 El nodo \textit{cdpr\_controller} se suscribe al topic \textit{/cdpr}, que recibe mensajes del tipo \textit{nav\_msgs/msg/Path}, que contiene una única o una secuencia de posiciones objetivo por las que se quiere desplazar el efector final. Una vez recibida esta información, el nodo publica en distintos topics:
+
+\newpage
 
 \begin{itemize}
 \item Topic \textit{/effector\_coordinates}: Muestra la posición en cada momento del efector final en el plano XY.

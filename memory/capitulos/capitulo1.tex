@@ -2,77 +2,168 @@
 \label{cap:capitulo1}
 \setcounter{page}{1}
 
-\vspace{0.25cm}
-
 \section{Contexto y motivación}
 \label{sec:segundaseccion}
+
+La robótica ha experimentado un crecimiento significativo en las últimas décadas, ampliando su presencia en gran variedad de sectores como la industria, logística, medicina, construcción y entretenimiento, entre otros. Es por ello que, el desarrollo de nuevas arquitecturas robóticas capaces de maniobrar en grandes espacios de trabajo y estructuras ligeras, se encuentran dentro de una amplia línea de investigación tanto para la comunidad científica como para la industrial.
+
+\vspace{0.25cm}
 
 Los robots paralelos accionados por cables, también conocidos como Cable Driven Parallel Robots (CDPR), han despertado bastante interés en los últimos años tanto en el ámbito académico como en el ámbito industrial. Este tipo de robots basa su funcionamiento en el uso de cables que pueden ser recogidos o elongados por poleas con el objetivo de desplazar el efector final que une todos los cables a una posición específica, obteniendo como resultado una estructura ligera, escalable, y lo más importante de todo, capaz de realizar grandes volúmenes de trabajo en comparación con otros tipos de robots.
 
 \vspace{0.25cm}
 
-Durante los últimos seis años, los cuales he dedicado enteramente a mi formación en el Grado en Ingeniería de Robótica Software, y tras haber abordado diferentes campos de la robótica, he decidido decantarme por este tipo de robots como tema principal de mi TFG, ya que combina conceptos de modelado matemático y cinemático, el uso de un lenguaje de programación de alto nivel como lo es Python, y una de las arquitecturas software por excelencia utilizadas en el mundo de la robótica: ROS 2. Este Trabajo de Fin de Grado tiene como objetivo principal la profundización en el diseño y el desarrollo de un CDPR de dos grados de libertad desde un punto de vista práctico y orientado al software.
+Este tipo de robots representan una alternativa bastante atractiva en comparación con otras arquitecturas robóticas debido a su capacidad para cubrir grandes espacios de trabajo utilizando mecanismos sencillos y ligeros. Además, para hacerlos funcionar, se requiere un modelo matemático del sistema que permita planificar trayectorias y que pueda integrarse en un entorno de desarrollo software, que puede llegar a convertirse en una plataforma que aborde problemas cinemáticos, simulación e integración basados en una arquitectura utilizada en robótica, como lo es ROS 2.
 
 \begin{figure} [h!]
     \begin{center}
-        \includegraphics[width=0.5\textwidth]{figs/cdpr_model.png}
+        \includegraphics[width=\textwidth]{figs/cdpr_model.png}
     \end{center}
-    \caption{Ejemplo visual de un CDPR de dos grados de libertad}
+    \caption{Ejemplo de CDPR de dos grados de libertad. En este tipo de sistemas, el movimiento del efector final se obtiene mediante la variación de la longitud de los cables conectados a poleas fijas de la estructura \href{https://ieeexplore.ieee.org/document/8920840}{[1]}.}
 \end{figure}\
 
 \newpage
 
-Y por último, es importante mencionar que la principal motivación que me ha llevado a elegir este tipo de robots como tema principal de mi TFG es que el comportamiento global del sistema viene determinado principalmente por la correcta formulación del modelo cinemático, además de todo lo que respecta a la implementación software.
+Y por último, es importante mencionar que la principal motivación que ha llevado a elegir este tipo de robots como tema principal de este trabajo se debe a que el comportamiento global del sistema viene determinado principalmente por la correcta formulación del modelo cinemático, además de todo lo que respecta a la implementación software.
+
+\newpage
 
 \section{Planteamiento del problema}
 \label{sec:segundaseccion}
 
-El problema principal que se aborda en este TFG es el control de la posición de un efector final suspendido mediante dos cables ubicados en una estructura fija, en este caso una pizarra móvil con ruedas, a través de poleas, donde el sistema debe ser capaz de desplazar el efector final hacia una o varias posiciones específicas, siendo capaz de definir trayectorias en caso de que el efector final pase por más de una posición, todo ello dentro de una región bidimensional cuadrada cuya área cuadrada viene definida por la distancia que separa ambas poleas.
+El problema principal que se aborda en este trabajo es el control de la posición de un efector final suspendido mediante dos cables ubicados en una estructura fija, en este caso una pizarra móvil con ruedas, a través de poleas, donde el sistema debe ser capaz de desplazar el efector final hacia una o varias posiciones específicas, siendo capaz de definir trayectorias en caso que el efector final pase por más de una posición, todo ello dentro de una región bidimensional cuya área viene definida por la distancia que separa ambas poleas.
+
+\begin{figure} [h!]
+    \begin{center}
+    \includegraphics[width=0.5\textwidth]{figs/problem_conceptual_outline.png}
+    \end{center}
+    \caption{Esquema conceptual del problema abordado}
+\end{figure}\
+
+Sabiendo esto, es necesario establecer una relación entre la región por la que se mueve el efector final y las variables físicas del sistema, como son las longitudes de los cables y el ángulo que debe rotar cada polea para desplazar el efector final a una posición específica. Esta relación debe ser lo suficientemente robusta de forma que pueda implementarse en un entorno real, y lo suficientemente flexible como para poder integrarla en software robótico.
 
 \vspace{0.25cm}
 
-Sabiendo esto, es necesario establecer una relación entre la región por la que se mueve el efector final y las variables físicas del sistema, como por ejemplo las longitudes de los cables y el ángulo que debe rotar cada polea para desplazar el efector final a una posición específica. Esta relación debe ser lo suficientemente robusta de forma que pueda implementarse en un entorno real, y lo suficientemente flexible como para poder integrarla en software robótico.
+Este problema en concreto aparece en numerosas aplicaciones. Algunos ejemplos de ello son los sistemas que utilizan las cámaras de retransmisiones deportivas para permanecer suspendidas dentro de los estadios, concretamente las llamadas "spider-cam", plataformas para manipular cargas en entornos industriales o sistemas de posicionamiento de herramientas en grandes espacios de trabajo. En todos estos casos se transforma una posición objetivo en órdenes de movimiento para los mecanismos encargados de accionar los cables.
 
-\newpage
+\vspace{0.25cm}
 
-En este TFG me he centrado principalmente en desarrollar todo el software necesario para resolver este problema, dejando la implementación del sistema real como una fase posterior, actualmente en proceso de definición y que abordaré en conjunto con mi tutor de TFG, \href{https://github.com/juanscelyg}{Juan Sebastián Cely Gutiérrez}.
+El desarrollo de este trabajo se ha centrado principalmente en desarrollar todo el software necesario para resolver este problema, dejando la implementación del sistema real como una fase a futuro, y que abordaré en conjunto con mi tutor \href{https://github.com/juanscelyg}{Juan Sebastián Cely Gutiérrez}.
 
 \section{Objetivos}
 \label{sec:segundaseccion}
 
-El objetivo principal de este TFG consiste en el diseño, implementación y validación de un sistema capaz de controlar un CDPR bidimensional, comenzando por la definición del modelo cinemático, pasando por su integración en ROS 2 y finalizando con la construcción de un prototipo del sistema en un entorno real utilizando elementos hardware.
+El objetivo principal de este trabajo consiste en el diseño, implementación y validación de un sistema capaz de controlar un CDPR bidimensional, comenzando por la definición del modelo cinemático, pasando por su integración en ROS 2 y finalizando con la preparación de una plataforma experimental orientada a futuras pruebas en un entorno físico real.
 
 \vspace{0.25cm}
 
-En términos específicos, los objetivos a destacar son los siguientes:
+Los objetivos específicos de este trabajo son:
+
+\newpage
 
 \begin{itemize}
 \item Desarrollo de un modelo cinemático que relacione la posición en la que se encuentre el efector final con las longitudes de los cables y los ángulos de giro de las poleas en cada momento.
-\item Validación del modelo desarrollado en distintos lenguajes de programación.
-\item Implementación del modelo cinemático en un nodo ROS 2 que ofrezca información sobre el movimiento y las trayectorias realizadas en cada momento.
-\item Integración completa del sistema en ROS 2 utilizando RViZ como herramienta de visualización.
-\item Integración del software desarrollado en un sistema hardware real.
+\item Validación del modelo desarrollado en distintos lenguajes de programación con el fin de comprobar los resultados obtenidos en cada uno de ellos y garantizar así que el comportamiento del modelo es independiente del tipo de lenguaje utilizado.
+\item Implementación del modelo cinemático dentro de una arquitectura software basada en ROS 2 que permita gestionar movimientos, trayectorias y comunicaciones entre procesos.
+\item Integración completa del sistema en ROS 2 incorporando mecanismos de visualización y monitorización mediante RViZ.
+\item Diseño e integración del software desarrollado sobre un sistema hardware real que se tendrá en cuenta como una propuesta de mejora a futuro.
 \end{itemize}
 
 \section{Alcance y limitaciones}
 \label{sec:segundaseccion}
 
-El alcance de este TFG se centra principalmente en la parte software del sistema, dentro de la cual se ha desarrollado y validado un modelo cinemático, además de su integración en ROS 2. Sin embargo, no se ha profundizado en otros aspectos como el modelado de fuerzas, las tensiones de los cables, la estructuración del sistema de forma que este sea de tipo ”lazo cerrado”, o una interacción más detallada con los sensores en el sistema real, ya que en este caso, éste está compuesto por dos servomotores como únicos elementos hardware.
+El alcance de este TFG se centra principalmente en la parte software del sistema, dentro de la cual se ha desarrollado y validado un modelo cinemático, además de su integración en ROS 2. Sin embargo, no se ha profundizado en otros aspectos como el modelado de fuerzas, las tensiones de los cables, la estructuración del sistema de forma que este sea de tipo ”lazo cerrado”, o una interacción más detallada con los sensores en el sistema real, ya que en este caso, éste está compuesto por dos poleas como únicos elementos hardware.
 
-\newpage
+\vspace{0.25cm}
 
 Por tanto, aunque se presente una descripción del sistema hardware, tanto la construcción del robot real como su puesta en funcionamiento quedan algo más apartadas. Todas estas limitaciones han sido asumidas desde el principio, ya que otro de los objetivos principales de este TFG comprende que toda la parte del desarrollo software sea sólida.
+
+\newpage
 
 \section{Metodología}
 \label{sec:segundaseccion}
 
-La metodología de este TFG ha sido iterativa e incremental en función de las fases que se han ido abordando. En primer lugar, se ha llevado a cabo la formulación del modelo cinemático del sistema para su posterior validación en pruebas realizadas en diferentes lenguajes de programación como han sido MATLAB, Python y C++ respectivamente, lo que ha permitido detectar y corregir pequeños errores de planteamiento de forma que no se acarreasen hasta fases más avanzadas. Una vez validado el modelo cinemático, se ha procedido a su integración en ROS 2, donde se ha desarrollado un nodo capaz de generar trayectorias y visualizarlas a través de RViZ, lo que ha permitido mantener una separación clara entre validación, simulación e integración.
+\subsection{Fase 1}
+\label{sec:terceraseccion}
+
+La primera fase consiste en analizar el problema y en definir la geometría del sistema, donde se han identificado las variables físicas más relevantes, restricciones geométricas y la relación entre el movimiento del efector final y la longitud de los cables.
+
+\subsection{Fase 2}
+\label{sec:terceraseccion}
+
+Con el sistema ya definido, se ha desarrollado el modelo cinemático inverso para calcular las longitudes de los cables y los ángulos de giro de las poleas a partir de la posición objetivo a la que se quiera desplazar el efector final, lo que ha permitido obtener todas las expresiones matemáticas que componen el núcleo del sistema.
+
+\subsection{Fase 3}
+\label{sec:terceraseccion}
+
+Posteriormente se ha validado este modelo en diferentes implementaciones realizadas en MATLAB, Python y C++, respectivamente. Estas pruebas han permitido comprobar la consistencia de los resultados obtenidos y la detección de posibles errores antes de entrar en fases de desarrollo más avanzadas.
+
+\subsection{Fase 4}
+\label{sec:terceraseccion}
+
+Y por último, el modelo ha sido validado e integrado en una arquitectura software basada en ROS 2, dentro de la cual se ha desarrollado el nodo principal del sistema, la comunicación entre topics y la incorporación de herramientas de visualización en RViZ, lo que ha permitido analizar el comportamiento del sistema.
 
 \section{Descripción inicial del sistema}
 \label{sec:segundaseccion}
 
-Aunque la parte hardware del sistema se encuentre en una fase preliminar, se ha planteado un diseño consistente en consonancia con el modelo software desarrollado, en el que el sistema está compuesto principalmente por una estructura rígida,  en este caso una pizarra móvil con ruedas, que soporta dos poleas fijas ubicadas en las esquinas superiores de la misma, a las cuales se conectan los cables encargados de desplazar el efector final.
+Aunque la parte hardware del sistema se tenga en cuenta como una propuesta de mejora a futuro, se ha planteado un diseño consistente en consonancia con el modelo software desarrollado, en el que el sistema está compuesto por una estructura rígida, en este caso una pizarra móvil con ruedas, que soporta dos poleas fijas ubicadas en las esquinas superiores de la misma, a las cuales se conectan los cables encargados de desplazar el efector final.
+
+\begin{figure} [h!]
+    \begin{center}
+    \includegraphics[width=0.5\textwidth]{figs/cdpr_main_components.png}
+    \end{center}
+    \caption{Descripción general de los componentes del CDPR}
+\end{figure}\
+
+En este diagrama se muestran los elementos principales que componen el sistema y su relación con todos los componentes físicos y software que intervienen en su funcionamiento.
+
+\section{Herramientas de apoyo empleadas durante el desarrollo}
+\label{sec:segundaseccion}
+
+Durante el desarrollo de este trabajo se ha utilizado ChatGPT como única herramienta de Inteligencia Artificial generativa, únicamente como apoyo puntual en tareas de organización, planificación y revisión de contenidos.
+
+\newpage
+
+El uso de esta herramienta se ha limitado a la consulta de dudas concretas sobre ciertas partes del software implementado, propuestas para una mejor estructuración de la memoria y recomendaciones sobre cómo abordar de la mejor forma posible determinadas tareas.
 
 \vspace{0.25cm}
 
-El movimiento de las poleas se lleva a cabo utilizando servomotores, cuyo tipo y características serán determinados en fases posteriores de este TFG, así como el diseño del efector final y el resto de materiales empleados, los cuales se detallarán una vez finalizada la fase de construcción del sistema real.
+En ningún caso el tiempo dedicado a la realización de tareas como el desarrollo del modelo cinemático, la implementación del software ni la validación de los resultados obtenidos han sido realizadas de forma automática por esta herramienta.
+
+\vspace{0.25cm}
+
+Toda la información ofrecida y generada por esta herramienta ha sido revisada, contrastada y adaptada antes de ser incorporada al trabajo, manteniendo así en todo momento la responsabilidad sobre el contenido desarrollado y respetando en todo momento los principios académicos de autoría y originalidad.
+
+\section{Relación con los conocimientos adquiridos en el grado}
+\label{sec:segundaseccion}
+
+El desarrollo de este trabajo ha requerido aplicar conocimientos adquiridos en diversas asignaturas del Grado en Ingeniería de Robótica Software. Concretamente, se han empleado conceptos relacionados con programación, arquitectura software, modelado matemático y cinemático, y sobre todo, robótica, que han servido como base para el diseño e implementación del sistema presentado.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Relación entre asignaturas del grado y su aportación al TFG}
+    \label{tab:mi_tabla}
+    \begin{tabularx}{\textwidth}{@{}X X @{}}
+        \toprule
+        Asignatura & Conocimientos aplicados en el TFG \\
+        \midrule
+        Álgebra & Modelado geométrico y representación matemática del sistema CDPR.\newline \\
+        Cálculo & Cálculo de distancias, relaciones geométricas y formulación del modelo cinemático.\newline \\
+        Fundamentos Físicos de la Robótica & Comprensión de magnitudes físicas relacionadas con posición, movimiento y estructura del sistema.\newline \\
+        Algoritmos y Estructuras de Datos & Diseño eficiente de funciones y organización de la lógica del sistema.\newline \\
+        Diseño Software & Organización modular del proyecto y definición de la arquitectura software.\newline \\
+        Sensores y Actuadores & Comprensión del funcionamiento de servomotores y su aplicación en el accionamiento de poleas.\newline \\
+        Arquitecturas Software para Robots & Diseño de la arquitectura basada en ROS 2 y comunicación entre componentes.\newline \\
+        Modelado y Simulación de Robots & Desarrollo y validación del modelo cinemático mediante simulaciones.\newline \\
+        Sistemas Empotrados y de Tiempo Real & Integración futura con hardware físico y consideraciones de ejecución en tiempo real.\newline \\
+        Sistemas Distribuidos y Concurrentes & Comunicación mediante topics y organización distribuida de ROS 2.\newline \\
+        Planificación y Sistemas Cognitivos & Generación y ejecución de trayectorias a partir de múltiples posiciones objetivo.\newline \\
+        Robótica de Servicio & Contextualización del sistema en aplicaciones robóticas reales.\newline \\
+        Mecatrónica & Integración entre hardware y software dentro del sistema desarrollado. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\newpage
+
+La realización de este trabajo ha permitido integrar conocimientos procedentes de diferentes áreas del grado dentro de un único proyecto. Esta unión ha resultado especialmente relevante para abordar tanto el desarrollo del modelo cinemático como la implementación de una arquitectura software basada en ROS 2 y su futura integración en un sistema robótico real.

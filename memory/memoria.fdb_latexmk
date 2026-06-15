@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1781167170.9093 "memoria.tex" "memoria.pdf" "memoria" 1781167170.99768 2
+["pdflatex"] 1781002365.02734 "memoria.tex" "memoria.pdf" "memoria" 1781002365.13146 2
   "/etc/texmf/web2c/texmf.cnf" 1771439610.07732 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1136768653 1288 655e228510b4c2a1abe905c368440826 ""
   "/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty" 1704662920 150008 7a05b0fdc0167c04e192003e780ab195 ""
@@ -10,9 +10,9 @@
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1771439621 6800795 e3da35cd5f679a10c1f9e3d52f9ef9d5 ""
-  "estilo.tex" 1781159624 3236 ff631fd4318ec1e8d9620b51d5032cf8 ""
-  "memoria.aux" 1781159622 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "memoria.tex" 1781167170.83229 1067 962fa013262a162d53aad4cc11a71bb4 ""
+  "estilo.tex" 1780994534 3236 ff631fd4318ec1e8d9620b51d5032cf8 ""
+  "memoria.aux" 1781002365.02707 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "memoria.tex" 1781002364.95059 1155 51f887dc11378bcdae0663e18ac92352 ""
   (generated)
   "memoria.aux"
   "memoria.log"

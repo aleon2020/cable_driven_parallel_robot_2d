@@ -36,14 +36,14 @@ Con el objetivo de visualizar el sistema descrito anteriormente, se adjunta a co
 
 \begin{figure} [h!]
     \begin{center}
-        \includegraphics[width=0.5\textwidth]{figs/general_system_architecture.png}
+        \includegraphics[width=\textwidth]{figs/general_system_architecture.png}
     \end{center}
     \caption{Arquitectura general del sistema en ROS 2}
 \end{figure}\
 
 Como se puede observar, se tiene una única posición o un conjunto de posiciones objetivo definidas por el usuario, las cuales se envían al nodo principal del sistema implementado, encargado de aplicar el modelo cinemático del robot para calcular las longitudes y los ángulos respecto a la vertical de cada cable, al igual que los ángulos de rotación y la cantidad de cable elongada o recogida por cada polea.
 
-\vspace{0.25cm}
+\newpage
 
 Una vez calculados estos parámetros, toda esta información se publica mediante topics, lo que permite a otros componentes del sistema poder utilizar esta información, mientras se visualiza en RViZ el estado del sistema en cada momento utilizando el modelo URDF definido, lo que permite observar el comportamiento de todos los elementos que componen el sistema durante la ejecución de una trayectoria.
 
@@ -67,7 +67,7 @@ El sistema software está compuesto principalmente por los siguientes elementos,
 
 El sistema hardware comprende una estructura rígida, en este caso una pizarra móvil con ruedas, encargada de sujetar los dos servomotores situados en las esquinas superiores de la misma que actúan como poleas, que a su vez se encargan de accionar los cables que definen la posición del efector final en cada momento, el cual se desplaza libremente dentro de la región bidimensional definida por el área de la pizarra.
 
-\vspace{0.25cm}
+\newpage
 
 Aunque la construcción física del sistema real no esté completa a día de hoy, todo su diseño se ha definido en consonancia con todo el software desarrollado, ya que la posición de cada una de las poleas, el espacio de trabajo equivalente a las dimensiones de la pizarra y el tamaño del efector final se han tenido en cuenta desde las primeras fases de este TFG.
 
@@ -86,14 +86,16 @@ Es por ello que, para representar el comportamiento del sistema durante su ejecu
 
 \begin{figure} [h!]
     \begin{center}
-        \includegraphics[width=0.5\textwidth]{figs/general_system_workflow.png}
+        \includegraphics[width=\textwidth]{figs/general_system_workflow.png}
     \end{center}
     \caption{Flujo general de funcionamiento del sistema}
 \end{figure}\
 
+\newpage
+
 Como se puede observar, el nodo recibe una única posición o una trayectoria objetivo, a partir de la cual se aplica el modelo cinemático para calcular la longitud de cada cable y los ángulos de rotación de cada polea.
 
-\newpage
+\vspace{0.25cm}
 
 Una vez hecho esto, el sistema publica los resultados obtenidos en topics, permitiendo así conocer el estado del sistema en tiempo real, al igual que en RViZ, donde se puede observar el movimiento del efector final y de las poleas en cada momento de la ejecución del sistema.
 

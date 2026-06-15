@@ -23,7 +23,7 @@ Esta primera implementación permite introducir directamente la posición $(x,y)
 
 \begin{figure} [h!]
     \begin{center}
-        \includegraphics[width=0.5\textwidth]{figs/matlab_kinematic_model.png}
+        \includegraphics[width=\textwidth]{figs/matlab_kinematic_model.png}
     \end{center}
     \caption{Simulación inicial en MATLAB}
 \end{figure}\
@@ -37,11 +37,11 @@ Con esto se ha cumplido el objetivo de esta primera versión, que no comprende l
 
 Una vez validado el primer modelo en MATLAB, se ha desarrollado una implementación más avanzada en Python, la cual ya incluye animaciones y la posibilidad de definir múltiples posiciones objetivo para así generar trayectorias contínuas que conecten dichos puntos.
 
-\vspace{0.25cm}
+\newpage
 
 Esta segunda implementación permite introducir una secuencia de posiciones objetivo para el efector final dentro del espacio de trabajo. A partir de estas posiciones, se pueden interpolar trayectorias rectilíneas entre puntos consecutivos, mientras se calculan en cada instante las longitudes y los ángulos de cada cable utilizando las ecuaciones correspondientes de cinemática inversa.
 
-\newpage
+\vspace{0.25cm}
 
 Además, esta implementación incluye una representación gráfica del sistema, en la que se muestra la estructura, la trayectoria realizada, y la variación del movimiento del efector final y los cables en todo momento, facilitando así la comprensión del funcionamiento del sistema y permitiendo observar de forma intuitiva cómo va evolucionando el movimiento del efector final y de los cables. Es por ello que esta segunda versión ya se aproxima mucho más al funcionamiento que se implementará posteriormente en ROS 2.
 
@@ -51,10 +51,12 @@ Para una mejor comprensión del comportamiento dinámico del sistema mostrado en
 
 \begin{figure} [h!]
     \begin{center}
-        \includegraphics[width=0.5\textwidth]{figs/python_kinematic_model_v3.png}
+        \includegraphics[width=\textwidth]{figs/python_kinematic_model_v3.png}
     \end{center}
     \caption{Implementación y simulación en Python}
 \end{figure}\
+
+\newpage
 
 \section{Implementación del modelo en C++}
 \label{sec:segundaseccion}
@@ -71,7 +73,7 @@ Para una mejor comprensión del comportamiento dinámico del sistema mostrado en
 
 \begin{figure} [h!]
     \begin{center}
-        \includegraphics[width=0.5\textwidth]{figs/cpp_kinematic_model_v3.png}
+        \includegraphics[width=\textwidth]{figs/cpp_kinematic_model_v3.png}
     \end{center}
     \caption{Implementación y simulación en C++}
 \end{figure}\
