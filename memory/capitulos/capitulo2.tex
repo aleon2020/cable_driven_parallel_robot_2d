@@ -1,9 +1,7 @@
 \chapter{Fundamentos teóricos}
 \label{cap:capitulo2}
 
-\vspace{0.25cm}
-
-\section{Introducción}
+\section{Contexto general de los CDPR}
 \label{sec:segundaseccion}
 
 Los robots paralelos accionados por cables (CDPR) han experimentado un gran crecimiento en los últimos años. Comprenden conceptos de robótica paralela, modelado geométrico y mecánica ligera, convirtiéndolos en un tipo de robots muy atractivo tanto para proyectos de investigación como para aplicaciones prácticas.
@@ -17,14 +15,22 @@ Este capítulo presenta el contexto teórico que comprende este TFG, además de 
 
 Un CDPR se caracteriza por utilizar cables como elementos para transmitir el movimiento entre la estructura y el efector final. Esta característica introduce una serie de particularidades desde el punto de vista del modelado y del control del sistema, ya que es necesario garantizar que los cables permanezcan tensionados en todo momento. A pesar de ello, este tipo de robots tiene un peso estructural mucho menor, una mayor escalabilidad y la posibilidad de desplazarse por regiones bastante amplias.
 
+\vspace{0.25cm}
+
+Todas estas características se han tenido en cuenta a la hora de redactar documentos científicos relacionados con este tema, donde los CDPR destacan por ofrecer grandes espacios de trabajo, cuya relación entre su masa y su carga útil es mejor en comparación con otras arquitecturas róboticas paralelas utilizadas \href{}{[2]}.
+
 \section{Configuraciones típicas}
 \label{sec:segundaseccion}
 
-Los CDPR pueden adoptar múltiples configuraciones en función del número de cables, puntos de anclaje y grados de libertad por los que se mueve el efector final. En caso de que se quiera mover el efector final en tres dimensiones, el número de cables debe ser superior al número de grados de libertad, con el fin de garantizar que todos los cables utilizados se encuentren tensionados.
+Los CDPR pueden adoptar múltiples configuraciones en función del número de cables, puntos de anclaje y grados de libertad por los que se mueve el efector final. En caso que se quiera mover el efector final en tres dimensiones, el número de cables debe ser superior al número de grados de libertad, con el fin de garantizar que todos los cables utilizados se encuentren tensionados \href{}{[3]}.
 
 \vspace{0.25cm}
 
-En este caso, el efector final se mueve en dos dimensiones, por lo que el número de cables debe ser como mínimo igual al número de grados de libertad, condición que se cumple satisfactoriamente desde el principio.
+Esta condición en el número de cables es más habitual en CDPR tridimensionales, ya que es imposible físicamente que un cable pueda comprimirse o tensionarse por sí mismo.
+
+\vspace{0.25cm}
+
+En este caso, el efector final se mueve en dos dimensiones, por lo que el número de cables debe ser como mínimo igual al número de grados de libertad, condición que se cumple satisfactoriamente desde el principio \href{}{[4]}.
 
 \section{Modelo cinemático}
 \label{sec:segundaseccion}
@@ -35,34 +41,71 @@ El modelo cinemático de un CDPR tiene como objetivo establecer una relación en
 
 En este caso, se ha optado por trabajar directamente con la cinemática inversa, ya que lo que se quiere es calcular las longitudes de cada cable siendo conocida la posición del efector final en cada momento. Este enfoque resulta adecuado para su posterior implementación software e integración en ROS 2.
 
-\section{Control y planificación de trayectorias}
-\label{sec:segundaseccion}
+\vspace{0.25cm}
 
-El control de un CDPR presenta diversos retos en lo que respecta a los cables y a la contínua necesidad de mantenerlos en tensión, ya que en sistemas más avanzados, lo más habitual es incorporar un modelo dinámico, un sistema de control en lazo cerrado y otras estrategias centradas en la tensión de los cables.
+La elección de la cinemática inversa se debe a que el problema a resolver en este trabajo consiste en determinar las longitudes de los cables para hacer que el efector final llegue a una posición objetivo.
 
 \vspace{0.25cm}
 
-Sin embargo, al tratarse de una aplicación mucho más sencilla, en la que el objetivo principal consiste en la validación del comportamiento geométrico del sistema, lo normal es utilizar un modelo cinemático y un sistema de control en lazo abierto, donde la planificación de trayectorias se realice a partir de un conjunto de posiciones objetivo y los cálculos necesarios para pasar por todas ellas de forma contínua.
+Por parte de la cinemática directa, el problema consiste en calcular la posición del efector final a partir de las longitudes de los cables. Es importante mencionar que el propio usuario es quien especifica por cuántas posiciones objetivo dentro del espacio de trabajo se va a querer desplazar el efector final, y es ahí donde el sistema se encarga de calcular los parámetros físicos necesarios para alcanzar todas ellas.
+
+\newpage
+
+Es por este motivo que la cinemática inversa resulta más adecuada de utilizar en el desarrollo de este sistema en concreto, ya que proporciona de forma directa las longitudes de los cables y los ángulos de giro que debe realizar cada polea para poder ejecutar una trayectoria.
+
+\begin{figure} [h!]
+    \begin{center}
+        \includegraphics[width=0.5\textwidth]{figs/direct_inverse_kinematics_comparison.png}
+    \end{center}
+    \caption{Comparación entre cinemática directa e inversa en un CDPR}
+\end{figure}\
+
+\begin{figure} [h!]
+    \begin{center}
+        \includegraphics[width=0.125\textwidth]{figs/inverse_kinematics_justification.png}
+    \end{center}
+    \caption{Flujo de información del sistema}
+\end{figure}\
+
+\newpage
+
+\section{Control y planificación de trayectorias}
+\label{sec:segundaseccion}
+
+El control de un CDPR presenta diversos retos en lo que respecta a los cables y a la contínua necesidad de mantenerlos en tensión, ya que en sistemas más avanzados, lo más habitual es incorporar un modelo dinámico, un sistema de control en lazo cerrado y otras estrategias centradas en la tensión de los cables \href{}{[5]}.
+
+\newpage
+
+Sin embargo, dado que el alcance de este trabajo se centra exclusivamente en la validación tanto geométrica como cinemática del sistema, lo normal es utilizar un modelo cinemático y un sistema de control en lazo abierto, donde la planificación de trayectorias se realice a partir de un conjunto de posiciones objetivo y los cálculos necesarios para pasar por todas ellas de forma contínua.
 
 \section{Frameworks robóticos}
 \label{sec:segundaseccion}
 
-ROS 2 se considera actualmente como uno de los frameworks de referencia en el desarrollo de sistemas robóticos, ya que su arquitectura basada en nodos, topics y servicios, hacen mucho más fácil y llevadera la creación de este tipo de sistemas.
-
-\vspace{0.25cm}
-
-Es por eso que la integración de un CDPR en ROS 2 permite separar y distinguir sin ningún problema el modelo cinemático, la lógica de control y la visualización del sistema simulado, la cual se llevará a cabo en RViZ.
+ROS 2 se considera actualmente como uno de los frameworks de referencia en el desarrollo de sistemas robóticos, ya que su arquitectura basada en nodos, topics y servicios, facilitan el desarrollo, integración y mantenimiento de este tipo de sistemas.
 
 \section{Aplicaciones y líneas de investigación actuales}
 \label{sec:segundaseccion}
 
-Los CDPR son utilizados en la actualidad desde sistemas de posicionamiento, manipulación de grandes cargas y plataformas de movimiento, hasta algunos robots de rehabilitación.
+Los CDPR son utilizados actualmente en aplicaciones como sistemas de posicionamiento, manipulación de grandes cargas y plataformas de movimiento, hasta algunos robots de rehabilitación.
+
+\begin{figure} [h!]
+    \begin{center}
+        \includegraphics[width=\textwidth]{figs/spidercam.png}
+    \end{center}
+    \caption{Spidercam utilizada en estadios de fútbol y eventos deportivos \href{https://www.panoramaaudiovisual.com/2022/09/09/ross-video-spidercam-estandar-camaras-cable-television/}{[6]}}
+\end{figure}\
+
+Entre las aplicaciones más conocidas en la actualidad se encuentran los sistemas de cámaras suspendidas desde grandes alturas utilizados en retransmisiones deportivas como el mostrado en la imagen, y otras aplicaciones como plataformas de manipulación o robots de rehabilitación programados para ayudar a realizar movimientos terapéuticos controlados.
 
 \vspace{0.25cm}
 
-Por otro lado, las principales líneas de investigación actuales están centradas en el análisis del espacio de trabajo, la optimización de las tensiones de los cables que componen el sistema, lograr una mayor robustez en el control del sistema y garantizar una interacción segura en todo su entorno.
+Por otro lado, las principales líneas de investigación actuales están centradas en el análisis del espacio de trabajo, la optimización de las tensiones de los cables que componen el sistema, lograr una mayor robustez en el control del sistema y garantizar una interacción segura en todo su entorno \href{}{[7]}.
 
 \section{Relación con el trabajo de fin de grado desarrollado}
 \label{sec:segundaseccion}
 
-Este TFG se sitúa dentro de todo este contexto desde un enfoque simplificado en comparación con aplicaciones ya existentes, haciendo énfasis en el desarrollo software, el modelo cinemático y la integración en ROS 2, lo que permite sentar unas bases sólidas de forma que, en un futuro, se pueda añadir un modelo dinámico, el uso de otro tipo de sensores aparte de los servomotores que actúan como poleas, o la implementación de un sistema de control mucho más avanzado.
+Este trabajo se centra específicamente en la formulación del modelo cinemático, su validación mediante simulaciones y su integración dentro de una arquitectura basada en ROS 2.
+
+\vspace{0.25cm}
+
+Todos estos elementos constituyen el núcleo del sistema, proporcionando así una plataforma adecuada para estudiar el comportamiento de este tipo de robots desde un punto de vista orientado al software.
