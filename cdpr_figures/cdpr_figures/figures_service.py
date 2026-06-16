@@ -12,7 +12,7 @@ class FigureService(Node):
     # __init__() function
     # Initializes the node, service, and publisher for managing figures
     def __init__(self):
-        super().__init__('figure_service')
+        super().__init__('figures_service')
         qos_profile = QoSProfile(depth=10)
         self.publisher_ = self.create_publisher(
             Path, '/cdpr', qos_profile)
