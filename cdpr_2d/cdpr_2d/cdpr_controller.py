@@ -174,10 +174,25 @@ class CDPRController(Node):
     def path_callback(self, msg: Path):
         self.clear_trace()
         self.points = []
+        workspace_error = False
         for pose_stamped in msg.poses:
             x = float(pose_stamped.pose.position.x)
             y = float(pose_stamped.pose.position.y)
+            error_msg = ''
+            if x >= (self.plane_width - (self.effector_width / 2.0)) or \
+               x <= (self.effector_width / 2.0):
+                error_msg += f'\n- X COORDINATE OUT OF LIMIT = {x:.3f} m'
+            if y >= (self.plane_height - (self.effector_height / 2.0)) or \
+               y <= (self.effector_height / 2.0):
+                error_msg += f'\n- Y COORDINATE OUT OF LIMIT = {y:.3f} m'
+            if error_msg:
+                self.get_logger().error(
+                    f'ERROR. INVALID POINT{error_msg}'
+                )
+                workspace_error = True
             self.points.append((x, y))
+        if workspace_error:
+            return
         self.points_number = len(self.points)
         if self.points_number == 0:
             self.get_logger().error('ERROR. PATH WITH NO POINTS')
