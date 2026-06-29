@@ -5,11 +5,11 @@ El modelo cinemático constituye uno de los elementos fundamentales de este TFG,
 
 \vspace{0.25cm}
 
-En un CDPR, el posicionamiento del efector final se consigue a partir de la variación de la longitud de cada uno de los cables conectados a las poleas situadas en las esquinas superiores de la estructura fija del sistema. Esto hace necesario definir un modelo geométrico que permita calcular, para cualquier posición en la que se encuentre el efector final, las longitudes de los cables y los ángulos que formen cada uno de ellos respecto a la vertical.
+En un CDPR, el posicionamiento del efector final se consigue a partir de la variación de la longitud de cada uno de los cables conectados a las poleas situadas en las esquinas superiores de la estructura fija del sistema. Esto hace necesario definir un modelo geométrico que permita calcular, para cualquier posición en la que se encuentre el efector final, las longitudes de los cables y los ángulos que forman cada uno de ellos respecto a la vertical.
 
 \vspace{0.25cm}
 
-El modelo desarrollado en este TFG corresponde a un CDPR bisimensional de dos grados de libertad, formado por dos cables, dos poleas situadas en las esquinas superiores de una estructura fija, y un efector final rígido que se desplaza dentro de un espacio de trabajo bidimensional. Es por ello que, en este caso, se ha optado por un modelo puramente geométrico basado en cinemática inversa, donde no se han considerado efectos dinámicos como la masa del efector final, la elasticidad de los cables o la fricción de las poleas.
+El modelo desarrollado en este TFG corresponde a un CDPR bidimensional de dos grados de libertad, formado por dos cables, dos poleas situadas en las esquinas superiores de una estructura fija, y un efector final rígido que se desplaza dentro de un espacio de trabajo bidimensional. Es por ello que, en este caso, se ha optado por un modelo puramente geométrico basado en cinemática inversa, donde no se han considerado efectos dinámicos como la masa del efector final, la elasticidad de los cables o la fricción de las poleas.
 
 \newpage
 
@@ -20,7 +20,7 @@ El modelo desarrollado en este TFG corresponde a un CDPR bisimensional de dos gr
     \begin{center}
         \includegraphics[width=\textwidth]{figs/kinematic_model.png}
     \end{center}
-    \caption{Modelo cinemático de un CDPR bidimensional}
+    \caption{Modelo cinemático de un CDPR bidimensional.}
 \end{figure}\
 
 En esta imagen se representa un sistema de referencia cartesiano fijo \{O\} situado en la esquina inferior izquierda de la estructura.
@@ -44,7 +44,7 @@ La posición del efector final viene definida de la siguiente forma:
 \begin{equation}
 e = (e_x, e_y)
 \end{equation}
-\caption[Posición del efector final en el espacio de trabajo]{Posición del efector final en el espacio de trabajo}
+\caption[Posición del efector final en el espacio de trabajo.]{Posición del efector final en el espacio de trabajo.}
 \end{myequation}
 
 donde:
@@ -76,7 +76,7 @@ La polea izquierda se define como:
 \begin{equation}
 PI = (PI_x, PI_y) = (0, a_p)
 \end{equation}
-\caption[Posición de la polea izquierda en el espacio de trabajo]{Posición de la polea izquierda en el espacio de trabajo}
+\caption[Posición de la polea izquierda en el espacio de trabajo.]{Posición de la polea izquierda en el espacio de trabajo.}
 \end{myequation}
 
 Mientras que la polea derecha queda definida como:
@@ -85,7 +85,7 @@ Mientras que la polea derecha queda definida como:
 \begin{equation}
 PD = (PD_x, PD_y) = (l_p, a_p)
 \end{equation}
-\caption[Posición de la polea derecha en el espacio de trabajo]{Posición de la polea derecha en el espacio de trabajo}
+\caption[Posición de la polea derecha en el espacio de trabajo.]{Posición de la polea derecha en el espacio de trabajo.}
 \end{myequation}
 
 Estas posiciones corresponden a la configuración mecánica prevista para un prototipo físico, donde ambas poleas quedarían situadas en cada una de las esquinas superiores de la estructura fija.
@@ -99,7 +99,7 @@ En vez de plantearlo como una aproximación puntual, el efector final se modela 
     \begin{center}
         \includegraphics[width=\textwidth]{figs/end_effector_coordinates.png}
     \end{center}
-    \caption{Geometría y dimensiones del efector final}
+    \caption{Geometría y dimensiones del efector final.}
 \end{figure}\
 
 Sabiendo que la posición del centro del efector final en el espacio de trabajo es $e = (e_x, e_y)$, se pueden determinar las posiciones de cada una de sus cuatro esquinas.
@@ -108,14 +108,14 @@ Sabiendo que la posición del centro del efector final en el espacio de trabajo 
 \begin{equation}
 ESI = (ESI_x, ESI_y) = (e_x - \frac{l_e}{2}, e_y + \frac{a_e}{2})
 \end{equation}
-\caption[Posición de la esquina superior izquierda del efector final]{Posición de la esquina superior izquierda del efector final}
+\caption[Posición de la esquina superior izquierda del efector final.]{Posición de la esquina superior izquierda del efector final.}
 \end{myequation}
 
 \begin{myequation}[h]
 \begin{equation}
 ESD = (ESD_x, ESD_y) = (e_x + \frac{l_e}{2}, e_y + \frac{a_e}{2})
 \end{equation}
-\caption[Posición de la esquina superior derecha del efector final]{Posición de la esquina superior derecha del efector final}
+\caption[Posición de la esquina superior derecha del efector final.]{Posición de la esquina superior derecha del efector final.}
 \end{myequation}
 
 \newpage
@@ -124,14 +124,14 @@ ESD = (ESD_x, ESD_y) = (e_x + \frac{l_e}{2}, e_y + \frac{a_e}{2})
 \begin{equation}
 EII = (EII_x, EII_y) = (e_x - \frac{l_e}{2}, e_y - \frac{a_e}{2})
 \end{equation}
-\caption[Posición de la esquina inferior izquierda del efector final]{Posición de la esquina inferior izquierda del efector final}
+\caption[Posición de la esquina inferior izquierda del efector final.]{Posición de la esquina inferior izquierda del efector final.}
 \end{myequation}
 
 \begin{myequation}[h]
 \begin{equation}
 EID = (EID_x, EID_y) = (e_x + \frac{l_e}{2}, e_y - \frac{a_e}{2})
 \end{equation}
-\caption[Posición de la esquina inferior derecha del efector final]{Posición de la esquina inferior derecha del efector final}
+\caption[Posición de la esquina inferior derecha del efector final.]{Posición de la esquina inferior derecha del efector final.}
 \end{myequation}
 
 Dado que los cables están unidos a las esquinas superiores del efector final, $ESI$ y $ESD$ son las únicas que intervienen directamente en cálculos cinemáticos posteriores.
@@ -149,14 +149,14 @@ Para ello, se calcula la distancia euclídea entre cada polea y la esquina super
 \begin{equation}
 LI = \sqrt{(ESI_x - PI_x)^2 + (ESI_y - PI_y)^2} 
 \end{equation}
-\caption[Longitud del cable izquierdo]{Longitud del cable izquierdo}
+\caption[Longitud del cable izquierdo.]{Longitud del cable izquierdo.}
 \end{myequation}
 
 \begin{myequation}[h]
 \begin{equation}
 LD = \sqrt{(ESD_x - PD_x)^2 + (ESD_y - PD_y)^2}
 \end{equation}
-\caption[Longitud del cable derecho]{Longitud del cable derecho}
+\caption[Longitud del cable derecho.]{Longitud del cable derecho.}
 \end{myequation}
 
 \newpage
@@ -165,16 +165,16 @@ Estas ecuaciones permiten obtener directamente la longitud que debe tener cada c
 
 \vspace{0.25cm}
 
-Desde el punto de vista software, estas expresiones constituyen el núcleo del modelo cinemático implementado en pruebas posteriormente realizadas en MATLAB, Python, C++ y ROS 2.
+Desde el punto de vista software, estas expresiones constituyen el núcleo del modelo cinemático implementado en pruebas posteriormente realizadas en MATLAB \cite{matlab_docs}, Python \cite{python_docs}, C++ \cite{cpp_docs} y ROS 2 \cite{ros2_docs}.
 
 \section{Cálculo de la orientación de los cables}
 \label{sec:segundaseccion}
 
-Además de la longitud de cada cable, es interesante conocer la orientación que presenta cada uno respecto a la vertical, ya que esta información resulta muy útil para:
+Además de la longitud de cada cable, es interesante conocer la orientación que presenta cada uno de ellos respecto a la vertical, ya que esta información resulta muy útil para:
 
 \begin{itemize}
 \item Analizar la configuración geométrica del sistema.
-\item Representar correctamente los cables en RViZ (no de forma visual pero sí de forma matemática).
+\item Representar correctamente los cables en RViZ \cite{rviz_docs} (no de forma visual pero sí de forma matemática).
 \item Calcular posteriormente otros parámetros relacionados con el accionamiento de las poleas, como por ejemplo la cantidad de cable recogido cuando el efector se ha desplazado entre varias posiciones.
 \end{itemize}
 
@@ -184,7 +184,7 @@ El ángulo del cable izquierdo se define como:
 \begin{equation}
 \theta_I = -\arctan \left(\frac{ESI_x - PI_x}{ESI_y - PI_y}\right)
 \end{equation}
-\caption[Ángulo que forma el cable izquierdo con la vertical]{Ángulo que forma el cable izquierdo con la vertical}
+\caption[Ángulo que forma el cable izquierdo con la vertical.]{Ángulo que forma el cable izquierdo con la vertical.}
 \end{myequation}
 
 Mientras que el ángulo del cable derecho viene definido por:
@@ -193,10 +193,10 @@ Mientras que el ángulo del cable derecho viene definido por:
 \begin{equation}
 \theta_D = \arctan \left(\frac{ESD_x - PD_x}{ESD_y - PD_y}\right)
 \end{equation}
-\caption[Ángulo que forma el cable derecho con la vertical]{Ángulo que forma el cable derecho con la vertical}
+\caption[Ángulo que forma el cable derecho con la vertical.]{Ángulo que forma el cable derecho con la vertical.}
 \end{myequation}
 
-Los ángulos obtenidos se calculan inicialmente en grados, que posteriormente pueden convertirse a radianes para hacer más sencilla tanto la interpretación de los resultados obtenidos como la visualización gráfica del sistema.
+Los ángulos obtenidos se calculan inicialmente en grados, que posteriormente pueden convertirse a radianes para hacer más sencilla tanto la interpretación de los resultados obtenidos como la visualización del sistema.
 
 \section{Relación entre cables y poleas}
 \label{sec:segundaseccion}
@@ -211,14 +211,14 @@ Si $R_p$ representa el radio de la polea y $\Delta L$ representa la variación d
 \begin{equation}
 \Delta\theta = \frac{\Delta L}{R_p}
 \end{equation}
-\caption[Relación longitud cable - radio polea]{Relación longitud cable - radio polea}
+\caption[Relación longitud cable - radio polea.]{Relación longitud cable - radio polea.}
 \end{myequation}
 
 donde:
 
 \begin{itemize}
-\item $\Delta\theta$ es el giro angular de la polea.
-\item $\Delta L$ es la variación de longitud del cable.
+\item $\Delta\theta$ es la variación angular de la polea.
+\item $\Delta L$ es la variación longitudinal del cable.
 \item $R_p$ es el radio de la polea.
 \end{itemize}
 
@@ -256,4 +256,4 @@ Es por ello que se han tenido en cuenta las siguientes limitaciones:
 \item La orientación del efector final siempre es constante.
 \end{itemize}
 
-A pesar de estas limitaciones, el modelo reproduce correctamente la relación geométrica existente entre la posición del efector final y las variables físicas del sistema, proporcionando una base sólida para la simulación y la integración en ROS 2.
+A pesar de estas limitaciones, el modelo reproduce correctamente la relación geométrica existente entre la posición del efector final y las variables físicas del sistema, proporcionando una base sólida para la simulación y la integración en ROS 2 \cite{ros2_docs}.

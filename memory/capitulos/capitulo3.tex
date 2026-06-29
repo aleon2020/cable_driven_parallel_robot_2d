@@ -4,7 +4,7 @@
 \section{Introducción}
 \label{sec:segundaseccion}
 
-En este capítulo se presenta una visión global del sistema desarrollado en este TFG, ofreciendo una descripción del CDPR diseñado y de toda la arquitectura que hace posible su funcionamiento, la cual ha permitido validar el modelo cinemático, así como los algoritmos para planificar trayectorias utilizados y su integración en ROS 2. Y aunque gran parte del sistema hardware se encuentre en una fase prevista como una mejora a futuro, todo el diseño ha sido considerado como referencia para garantizar la coherencia entre el modelo software desarrollado y una futura implementación física del sistema.
+En este capítulo se presenta una visión global del sistema desarrollado en este TFG, ofreciendo una descripción del CDPR diseñado y de toda la arquitectura que hace posible su funcionamiento, la cual ha permitido validar el modelo cinemático, así como los algoritmos para planificar trayectorias utilizados y su integración en ROS 2 \cite{ros2_docs}. Y aunque gran parte del sistema hardware se encuentre en una fase prevista como una mejora a futuro, todo el diseño ha sido considerado como referencia para garantizar la coherencia entre el modelo software desarrollado y una futura implementación física del sistema.
 
 \section{Funcionamiento de un CDPR bidimensional}
 \label{sec:segundaseccion}
@@ -15,17 +15,17 @@ El funcionamiento principal de un CDPR bidimensional consiste en el desplazamien
     \begin{center}
         \includegraphics[width=0.55\textwidth]{figs/bidimensional_cdpr_functionality.png}
     \end{center}
-    \caption{Funcionamiento general de un CDPR bidimensional}
+    \caption{Funcionamiento general de un CDPR bidimensional.}
 \end{figure}\
 
 \newpage
 
-El funcionamiento del sistema puede resumirse en tres etapas. En primer lugar, el usuario define una o varias posiciones objetivo por las que el efector final debe pasar para formar una trayectoria. Después, el modelo cinemático se encarga de calcular la longitud de los cables para alcanzar cada posición objetivo, que posteriormente se transforman en desplazamientos angulares de cada una de las poleas mediante la relación geométrica existente entre el radio de las poleas y la longitud de cable elongada o recogida por cada una de ellas. Y por último, todos los resultados obtenidos se utilizan para actualizar el estado del sistema en todo momento y verificar que toda la configuración realizada resulta en un comportamiento correcto del efector final durante la ejecución del movimiento.
+El funcionamiento del sistema puede resumirse en tres etapas. En primer lugar, el usuario define una o varias posiciones objetivo por las que el efector final debe pasar para formar una trayectoria. Después, el modelo cinemático se encarga de calcular las longitudes de los cables para alcanzar cada posición objetivo, que posteriormente se transforman en desplazamientos angulares de cada una de las poleas mediante la relación geométrica existente entre el radio de las poleas y la longitud de cable elongada o recogida por cada una de ellas. Y por último, todos los resultados obtenidos se utilizan para actualizar el estado del sistema en todo momento y verificar que toda la configuración realizada resulta en un comportamiento correcto del efector final durante la ejecución del movimiento.
 
 \section{Arquitectura}
 \label{sec:segundaseccion}
 
-La arquitectura del sistema sigue un enfoque modular y escalable. Esto significa que, aunque el control principal del sistema se concentra en un único nodo ROS 2, posee un diseño que separa las diferentes capas que componen el sistema, las cuales se describen a continuación.
+La arquitectura del sistema sigue un enfoque modular y escalable. Esto significa que, aunque el control principal del sistema se concentra en un único nodo ROS 2 \cite{ros2_docs}, posee un diseño que separa las diferentes capas que componen el sistema, las cuales se describen a continuación.
 
 \begin{code}[h]
 \begin{lstlisting}
@@ -43,7 +43,7 @@ src
 `-- cdpr_interfaces
     `-- DrawFigure.srv
 \end{lstlisting}
-\caption[Estructura del workspace ROS 2]{Estructura del workspace ROS 2}
+\caption[Estructura del workspace ROS 2.]{Estructura del workspace ROS 2.}
 \end{code}
 
 \begin{table}[htbp]
@@ -58,7 +58,7 @@ src
         Visual & Representación gráfica y monitorización del estado del sistema mediante RViZ.\\
         \bottomrule
     \end{tabularx}
-    \caption{Capas que componen la arquitectura del sistema}
+    \caption{Capas que componen la arquitectura del sistema.}
 \end{table}
 
 \newpage
@@ -73,19 +73,19 @@ Con el objetivo de visualizar el sistema descrito anteriormente, se adjunta a co
     \begin{center}
         \includegraphics[width=\textwidth]{figs/general_system_architecture.png}
     \end{center}
-    \caption{Arquitectura general del sistema en ROS 2. El usuario envía una o varias posiciones objetivo que son procesadas por el nodo principal del CDPR, el cual se encarga de aplicar el modelo cinemático y publicar los resultados obtenidos mediante topics, que serán utilizados posteriormente para monitorizar el sistema en todo momento y representarlos gráficamente en RViZ.}
+    \caption{Arquitectura general del sistema en ROS 2. El usuario envía una o varias posiciones objetivo que son procesadas por el nodo principal del CDPR, el cual se encarga de aplicar el modelo cinemático y publicar los resultados obtenidos mediante topics, que serán utilizados posteriormente para monitorizar el sistema en todo momento y representarlos visualmente en RViZ.}
 \end{figure}\
 
 Como se puede observar, se tiene una única posición o un conjunto de posiciones objetivo definidas por el usuario, las cuales se envían al nodo principal del sistema implementado, encargado de aplicar el modelo cinemático del robot para calcular las longitudes y los ángulos respecto a la vertical de cada cable, al igual que los ángulos de rotación y la cantidad de cable elongada o recogida por cada polea.
 
 \newpage
 
-Una vez se han calculado estos parámetros, toda esta información se publica mediante topics, lo que permite a otros componentes del sistema poder utilizar esta información mientras se visualiza en RViZ el estado del sistema en cada momento utilizando el modelo URDF definido, lo que permite observar el comportamiento de todos los elementos que componen el sistema durante la ejecución de una trayectoria.
+Una vez se han calculado estos parámetros, toda esta información se publica mediante topics, lo que permite a otros componentes del sistema poder utilizar esta información mientras se visualiza en RViZ \cite{rviz_docs} el estado del sistema en cada momento utilizando el modelo URDF \cite{urdf_docs} definido, lo que permite observar el comportamiento de todos los elementos que componen el sistema durante la ejecución de una trayectoria.
 
 \section{Componentes software}
 \label{sec:segundaseccion}
 
-El desarrollo software es lo que compone en su gran mayoría al núcleo de este TFG, el cual se ha llevado a cabo en Python, ya que es un lenguaje de programación de alto nivel que se integra perfectamente con ROS 2 y que se caracteriza principalmente por su flexibilidad y legibilidad en código, siendo éstos los factores principales que se han tenido en cuenta a la hora de elegir este lenguaje de programación antes que otros, como por ejemplo MATLAB o C++.
+El desarrollo software es lo que compone en su gran mayoría al núcleo de este TFG, el cual se ha llevado a cabo en Python \cite{python_docs}, ya que es un lenguaje de programación de alto nivel que se integra perfectamente con ROS 2 \cite{ros2_docs} y que se caracteriza principalmente por su flexibilidad y legibilidad en código, siendo éstos los factores principales que se han tenido en cuenta a la hora de elegir este lenguaje de programación antes que otros, como por ejemplo MATLAB \cite{matlab_docs} o C++ \cite{cpp_docs}.
 
 \vspace{0.25cm}
 
@@ -105,7 +105,7 @@ El sistema software está compuesto principalmente por los siguientes elementos,
         Modelo URDF & Representación visual del sistema en RViZ. \\
         \bottomrule
     \end{tabularx}
-    \caption{Componentes de la arquitectura software del sistema}
+    \caption{Componentes de la arquitectura software del sistema.}
 \end{table}
 
 \section{Sistema hardware}
@@ -117,10 +117,10 @@ El sistema hardware comprende una estructura rígida, en este caso una pizarra m
     \begin{center}
         \includegraphics[width=\textwidth]{figs/esp32-s2_mini_component.png}
     \end{center}
-    \caption{Microcontrolador ESP32-S2 Mini}
+    \caption{Microcontrolador ESP32-S2 Mini.}
 \end{figure}\
 
-Aunque la construcción física del sistema real se contemple como una mejora a futuro, todo su diseño se ha definido en consonancia el software desarrollado, ya que la posición de cada una de las poleas, el espacio de trabajo equivalente a las dimensiones de la pizarra y el tamaño del efector final se han tenido en cuenta desde las primeras fases de este TFG.
+Aunque la construcción física del sistema real se contemple como una mejora a futuro, todo su diseño se ha definido en consonancia con el software desarrollado, ya que la posición de cada una de las poleas, el espacio de trabajo equivalente a las dimensiones de la pizarra y el tamaño del efector final se han tenido en cuenta desde las primeras fases de este TFG.
 
 \section{Flujo general de funcionamiento}
 \label{sec:segundaseccion}
@@ -137,7 +137,7 @@ Este procedimiento se representa de forma más resumida en el diagrama de activi
     \begin{center}
         \includegraphics[width=0.5\textwidth]{figs/activity_system_workflow.png}
     \end{center}
-    \caption{Diagrama de actividades del flujo de ejecución del sistema}
+    \caption{Diagrama de actividades del flujo de ejecución del sistema.}
 \end{figure}\
 
 Con todos estos parámetros ya calculados, el sistema se va actualizando en todo momento mientras va publicando información relevante, como la posición del efector final, el valor de la longitud de cada cable y el ángulo girado por cada polea en tiempo real. Todo este flujo de trabajo se repite contínuamente hasta que el efector final llegue a la última posición que haya recibido por su entrada.
@@ -159,12 +159,12 @@ Como se puede observar, el nodo recibe una única posición o una trayectoria ob
 
 \vspace{0.25cm}
 
-Una vez hecho esto, el sistema publica los resultados obtenidos en topics, permitiendo así conocer el estado del sistema en tiempo real, al igual que en RViZ, donde se puede observar el movimiento del efector final y de las poleas en cada momento de la ejecución del sistema.
+Una vez hecho esto, el sistema publica los resultados obtenidos en topics, permitiendo así conocer el estado del sistema en tiempo real, al igual que en RViZ \cite{rviz_docs}, donde se puede observar el movimiento del efector final y de las poleas en cada momento de la ejecución del sistema.
 
 \section{Relación entre módulos}
 \label{sec:segundaseccion}
 
-Aunque el control principal del sistema se concentra en un único nodo ROS 2, se pueden identificar claramente las relaciones entre todos los módulos que lo componen, como son las posiciones recibidas por su entrada, el cálculo cinemático y su visualización, lo que permite analizar y depurar el comportamiento del sistema de una forma mucho más estructurada, y que además, esta organización se puede seguir teniendo en cuenta en caso de que se quieran hacer ampliaciones en un futuro, como podría ser la adición de otro tipo de sensores en adición a los servomotores que ya se tienen, el paso de tener un sistema de control en lazo abierto a cerrado, o la separación del código en múltiples nodos ROS 2 en lugar de uno solo.
+Aunque el control principal del sistema se concentra en un único nodo ROS 2 \cite{ros2_docs}, se pueden identificar claramente las relaciones entre todos los módulos que lo componen, como son las posiciones recibidas por su entrada, el cálculo cinemático y su visualización, lo que permite analizar y depurar el comportamiento del sistema de una forma mucho más estructurada, y que además, esta organización se puede seguir teniendo en cuenta en caso de que se quieran hacer ampliaciones en un futuro, como podría ser la adición de otro tipo de sensores en adición a los servomotores que ya se tienen, el paso de tener un sistema de control en lazo abierto a cerrado, o la separación del código en múltiples nodos ROS 2 \cite{ros2_docs} en lugar de uno solo.
 
 \begin{figure} [h!]
     \begin{center}

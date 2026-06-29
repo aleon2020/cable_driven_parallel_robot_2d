@@ -4,16 +4,16 @@
 \section{Introducción}
 \label{sec:segundaseccion}
 
-Una vez desarrollado el modelo cinemático del CDPR, se ha llevado a cabo un proceso de validación y simulación con el objetivo de comprobar las expresiones matemáticas obtenidas del modelo cinemático en una primera implementación software. Esto permite verificar el comportamiento del sistema para así poder detectar posibles errores de planteamiento y evitar que se vayan acarreando a la hora de integrar el sistema completo en ROS 2.
+Una vez desarrollado el modelo cinemático del CDPR, se ha llevado a cabo un proceso de validación y simulación con el objetivo de comprobar las expresiones matemáticas obtenidas del modelo cinemático en una primera implementación software. Esto permite verificar el comportamiento del sistema para así poder detectar posibles errores de planteamiento y evitar que se vayan acarreando a la hora de integrar el sistema completo en ROS 2 \cite{ros2_docs}.
 
 \vspace{0.25cm}
 
-En el caso de este TFG, las pruebas del modelo cinemático se han ido realizando de forma progresiva mediante su implementación en tres lenguajes de programación diferentes: MATLAB, Python y C++.
+En el caso de este TFG, las pruebas del modelo cinemático se han ido realizando de forma progresiva mediante su implementación en tres lenguajes de programación diferentes: MATLAB \cite{matlab_docs}, Python \cite{python_docs} y C++ \cite{cpp_docs}.
 
 \section{Simulación inicial en MATLAB}
 \label{sec:segundaseccion}
 
-MATLAB es el primer lenguaje de programación que se ha utilizado para validar el modelo cinemático, ya que éste se considera idóneo para tratar expresiones matemáticas y obtener una rápida visualización de los resultados. Es por ello que, en esta fase inicial, la simulación se ha centrado exclusivamente en verificar que el efector final se ubica correctamente en una posición $(x,y)$ específica.
+MATLAB \cite{matlab_docs} es el primer lenguaje de programación que se ha utilizado para validar el modelo cinemático, ya que éste se considera idóneo para tratar expresiones matemáticas y obtener una rápida visualización de los resultados. Es por ello que, en esta fase inicial, la simulación se ha centrado exclusivamente en verificar que el efector final se ubica correctamente en una posición $(x,y)$ específica.
 
 \vspace{0.25cm}
 
@@ -23,7 +23,7 @@ Esta primera implementación permite introducir directamente la posición $(x,y)
     \begin{center}
         \includegraphics[width=\textwidth]{figs/matlab_kinematic_model.png}
     \end{center}
-    \caption{Simulación inicial en MATLAB}
+    \caption{Simulación inicial en MATLAB.}
 \end{figure}\
 
 \newpage
@@ -33,15 +33,15 @@ Con esto se ha cumplido el objetivo de esta primera versión, que no comprende l
 \section{Implementación del modelo en Python}
 \label{sec:segundaseccion}
 
-Una vez validado el primer modelo en MATLAB, se ha desarrollado una implementación más avanzada en Python, la cual ya incluye animaciones y la posibilidad de definir múltiples posiciones objetivo para así generar trayectorias contínuas que conecten dichos puntos.
+Una vez validado el primer modelo en MATLAB \cite{matlab_docs}, se ha desarrollado una implementación más avanzada en Python \cite{python_docs}, la cual ya incluye animaciones y la posibilidad de definir múltiples posiciones objetivo para así generar trayectorias contínuas que conecten dichos puntos.
 
 \newpage
 
-Esta segunda implementación permite introducir una secuencia de posiciones objetivo para el efector final dentro del espacio de trabajo. A partir de estas posiciones, se pueden interpolar trayectorias rectilíneas entre puntos consecutivos, mientras se calculan en cada instante las longitudes y los ángulos de cada cable utilizando las ecuaciones correspondientes de cinemática inversa.
+Esta segunda implementación permite introducir una secuencia de posiciones objetivo para el efector final dentro del espacio de trabajo. A partir de estas posiciones, se pueden interpolar trayectorias rectilíneas entre posiciones consecutivas, mientras se calculan en cada instante las longitudes y los ángulos de cada cable utilizando las ecuaciones correspondientes de cinemática inversa.
 
 \vspace{0.25cm}
 
-Además, esta implementación incluye una representación gráfica del sistema, en la que se muestra la estructura, la trayectoria realizada, y la variación del movimiento del efector final y los cables en todo momento, facilitando así la comprensión del funcionamiento del sistema y permitiendo observar de forma intuitiva cómo va evolucionando el movimiento del efector final y de los cables. Es por ello que esta segunda versión ya se aproxima mucho más al funcionamiento que se implementará posteriormente en ROS 2.
+Además, esta implementación incluye una representación gráfica del sistema, en la que se muestra la estructura, la trayectoria realizada, y la variación del movimiento del efector final y los cables en todo momento, facilitando así la comprensión del funcionamiento del sistema y permitiendo observar de forma intuitiva cómo va evolucionando el movimiento del efector final y de los cables. Es por ello que esta segunda versión ya se aproxima mucho más al funcionamiento que se implementará posteriormente en ROS 2 \cite{ros2_docs}.
 
 \vspace{0.25cm}
 
@@ -51,7 +51,7 @@ Para una mejor comprensión del comportamiento dinámico del sistema mostrado en
     \begin{center}
         \includegraphics[width=\textwidth]{figs/python_kinematic_model_v3.png}
     \end{center}
-    \caption{Implementación y simulación en Python}
+    \caption{Implementación y simulación en Python.}
 \end{figure}\
 
 \newpage
@@ -59,11 +59,11 @@ Para una mejor comprensión del comportamiento dinámico del sistema mostrado en
 \section{Implementación del modelo en C++}
 \label{sec:segundaseccion}
 
-En paralelo a la implementación en Python, se ha desarrollado una versión del modelo cinemático en C++. Esta implementación reproduce la misma lógica que la vista en Python, permitiendo la definición de varias posiciones objetivo y el cálculo de la longitud de los cables en cada momento para recorrer una trayectoria.
+En paralelo a la implementación en Python \cite{python_docs}, se ha desarrollado una versión del modelo cinemático en C++ \cite{cpp_docs}. Esta implementación reproduce la misma lógica que la vista en Python \cite{python_docs}, permitiendo la definición de varias posiciones objetivo y el cálculo de la longitud de los cables en cada momento para recorrer una trayectoria.
 
 \vspace{0.25cm}
 
-Esta simulación se ha llevado a cabo únicamente con fines de verificación y comparación para asegurar que el modelo cinemático es independiente del lenguaje de programación utilizado, y que todas las ecuaciones que lo forman sean consistentes. Y aunque la visualización gráfica en C++ no sea tan completa como la de Python, también es útil para validar todos los cálculos numéricos realizados.
+Esta simulación se ha llevado a cabo únicamente con fines de verificación y comparación para asegurar que el modelo cinemático es independiente del lenguaje de programación utilizado, y que todas las ecuaciones que lo forman sean consistentes. Y aunque la visualización gráfica en C++ \cite{cpp_docs} no sea tan completa como la de Python \cite{python_docs}, también es útil para validar todos los cálculos numéricos realizados.
 
 \vspace{0.25cm}
 
@@ -73,7 +73,7 @@ Para una mejor comprensión del comportamiento dinámico del sistema mostrado en
     \begin{center}
         \includegraphics[width=\textwidth]{figs/cpp_kinematic_model_v3.png}
     \end{center}
-    \caption{Implementación y simulación en C++}
+    \caption{Implementación y simulación en C++.}
 \end{figure}\
 
 \section{Comparación y validación de resultados}
@@ -83,7 +83,7 @@ Para validar el modelo cinemático, se han comparado los resultados obtenidos en
 
 \vspace{0.25cm}
 
-Sin embargo, existen algunas diferencias en cuanto a funcionalidad y flexibilidad. MATLAB se ha utilizado como herramienta para llevar a cabo una primera validación, limitándose únicamente al posicionamiento de una única posición objetivo, mientras que las implementaciones realizadas en Python y en C++ permiten la generación de trayectorias definidas por múltiples posiciones objetivo.
+Sin embargo, existen algunas diferencias en cuanto a funcionalidad y flexibilidad. MATLAB \cite{matlab_docs} se ha utilizado como herramienta para llevar a cabo una primera validación, limitándose únicamente al posicionamiento de una única posición objetivo, mientras que las implementaciones realizadas en Python \cite{python_docs} y en C++ \cite{cpp_docs} permiten la generación de trayectorias definidas por múltiples posiciones objetivo.
 
 \begin{table}[htbp]
     \centering
@@ -100,18 +100,18 @@ Sin embargo, existen algunas diferencias en cuanto a funcionalidad y flexibilida
         C++ V3 & 7.27 & 99.352 & 8.79\\
         \bottomrule
     \end{tabularx}
-    \caption{Comparativa de métricas de rendimiento entre las implementaciones desarrolladas en Python y C++}
+    \caption{Comparativa de métricas de rendimiento entre las implementaciones desarrolladas en Python y C++.}
 \end{table}
 
-Los resultados obtenidos muestran que ambas implementaciones reproducen correctamente el modelo cinemático desarrollado, pero presentando algunas diferencias en el rendimiento computacional. En la primera versión, correspondiente a una validación básica del modelo, donde se envía al efector a una única posición objetivo, C++ obtiene un tiempo de ejecución ligeramente inferior y un menor consumo de memoria en comparación con la primera versión de Python. Sin embargo, la diferencia entre ambas es reducida y no supone ningún problema para el objetivo de este trabajo.
+Los resultados obtenidos muestran que ambas implementaciones reproducen correctamente el modelo cinemático desarrollado, pero presentando algunas diferencias en el rendimiento computacional. En la primera versión, correspondiente a una validación básica del modelo, donde se envía al efector a una única posición objetivo, C++ \cite{cpp_docs} obtiene un tiempo de ejecución ligeramente inferior y un menor consumo de memoria en comparación con la primera versión de Python \cite{python_docs}. Sin embargo, la diferencia entre ambas es reducida y no supone ningún problema para el objetivo de este trabajo.
 
 \vspace{0.25cm}
 
-Tanto en la segunda versión, donde el efector final realiza un desplazamiento desde una posición inicial hasta una posición final, como en la tercera versión, en la que ya se le envían al efector final más de dos posiciones objetivo para que pueda generar trayectorias, Python ofrece unos tiempos de ejecución inferiores a los de C++, situándose en unos 6.2 segundos en comparación con los 7.2 segundos de C++. De la misma forma, el tiempo de CPU empleado por las implementaciones de Python siempre está próximo a los 4 segundos, mientras que en C++ aumenta hasta valores cercanos a los 7-8 segundos.
+Tanto en la segunda versión, donde el efector final realiza un desplazamiento desde una posición inicial hasta una posición final, como en la tercera versión, en la que ya se le envían al efector final más de dos posiciones objetivo para que pueda generar trayectorias, Python \cite{python_docs} ofrece unos tiempos de ejecución inferiores a los de C++ \cite{cpp_docs}, situándose en unos 6.2 segundos en comparación con los 7.2 segundos de C++ \cite{cpp_docs}. De la misma forma, el tiempo de CPU empleado por las implementaciones de Python \cite{python_docs} siempre está próximo a los 4 segundos, mientras que en C++ \cite{cpp_docs} aumenta hasta valores cercanos a los 7-8 segundos.
 
 \newpage
 
-A partir de estas métricas, se puede concluir que ambos lenguajes implementan correctamente el modelo cinemático y obtienen resultados equivalentes en su funcionalidad. Sin embargo, dado que el tiempo de rendimiento de Python es mejor y más equilibrado, además de ofrecer una legibilidad de código y una integración sencilla con ROS 2, se ha decidido utilizar este lenguaje para el desarrollo completo del sistema que se abordará en el próximo capítulo.
+A partir de estas métricas, se puede concluir que ambos lenguajes implementan correctamente el modelo cinemático y obtienen resultados equivalentes en su funcionalidad. Sin embargo, dado que el tiempo de rendimiento de Python \cite{python_docs} es mejor y más equilibrado, además de ofrecer una legibilidad de código y una integración sencilla con ROS 2 \cite{ros2_docs}, se ha decidido utilizar este lenguaje para el desarrollo completo del sistema, el cual se abordará en el próximo capítulo.
 
 \section{Análisis de errores y limitaciones}
 \label{sec:segundaseccion}
@@ -120,12 +120,12 @@ Durante el proceso de simulación, se han identificado algunas limitaciones que 
 
 \vspace{0.25cm}
 
-En vías generales, ninguna de las implementaciones presenta errores funcionales o numéricos relacionados con el lenguaje de programación empleado en los resultados obtenidos para las posiciones del efector final, las longitudes de los cables o los ángulos de giro de cada una de las poleas. Las diferencias observadas se concentran principalmente en el rendimiento computacional, donde la segunda y la tercera versión de Python tardan aproximadamente un segundo menos que las de C++, además de que éstas requieren un tiempo de CPU significativamente inferior, mientras que C++ presenta un consumo máximo de memoria ligeramente menor en todas las versiones analizadas.
+En vías generales, ninguna de las implementaciones presenta errores funcionales o numéricos relacionados con el lenguaje de programación empleado en los resultados obtenidos para las posiciones del efector final, las longitudes de los cables o los ángulos de giro de cada una de las poleas. Las diferencias observadas se concentran principalmente en el rendimiento computacional, donde la segunda y la tercera versión de Python \cite{python_docs} tardan aproximadamente un segundo menos que las de C++ \cite{cpp_docs}, además de que éstas requieren un tiempo de CPU significativamente inferior, mientras que C++ \cite{cpp_docs} presenta un consumo máximo de memoria ligeramente menor en todas las versiones analizadas.
 
 \vspace{0.25cm}
 
-Estas diferencias hacen ver que en caso de haber errores o limitaciones del sistema, éstos no están relacionados con la validez del modelo cinemático, sino con aspectos de implementación y eficiencia. En por ello que puede afirmarse que el comportamiento matemático del modelo es consistente en ambos lenguajes, donde las únicas variaciones observadas entre Python y C++ quedan limitadas únicamente al coste computacional asociado a cada una de sus implementaciones.
+Estas diferencias hacen ver que en caso de haber errores o limitaciones del sistema, éstos no están relacionados con la validez del modelo cinemático, sino con aspectos de implementación y eficiencia. En por ello que puede afirmarse que el comportamiento matemático del modelo es consistente en ambos lenguajes, donde las únicas variaciones observadas entre Python \cite{python_docs} y C++ \cite{cpp_docs} quedan limitadas únicamente al coste computacional asociado a cada una de sus implementaciones.
 
 \vspace{0.25cm}
 
-Y por último, es importante mencionar que todas las simulaciones se realizan en lazo abierto, lo que implica que todos los resultados obtenidos dependan directamente de la precisión del modelo y de los parámetros geométricos definidos. Todas estas limitaciones no invalidan ningún aspecto del sistema ya definido, pero es importante tenerlas en cuenta a la hora de interpretar los resultados cuando se esté implementando en un entorno físico real.
+Y por último, es importante mencionar que todas las simulaciones se realizan en lazo abierto, lo que implica que todos los resultados obtenidos dependen directamente de la precisión del modelo y de los parámetros geométricos definidos. Todas estas limitaciones no invalidan ningún aspecto del sistema ya definido, pero es importante tenerlas en cuenta a la hora de interpretar los resultados cuando se esté implementando en un entorno físico real.
