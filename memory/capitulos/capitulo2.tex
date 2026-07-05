@@ -8,6 +8,18 @@ Los robots paralelos accionados por cables (CDPR) han experimentado un gran crec
 
 \vspace{0.25cm}
 
+Aunque el interés por este tipo de robots haya ido en aumento en los últimos veinte años, aparecieron por primera vez en los años 80, donde uno de los primeros trabajos académicos sobre estos robots fue desarrollado por Landsberger en 1984, que consistía en el diseño y la construcción de un robot manipulador paralelo controlado mediante cables \cite{landsberger1984}. En 1989, Albus patentó un sistema de elevación estabilizado mediante cables, que fue considerado como uno de los primeros diseños orientados a la manipulación de cargas suspendidas, lo que sentó las bases hacia un desarrollo posterior de los CDPR actuales \cite{albus1989patent}.
+
+\vspace{0.25cm}
+
+Sin embargo, la primera implementación de gran impacto llegó con el sistema Robocrane desarrollado por Albus, Bostelman y Dagalakis en el NIST (National Institute of Standards and Technology), el cual demostró la viabilidad práctica de utilizar cables para manipular cargas de gran tamaño con precisión. Este sistema se convirtió en una referencia fundamental para gran parte de los desarrollos posteriores \cite{albus1992robocrane}.
+
+\vspace{0.25cm}
+
+A partir de estos primeros desarrollos, comenzaron a aparecer nuevos trabajos centrados en ampliar las capacidades de los CDPR. Uno de ellos fue el de Kawamura e Ito, que introdujo sistemas de accionamiento mediante cables teleoperados \cite{kawamura1993}, y otro fue el de Ming y Higuchi, que propuso mecanismos de posicionamiento con múltiples grados de libertad accionados mediante cables, además de desarrollar una implementación experimental restringida a 2 grados de libertad \cite{ming1994part1,ming1994part2}. Es por ello que estos trabajos consolidaron el interés científico por este tipo de arquitecturas robóticas.
+
+\vspace{0.25cm}
+
 Este capítulo presenta el contexto teórico que comprende este TFG, además de abordar conceptos fundamentales sobre los CDPR, sus configuraciones más habituales y sus principales líneas de investigación, todo ello relacionado con el enfoque software adaptado.
 
 \section{Robots paralelos accionados por cables (CDPR)}
@@ -17,7 +29,15 @@ Un CDPR se caracteriza por utilizar cables como elementos para transmitir el mov
 
 \vspace{0.25cm}
 
+Con el paso del tiempo, el desarrollo de este tipo de robots permitió ampliar el número de aplicaciones en las que podrían utilizarse, además de añadir mejoras en su diseño mecánico como en sus modelados matemáticos y geométricos. Es por ello por lo que empezaron a aparecer estudios centrados en el análisis del espacio de trabajo, un aspecto que resulta fundamental para determinar el máximo alcanzable por el efector final de forma que no aparezca ninguna singularidad \cite{verhoeven2004}.
+
+\vspace{0.25cm}
+
 Todas estas características se han tenido en cuenta a la hora de redactar documentos científicos relacionados con este tema, donde los CDPR destacan por ofrecer grandes espacios de trabajo \cite{fattah2005design}, cuya relación entre su masa y su carga útil \cite{pott2018cdpr,merlet2006parallel,fattah2005design,carpio2019modeling} es mejor en comparación con otras arquitecturas róboticas paralelas utilizadas.
+
+\vspace{0.25cm}
+
+El crecimiento experimentado por estas líneas de investigación dio lugar a numerosas publicaciones especializadas que recopilaron los principales avances en modelado, control, análisis del espacio de trabajo y aplicaciones industriales. Entre ellas destacan la recopilación de Bruckmann y Pott, que reúne contribuciones de numerosos grupos de investigación internacionales, además de la revisión publicada por Gosselin, donde se presenta un estado del arte completo sobre la evolución de los robots paralelos accionados por cables y los retos abiertos existentes en este campo \cite{gosselin2014, bruckmann2013}.
 
 \section{Configuraciones típicas}
 \label{sec:segundaseccion}
@@ -39,7 +59,7 @@ El modelo cinemático de un CDPR tiene como objetivo establecer una relación en
 
 \vspace{0.25cm}
 
-En este caso, se ha optado por trabajar directamente con la cinemática inversa \cite{aref2009kinematics}, ya que lo que se quiere es calcular las longitudes de cada cable siendo conocida la posición del efector final en cada momento. Este enfoque resulta adecuado para su posterior implementación software e integración en ROS 2 \cite{ros2_docs}.
+En este caso, se ha optado por trabajar directamente con la cinemática inversa \cite{aref2009kinematics}, ya que lo que se quiere es calcular las longitudes de cada cable siendo conocida la posición del efector final en cada momento. Este enfoque resulta adecuado para su posterior implementación software e integración en ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}}.
 
 \vspace{0.25cm}
 
@@ -81,21 +101,24 @@ Sin embargo, dado que el alcance de este trabajo se centra exclusivamente en la 
 \section{Frameworks robóticos}
 \label{sec:segundaseccion}
 
-ROS 2 \cite{ros2_docs} se considera actualmente como uno de los frameworks de referencia en el desarrollo de sistemas robóticos, ya que su arquitectura basada en nodos, topics y servicios, facilitan el desarrollo, integración y mantenimiento de este tipo de sistemas \cite{ros2_docs}.
+ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}} se considera actualmente como uno de los frameworks de referencia en el desarrollo de sistemas robóticos, ya que su arquitectura basada en nodos, topics y servicios, facilitan el desarrollo, integración y mantenimiento de este tipo de sistemas.
+
+\newpage
 
 \section{Aplicaciones y líneas de investigación actuales}
 \label{sec:segundaseccion}
 
 Los CDPR son utilizados actualmente en aplicaciones como sistemas de posicionamiento, manipulación de grandes cargas \cite{albus1992robocrane} y plataformas de movimiento, hasta algunos robots de rehabilitación.
 
-\begin{figure} [h!]
+\begin{figure} [h]
     \begin{center}
         \includegraphics[width=\textwidth]{figs/spidercam.png}
     \end{center}
     \caption{Spider-Cam utilizada en estadios de fútbol y eventos deportivos \cite{spidercam_article}.}
+    \label{fig:2.3}
 \end{figure}\
 
-Entre las aplicaciones más conocidas en la actualidad se encuentran los sistemas de cámaras suspendidas desde grandes alturas utilizados en retransmisiones deportivas como el mostrado en la imagen, y otras aplicaciones como plataformas de manipulación o robots de rehabilitación programados para ayudar a realizar movimientos terapéuticos controlados.
+Entre las aplicaciones más conocidas en la actualidad se encuentran los sistemas de cámaras suspendidas desde grandes alturas utilizados en retransmisiones deportivas como el mostrado en la Figura~\ref{fig:2.3}, y otras aplicaciones como plataformas de manipulación o robots de rehabilitación programados para ayudar a realizar movimientos terapéuticos controlados.
 
 \vspace{0.25cm}
 
@@ -104,7 +127,7 @@ Por otro lado, las principales líneas de investigación actuales están centrad
 \section{Relación con el trabajo de fin de grado desarrollado}
 \label{sec:segundaseccion}
 
-Este trabajo se centra específicamente en la formulación del modelo cinemático, su validación mediante simulaciones y su integración dentro de una arquitectura basada en ROS 2 \cite{ros2_docs}.
+Este trabajo se centra específicamente en la formulación del modelo cinemático, su validación mediante simulaciones y su integración dentro de una arquitectura basada en ROS 2.
 
 \vspace{0.25cm}
 

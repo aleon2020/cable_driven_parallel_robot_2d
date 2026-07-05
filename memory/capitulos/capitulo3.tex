@@ -4,7 +4,7 @@
 \section{Introducción}
 \label{sec:segundaseccion}
 
-En este capítulo se presenta una visión global del sistema desarrollado en este TFG, ofreciendo una descripción del CDPR diseñado y de toda la arquitectura que hace posible su funcionamiento, la cual ha permitido validar el modelo cinemático, así como los algoritmos para planificar trayectorias utilizados y su integración en ROS 2 \cite{ros2_docs}. Y aunque gran parte del sistema hardware se encuentre en una fase prevista como una mejora a futuro, todo el diseño ha sido considerado como referencia para garantizar la coherencia entre el modelo software desarrollado y una futura implementación física del sistema.
+En este capítulo se presenta una visión global del sistema desarrollado en este TFG, ofreciendo una descripción del CDPR diseñado y de toda la arquitectura que hace posible su funcionamiento, la cual ha permitido validar el modelo cinemático, así como los algoritmos para planificar trayectorias utilizados y su integración en ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}}. Y aunque gran parte del sistema hardware se encuentre en una fase prevista como una mejora a futuro, todo el diseño ha sido considerado como referencia para garantizar la coherencia entre el modelo software desarrollado y una futura implementación física del sistema.
 
 \section{Funcionamiento de un CDPR bidimensional}
 \label{sec:segundaseccion}
@@ -25,7 +25,7 @@ El funcionamiento del sistema puede resumirse en tres etapas. En primer lugar, e
 \section{Arquitectura}
 \label{sec:segundaseccion}
 
-La arquitectura del sistema sigue un enfoque modular y escalable. Esto significa que, aunque el control principal del sistema se concentra en un único nodo ROS 2 \cite{ros2_docs}, posee un diseño que separa las diferentes capas que componen el sistema, las cuales se describen a continuación.
+La arquitectura del sistema sigue un enfoque modular y escalable. Esto significa que, aunque el control principal del sistema se concentra en un único nodo ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}}, posee un diseño que separa las diferentes capas que componen el sistema, las cuales se describen a continuación.
 
 \begin{code}[h]
 \begin{lstlisting}
@@ -67,46 +67,49 @@ Esta organización facilita la incorporación de nuevas funcionalidades sin tene
 
 \vspace{0.25cm}
 
-Con el objetivo de visualizar el sistema descrito anteriormente, se adjunta a continuación un diagrama que representa la arquitectura general del sistema y la relación entre sus componentes principales.
+Con el objetivo de visualizar el sistema descrito anteriormente, la Figura~\ref{fig:3.2} representa la arquitectura general del sistema y la relación entre sus componentes principales.
 
 \begin{figure} [h!]
     \begin{center}
         \includegraphics[width=\textwidth]{figs/general_system_architecture.png}
     \end{center}
     \caption{Arquitectura general del sistema en ROS 2. El usuario envía una o varias posiciones objetivo que son procesadas por el nodo principal del CDPR, el cual se encarga de aplicar el modelo cinemático y publicar los resultados obtenidos mediante topics, que serán utilizados posteriormente para monitorizar el sistema en todo momento y representarlos visualmente en RViZ.}
+    \label{fig:3.2}
 \end{figure}\
 
-Como se puede observar, se tiene una única posición o un conjunto de posiciones objetivo definidas por el usuario, las cuales se envían al nodo principal del sistema implementado, encargado de aplicar el modelo cinemático del robot para calcular las longitudes y los ángulos respecto a la vertical de cada cable, al igual que los ángulos de rotación y la cantidad de cable elongada o recogida por cada polea.
+Como se puede observar en la Figura~\ref{fig:3.2}, se tiene una única posición o un conjunto de posiciones objetivo definidas por el usuario, las cuales se envían al nodo principal del sistema implementado, encargado de aplicar el modelo cinemático del robot para calcular las longitudes y los ángulos respecto a la vertical de cada cable, al igual que los ángulos de rotación y la cantidad de cable elongada o recogida por cada polea.
 
 \newpage
 
-Una vez se han calculado estos parámetros, toda esta información se publica mediante topics, lo que permite a otros componentes del sistema poder utilizar esta información mientras se visualiza en RViZ \cite{rviz_docs} el estado del sistema en cada momento utilizando el modelo URDF \cite{urdf_docs} definido, lo que permite observar el comportamiento de todos los elementos que componen el sistema durante la ejecución de una trayectoria.
+Una vez se han calculado estos parámetros, toda esta información se publica mediante topics, lo que permite a otros componentes del sistema poder utilizar esta información mientras se visualiza en RViZ\footnote{\url{https://docs.ros.org/en/jazzy/Tutorials/Intermediate/RViz/RViz-Main.html}} el estado del sistema en cada momento utilizando el modelo URDF\footnote{\url{https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html}} definido, lo que permite observar el comportamiento de todos los elementos que componen el sistema durante la ejecución de una trayectoria.
 
 \section{Componentes software}
 \label{sec:segundaseccion}
 
-El desarrollo software es lo que compone en su gran mayoría al núcleo de este TFG, el cual se ha llevado a cabo en Python \cite{python_docs}, ya que es un lenguaje de programación de alto nivel que se integra perfectamente con ROS 2 \cite{ros2_docs} y que se caracteriza principalmente por su flexibilidad y legibilidad en código, siendo éstos los factores principales que se han tenido en cuenta a la hora de elegir este lenguaje de programación antes que otros, como por ejemplo MATLAB \cite{matlab_docs} o C++ \cite{cpp_docs}.
+El desarrollo software es lo que compone en su gran mayoría al núcleo de este TFG, el cual se ha llevado a cabo en Python\footnote{\url{https://docs.python.org/3/}}, ya que es un lenguaje de programación de alto nivel que se integra perfectamente con ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}} y que se caracteriza principalmente por su flexibilidad y legibilidad en código, siendo éstos los factores principales que se han tenido en cuenta a la hora de elegir este lenguaje de programación antes que otros, como por ejemplo MATLAB\footnote{\url{https://es.mathworks.com/help/matlab/index.html}} o C++\footnote{\url{https://devdocs.io/cpp/}}.
 
 \vspace{0.25cm}
 
 El sistema software está compuesto principalmente por los siguientes elementos, los cuales trabajan de forma coordinada con el objetivo de ofrecer una simulación bastante coherente.
 
-\begin{table}[htbp]
+\begin{table}[h]
     \centering
     \label{tab:mi_tabla}
     \begin{tabularx}{\textwidth}{@{}X X @{}}
         \toprule
         Componente & Función principal \\
         \midrule
-        Paquete cdpr\_2d & Implementación del controlador principal del sistema que incluye el modelo cinemático y la configuración para la posterior visualización de la ejecución.\newline \\
-        Paquete cdpr\_figures & Definición de trayectorias para realizar figuras específicas y sus servicios asociados.\newline \\
-        Paquete cdpr\_interfaces & Definición de interfaces utilizadas en la comunicación mediante servicios.\newline \\
+        Paquete \textit{cdpr\_2d} & Implementación del controlador principal del sistema que incluye el modelo cinemático y la configuración para la posterior visualización de la ejecución.\newline \\
+        Paquete \textit{cdpr\_figures} & Definición de trayectorias para realizar figuras específicas y sus servicios asociados.\newline \\
+        Paquete \textit{cdpr\_interfaces} & Definición de interfaces utilizadas en la comunicación mediante servicios.\newline \\
         Ficheros de configuración & Definición de los parámetros del sistema.\newline \\
         Modelo URDF & Representación visual del sistema en RViZ. \\
         \bottomrule
     \end{tabularx}
     \caption{Componentes de la arquitectura software del sistema.}
 \end{table}
+
+\newpage
 
 \section{Sistema hardware}
 \label{sec:segundaseccion}
@@ -120,16 +123,18 @@ El sistema hardware comprende una estructura rígida, en este caso una pizarra m
     \caption{Microcontrolador ESP32-S2 Mini.}
 \end{figure}\
 
+\newpage
+
 Aunque la construcción física del sistema real se contemple como una mejora a futuro, todo su diseño se ha definido en consonancia con el software desarrollado, ya que la posición de cada una de las poleas, el espacio de trabajo equivalente a las dimensiones de la pizarra y el tamaño del efector final se han tenido en cuenta desde las primeras fases de este TFG.
 
 \section{Flujo general de funcionamiento}
 \label{sec:segundaseccion}
 
-En primer lugar, se recibe como entrada del sistema una o varias posiciones objetivo por las que el efector final debe pasar, a partir de las cuales el sistema aplica el modelo cinemático, obteniendo así todos los parámetros necesarios que permiten al sistema accionar los cables con el objetivo de que el efector final pase por todas las posiciones recibidas.
+En primer lugar, se recibe como entrada del sistema una o varias posiciones objetivo por las que el efector final debe pasar, a partir de las cuales el sistema aplica el modelo cinemático, obteniendo así todos los parámetros necesarios que permitan al sistema accionar los cables de forma que el efector final pase por todas las posiciones recibidas.
 
 \vspace{0.25cm}
 
-Este procedimiento se representa de forma más resumida en el diagrama de actividades mostrado en la siguiente figura.
+Este procedimiento se representa de forma más resumida en la Figura~\ref{fig:3.4}.
 
 \newpage
 
@@ -137,20 +142,22 @@ Este procedimiento se representa de forma más resumida en el diagrama de activi
     \begin{center}
         \includegraphics[width=0.5\textwidth]{figs/activity_system_workflow.png}
     \end{center}
-    \caption{Diagrama de actividades del flujo de ejecución del sistema.}
+    \caption{Diagrama de flujo del funcionamiento del sistema.}
+    \label{fig:3.4}
 \end{figure}\
 
 Con todos estos parámetros ya calculados, el sistema se va actualizando en todo momento mientras va publicando información relevante, como la posición del efector final, el valor de la longitud de cada cable y el ángulo girado por cada polea en tiempo real. Todo este flujo de trabajo se repite contínuamente hasta que el efector final llegue a la última posición que haya recibido por su entrada.
 
 \vspace{0.25cm}
 
-Es por ello que, para representar el comportamiento del sistema durante su ejecución, se adjunta a continuación un diagrama de flujo que describe todo este proceso.
+Es por ello que, para representar el comportamiento del sistema durante su ejecución, la Figura~\ref{fig:3.5} se encarga de describir todo este proceso.
 
 \begin{figure} [h!]
     \begin{center}
         \includegraphics[width=\textwidth]{figs/general_system_workflow.png}
     \end{center}
     \caption{Secuencia general de operaciones ejecutadas por el sistema desde la recepción de una o varias posiciones objetivo hasta la publicación de resultados mediante topics y la actualización de la visualización en RViZ.}
+    \label{fig:3.5}
 \end{figure}\
 
 \newpage
@@ -159,12 +166,12 @@ Como se puede observar, el nodo recibe una única posición o una trayectoria ob
 
 \vspace{0.25cm}
 
-Una vez hecho esto, el sistema publica los resultados obtenidos en topics, permitiendo así conocer el estado del sistema en tiempo real, al igual que en RViZ \cite{rviz_docs}, donde se puede observar el movimiento del efector final y de las poleas en cada momento de la ejecución del sistema.
+Una vez hecho esto, el sistema publica los resultados obtenidos en topics, permitiendo así conocer el estado del sistema en tiempo real, al igual que en RViZ\footnote{\url{https://docs.ros.org/en/jazzy/Tutorials/Intermediate/RViz/RViz-Main.html}}, donde se puede observar el movimiento del efector final y de las poleas en cada momento de la ejecución del sistema.
 
 \section{Relación entre módulos}
 \label{sec:segundaseccion}
 
-Aunque el control principal del sistema se concentra en un único nodo ROS 2 \cite{ros2_docs}, se pueden identificar claramente las relaciones entre todos los módulos que lo componen, como son las posiciones recibidas por su entrada, el cálculo cinemático y su visualización, lo que permite analizar y depurar el comportamiento del sistema de una forma mucho más estructurada, y que además, esta organización se puede seguir teniendo en cuenta en caso de que se quieran hacer ampliaciones en un futuro, como podría ser la adición de otro tipo de sensores en adición a los servomotores que ya se tienen, el paso de tener un sistema de control en lazo abierto a cerrado, o la separación del código en múltiples nodos ROS 2 \cite{ros2_docs} en lugar de uno solo.
+Aunque el control principal del sistema se concentra en un único nodo \newline ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}}, se pueden identificar claramente las relaciones entre todos los módulos que lo componen, como son las posiciones recibidas por su entrada, el cálculo cinemático y su visualización, lo que permite analizar y depurar el comportamiento del sistema de forma mucho más estructurada, y que además, esta organización se puede seguir teniendo en cuenta en caso que se quieran hacer ampliaciones en un futuro, como podría ser la adición de otro tipo de sensores en adición a los servomotores que ya se tienen, el paso de tener un sistema de control en lazo abierto a cerrado, o el aumento de dimensiones del espacio de trabajo y del número de grados de libertad del efector final.
 
 \begin{figure} [h!]
     \begin{center}

@@ -21,9 +21,10 @@ El modelo desarrollado en este TFG corresponde a un CDPR bidimensional de dos gr
         \includegraphics[width=\textwidth]{figs/kinematic_model.png}
     \end{center}
     \caption{Modelo cinemático de un CDPR bidimensional.}
+    \label{fig:4.1}
 \end{figure}\
 
-En esta imagen se representa un sistema de referencia cartesiano fijo \{O\} situado en la esquina inferior izquierda de la estructura.
+En la Figura~\ref{fig:4.1} se representa un sistema de referencia cartesiano fijo \{O\} situado en la esquina inferior izquierda de la estructura.
 
 \vspace{0.25cm}
 
@@ -93,7 +94,7 @@ Estas posiciones corresponden a la configuración mecánica prevista para un pro
 \section{Geometría del efector final}
 \label{sec:segundaseccion}
 
-En vez de plantearlo como una aproximación puntual, el efector final se modela como un cuerpo rígido rectangular cuyas dimensiones son $l_e$ y $a_e$.
+En vez de plantearlo como una aproximación puntual, el efector final se modela como un cuerpo rígido cuadrado, cuyas dimensiones son $l_e$ y $a_e$, por lo que $l_e$ y $a_e$ son iguales.
 
 \begin{figure} [h!]
     \begin{center}
@@ -134,7 +135,7 @@ EID = (EID_x, EID_y) = (e_x + \frac{l_e}{2}, e_y - \frac{a_e}{2})
 \caption[Posición de la esquina inferior derecha del efector final.]{Posición de la esquina inferior derecha del efector final.}
 \end{myequation}
 
-Dado que los cables están unidos a las esquinas superiores del efector final, $ESI$ y $ESD$ son las únicas que intervienen directamente en cálculos cinemáticos posteriores.
+Dado que los cables están unidos por un extremo a las poleas y por el otro a las esquinas superiores del efector final, $ESI$ y $ESD$ son las únicas que intervienen directamente en cálculos cinemáticos posteriores.
 
 \section{Cinemática inversa}
 \label{sec:segundaseccion}
@@ -165,7 +166,7 @@ Estas ecuaciones permiten obtener directamente la longitud que debe tener cada c
 
 \vspace{0.25cm}
 
-Desde el punto de vista software, estas expresiones constituyen el núcleo del modelo cinemático implementado en pruebas posteriormente realizadas en MATLAB \cite{matlab_docs}, Python \cite{python_docs}, C++ \cite{cpp_docs} y ROS 2 \cite{ros2_docs}.
+Desde el punto de vista software, estas expresiones constituyen el núcleo del modelo cinemático implementado en pruebas posteriormente realizadas en MATLAB\footnote{\url{https://es.mathworks.com/help/matlab/index.html}}, Python\footnote{\url{https://docs.python.org/3/}}, C++\footnote{\url{https://devdocs.io/cpp/}} y ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}}.
 
 \section{Cálculo de la orientación de los cables}
 \label{sec:segundaseccion}
@@ -174,7 +175,7 @@ Además de la longitud de cada cable, es interesante conocer la orientación que
 
 \begin{itemize}
 \item Analizar la configuración geométrica del sistema.
-\item Representar correctamente los cables en RViZ \cite{rviz_docs} (no de forma visual pero sí de forma matemática).
+\item Representar correctamente los cables en RViZ (no de forma visual pero sí de forma matemática).
 \item Calcular posteriormente otros parámetros relacionados con el accionamiento de las poleas, como por ejemplo la cantidad de cable recogido cuando el efector se ha desplazado entre varias posiciones.
 \end{itemize}
 
@@ -186,6 +187,8 @@ El ángulo del cable izquierdo se define como:
 \end{equation}
 \caption[Ángulo que forma el cable izquierdo con la vertical.]{Ángulo que forma el cable izquierdo con la vertical.}
 \end{myequation}
+
+\newpage
 
 Mientras que el ángulo del cable derecho viene definido por:
 
@@ -224,12 +227,12 @@ donde:
 
 Esta ecuación permite establecer la transformación entre el espacio cartesiano del efector final y el espacio articular del sistema, el cual viene definido por los giros realizados por cada una de las poleas.
 
+\newpage
+
 \section{Espacio de trabajo y restricciones geométricas}
 \label{sec:segundaseccion}
 
-Aunque el modelo matemático permite calcular soluciones para cualquier posición $(e_x, e_y)$ del efector final, existe una serie de restricciones geométricas que deben cumplirse para garantizar que el funcionamiento del sistema sea correcto:
-
-\newpage
+Aunque el modelo matemático permita calcular soluciones para cualquier posición $(e_x, e_y)$ del efector final, existe una serie de restricciones geométricas que deben cumplirse para garantizar que el funcionamiento del sistema sea correcto:
 
 \begin{itemize}
 \item El efector final debe estar dentro de los límites físicos de la estructura.
@@ -239,7 +242,7 @@ Aunque el modelo matemático permite calcular soluciones para cualquier posició
 \item Las poleas deben operar dentro de sus límites mecánicos de giro.
 \end{itemize}
 
-Estas restricciones delimitan el espacio de trabajo del sistema y deben tenerse en cuenta siempre que se quiera planificar trayectorias.
+Estas restricciones delimitan el espacio de trabajo del sistema y deben tenerse en cuenta siempre que se quieran planificar trayectorias.
 
 \section{Consideraciones y limitaciones del modelo}
 \label{sec:segundaseccion}
@@ -256,4 +259,4 @@ Es por ello que se han tenido en cuenta las siguientes limitaciones:
 \item La orientación del efector final siempre es constante.
 \end{itemize}
 
-A pesar de estas limitaciones, el modelo reproduce correctamente la relación geométrica existente entre la posición del efector final y las variables físicas del sistema, proporcionando una base sólida para la simulación y la integración en ROS 2 \cite{ros2_docs}.
+A pesar de estas limitaciones, el modelo reproduce correctamente la relación geométrica existente entre la posición del efector final y las variables físicas del sistema, proporcionando una base sólida para la simulación y la integración en ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}}.

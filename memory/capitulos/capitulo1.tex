@@ -13,7 +13,7 @@ Los robots paralelos accionados por cables, también conocidos como Cable Driven
 
 \vspace{0.25cm}
 
-Este tipo de robots representan una alternativa bastante atractiva en comparación con otras arquitecturas robóticas debido a su capacidad para cubrir grandes espacios de trabajo utilizando mecanismos sencillos y ligeros. Además, para hacerlos funcionar, se requiere un modelo matemático del sistema que permita planificar trayectorias y que pueda integrarse en un entorno de desarrollo software, que puede llegar a convertirse en una plataforma que aborde problemas cinemáticos, simulación e integración basados en una arquitectura utilizada en robótica, como lo es ROS 2 \cite{ros2_docs}.
+Este tipo de robots representa una alternativa bastante atractiva en comparación con otras arquitecturas robóticas debido a su capacidad para cubrir grandes espacios de trabajo utilizando mecanismos sencillos y ligeros. Además, para hacerlos funcionar, se requiere un modelo matemático del sistema que permita planificar trayectorias y que pueda integrarse en un entorno de desarrollo software, de forma que pueda llegar a convertirse en una plataforma que aborde problemas cinemáticos, simulación e integración basados en una arquitectura utilizada en robótica, como lo es ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}}.
 
 \begin{figure} [h!]
     \begin{center}
@@ -53,26 +53,24 @@ El desarrollo de este trabajo se ha centrado principalmente en desarrollar todo 
 \section{Objetivos}
 \label{sec:segundaseccion}
 
-El objetivo principal de este trabajo consiste en el diseño, implementación y validación de un sistema capaz de controlar un CDPR bidimensional, comenzando por la definición del modelo cinemático, pasando por su integración en ROS 2 y finalizando con la preparación de una plataforma experimental orientada a futuras pruebas en un entorno físico real.
-
-\vspace{0.25cm}
-
-Los objetivos específicos de este trabajo son:
+El objetivo principal de este trabajo consiste en el diseño, implementación y validación de un sistema capaz de controlar un CDPR bidimensional, comenzando por la definición del modelo cinemático, pasando por su integración en ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}} y finalizando con la preparación de una plataforma experimental orientada a futuras pruebas en un entorno físico real.
 
 \newpage
 
+Los objetivos específicos de este trabajo son:
+
 \begin{itemize}
-\item Desarrollo de un modelo cinemático que relacione la posición en la que se encuentre el efector final con las longitudes de los cables y los ángulos de giro de las poleas en cada momento.
-\item Validación del modelo desarrollado en distintos lenguajes de programación con el fin de comprobar los resultados obtenidos en cada uno de ellos y garantizar así que el comportamiento del modelo es independiente del tipo de lenguaje utilizado.
-\item Implementación del modelo cinemático dentro de una arquitectura software basada en ROS 2 \cite{ros2_docs} que permita gestionar movimientos, trayectorias y comunicaciones entre procesos.
-\item Integración completa del sistema en ROS 2 \cite{ros2_docs} incorporando mecanismos de visualización y monitorización mediante RViZ.
+\item Desarrollo de un modelo cinemático que relacione la posición en la que se encuentra el efector final con las longitudes de los cables y los ángulos de giro de las poleas en cada momento.
+\item Validación del modelo desarrollado en distintos lenguajes de programación, con el fin de comprobar los resultados obtenidos en cada uno de ellos y garantizar así que el comportamiento del modelo es independiente del tipo de lenguaje utilizado.
+\item Implementación del modelo cinemático dentro de una arquitectura software basada en ROS 2 que permita gestionar movimientos, trayectorias y comunicaciones entre procesos.
+\item Integración completa del sistema en ROS 2 incorporando mecanismos de visualización y monitorización mediante RViZ.
 \item Diseño e integración del software desarrollado sobre un sistema hardware real que se tendrá en cuenta como una propuesta de mejora a futuro.
 \end{itemize}
 
 \section{Alcance y limitaciones}
 \label{sec:segundaseccion}
 
-El alcance de este TFG se centra principalmente en la parte software del sistema, dentro de la cual se ha desarrollado y validado un modelo cinemático, además de su integración en ROS 2. Sin embargo, no se ha profundizado en otros aspectos como el modelado de fuerzas, las tensiones de los cables, la estructuración del sistema de forma que este sea de tipo ”lazo cerrado”, o una interacción más detallada con los sensores en el sistema real, ya que en este caso, éste está compuesto por dos poleas como únicos elementos hardware.
+El alcance de este TFG se centra principalmente en la parte software del sistema, dentro de la cual se ha desarrollado y validado el modelo cinemático, además de su integración en ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}}. Sin embargo, no se ha profundizado en otros aspectos como el modelado de fuerzas, las tensiones de los cables, la estructuración del sistema de forma que este sea de tipo ”lazo cerrado”, o una interacción más detallada con los sensores en el sistema real, ya que en este caso, éste está compuesto por dos poleas como únicos elementos hardware.
 
 \vspace{0.25cm}
 
@@ -96,12 +94,14 @@ Con el sistema ya definido, se ha desarrollado el modelo cinemático inverso par
 \subsection{Fase 3}
 \label{sec:terceraseccion}
 
-Posteriormente, se ha validado este modelo en diferentes implementaciones realizadas en MATLAB \cite{matlab_docs}, Python \cite{python_docs} y C++ \cite{cpp_docs}, respectivamente. Estas pruebas han permitido comprobar la consistencia de los resultados obtenidos y la detección de posibles errores antes de entrar en fases de desarrollo más avanzadas.
+Posteriormente, se ha validado este modelo en diferentes implementaciones realizadas en MATLAB\footnote{\url{https://es.mathworks.com/help/matlab/index.html}}, Python\footnote{\url{https://docs.python.org/3/}} y C++\footnote{\url{https://devdocs.io/cpp/}}, respectivamente. Estas pruebas han permitido comprobar la consistencia de los resultados obtenidos y la detección de posibles errores antes de entrar en fases de desarrollo más avanzadas.
 
 \subsection{Fase 4}
 \label{sec:terceraseccion}
 
-Y por último, el modelo ha sido validado e integrado en una arquitectura software basada en ROS 2 \cite{ros2_docs}, dentro de la cual se ha desarrollado el nodo principal del sistema, la comunicación entre topics y la incorporación de herramientas de visualización en RViZ \cite{rviz_docs}, lo que ha permitido analizar el comportamiento del sistema.
+Y por último, el modelo ha sido validado e integrado en una arquitectura software basada en ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}}, dentro de la cual se ha desarrollado el nodo principal del sistema, la comunicación entre topics y la incorporación de herramientas de visualización en RViZ\footnote{\url{https://docs.ros.org/en/jazzy/Tutorials/Intermediate/RViz/RViz-Main.html}}, lo que ha permitido analizar el comportamiento del sistema.
+
+\newpage
 
 \section{Descripción inicial del sistema}
 \label{sec:segundaseccion}
@@ -113,16 +113,17 @@ Aunque la parte hardware del sistema se tenga en cuenta como una propuesta de me
     \includegraphics[width=0.5\textwidth]{figs/cdpr_main_components.png}
     \end{center}
     \caption{Descripción general de los componentes del CDPR.}
+    \label{fig:1.3}
 \end{figure}\
 
-En este diagrama se muestran los elementos principales que componen el sistema y su relación con todos los componentes físicos y software que intervienen en su funcionamiento.
+En la Figura~\ref{fig:1.3} se muestran los elementos principales que componen el sistema y su relación con todos los componentes físicos y software que intervienen en su funcionamiento.
 
 \section{Herramientas de apoyo empleadas durante el desarrollo}
 \label{sec:segundaseccion}
 
 Durante el desarrollo de este trabajo se ha utilizado ChatGPT como única herramienta de Inteligencia Artificial generativa, únicamente como apoyo puntual en tareas de organización, planificación y revisión de contenidos.
 
-\newpage
+\vspace{0.25cm}
 
 El uso de esta herramienta se ha limitado a la consulta de dudas concretas sobre ciertas partes del software implementado, propuestas para una mejor estructuración de la memoria y recomendaciones sobre cómo abordar de la mejor forma posible determinadas tareas.
 
@@ -146,7 +147,7 @@ El desarrollo de este trabajo ha requerido aplicar conocimientos adquiridos en d
         \toprule
         Asignatura & Conocimientos aplicados en el TFG \\
         \midrule
-        Álgebra & Modelado geométrico y representación matemática del sistema CDPR.\newline \\
+        Álgebra & Modelado geométrico y representación matemática del sistema.\newline \\
         Cálculo & Cálculo de distancias, relaciones geométricas y formulación del modelo cinemático.\newline \\
         Fundamentos Físicos de la Robótica & Comprensión de magnitudes físicas relacionadas con posición, movimiento y estructura del sistema.\newline \\
         Algoritmos y Estructuras de Datos & Diseño eficiente de funciones y organización de la lógica del sistema.\newline \\
@@ -166,4 +167,4 @@ El desarrollo de este trabajo ha requerido aplicar conocimientos adquiridos en d
 
 \newpage
 
-La realización de este trabajo ha permitido integrar conocimientos procedentes de diferentes áreas del grado dentro de un único proyecto. Esta unión ha resultado especialmente relevante para abordar tanto el desarrollo del modelo cinemático como la implementación de una arquitectura software basada en ROS 2 \cite{ros2_docs} y su futura integración en un sistema robótico real.
+La realización de este trabajo ha permitido integrar conocimientos procedentes de diferentes áreas del grado dentro de un único proyecto. Esta unión ha resultado especialmente relevante para abordar tanto el desarrollo del modelo cinemático como la implementación de una arquitectura software basada en ROS 2\footnote{\url{https://docs.ros.org/en/jazzy/index.html}} y su futura integración en un sistema robótico real.
