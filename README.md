@@ -77,6 +77,38 @@ src
 
 ---
 
+## Kinematic Model Validation
+
+Before integrating the kinematic model in ROS 2, it's validated in three different programming languages. 
+
+The objective of this step is to ensure that all the mathematical formulation is consistent in result terms regardless of the implementation language and warn about potential errors before the model is integrated into ROS 2.
+
+### MATLAB prototype
+
+<p align="center">
+  <img width="684" height="392" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/matlab_kinematic_model.png?raw=true">
+</p>
+
+### Python implementation
+
+<p align="center">
+  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v1.png?raw=true">
+  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v2.png?raw=true">
+  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v3.png?raw=true">
+</p>
+
+### C++ implementation
+
+<p align="center">
+  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cpp_kinematic_model_v1.png?raw=true">
+  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v2.png?raw=true">
+  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v3.png?raw=true">
+</p>
+
+**NOTE**: To see with more detail this process, take a look at the matlab/, python and c++/ folders inside the scripts/ directory.
+
+---
+
 ## Installation
 
 ### Prerequisites
