@@ -86,26 +86,28 @@ The objective of this step is to ensure that all the mathematical formulation is
 ### MATLAB prototype
 
 <p align="center">
-  <img width="684" height="392" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/matlab_kinematic_model.png?raw=true">
+  <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/matlab_kinematic_model.png?raw=true">
 </p>
 
 ### Python implementation
 
 <p align="center">
-  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v1.png?raw=true">
-  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v2.png?raw=true">
-  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v3.png?raw=true">
+  <img width="250" height="125" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v1.png?raw=true">
+  <img width="250" height="125" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v2.png?raw=true">
+  <img width="250" height="125" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v3.png?raw=true">
 </p>
 
 ### C++ implementation
 
 <p align="center">
-  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cpp_kinematic_model_v1.png?raw=true">
-  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v2.png?raw=true">
-  <img width="228" height="131" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/python_kinematic_model_v3.png?raw=true">
+  <img width="250" height="125" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cpp_kinematic_model_v1.png?raw=true">
+  <img width="250" height="125" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cpp_kinematic_model_v2.png?raw=true">
+  <img width="250" height="125" src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/images/cpp_kinematic_model_v3.png?raw=true">
 </p>
 
-**NOTE**: To see with more detail this process, take a look at the matlab/, python and c++/ folders inside the scripts/ directory.
+The agreement observed between the MATLAB, Python and C++ implementations confirms the correctness of the proposed kinematic model before its integration into ROS 2, reducing significantly the risk of introducing implementation errors into the final architecture.
+
+**NOTE**: To see with more detail this process, take a look at the [matlab/](https://github.com/aleon2020/cable_driven_parallel_robot_2d/tree/main/scripts/matlab), [python/](https://github.com/aleon2020/cable_driven_parallel_robot_2d/tree/main/scripts/python) and [c++/](https://github.com/aleon2020/cable_driven_parallel_robot_2d/tree/main/scripts/c%2B%2B) folders inside the [scripts/](https://github.com/aleon2020/cable_driven_parallel_robot_2d/tree/main/scripts) directory.
 
 ---
 
