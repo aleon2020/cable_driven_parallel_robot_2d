@@ -264,10 +264,31 @@ ros2 interface show cdpr_interfaces/srv/DrawFigure
 Finally, a predefined figure can be requested by calling the service:
 
 ```sh
-# Draws a large-sized square from the polygon category (same as "Case 3")
+ros2 service call /draw_figure cdpr_interfaces/srv/DrawFigure \
+    "{category: letter, name: W, size: small}"
+```
+
+<p align="center">
+  <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/gifs/w_small_letter_execution.gif?raw=true">
+</p>
+
+```sh
 ros2 service call /draw_figure cdpr_interfaces/srv/DrawFigure \
     "{category: polygon, name: square, size: medium}"
 ```
+
+<p align="center">
+  <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/gifs/square_medium_polygon_execution.gif?raw=true">
+</p>
+
+```sh
+ros2 service call /draw_figure cdpr_interfaces/srv/DrawFigure \
+    "{category: shape, name: house, size: large}"
+```
+
+<p align="center">
+  <img src="https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/media/gifs/house_large_shape_execution.gif?raw=true">
+</p>
 
 **NOTE**: The request fields depend on the definition provided in [figures_library.py](https://github.com/aleon2020/cable_driven_parallel_robot_2d/blob/main/cdpr_figures/cdpr_figures/figures_library.py).
 
